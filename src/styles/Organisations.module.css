@@ -1,0 +1,165 @@
+.pageContainer {
+    padding: 2rem 1rem 6rem;
+    max-width: var(--max-content-width, 1200px);
+    margin: 0 auto;
+    min-height: 100vh;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 5rem;
+}
+
+.header h1 {
+    font-family: var(--font-heading-system);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    color: var(--accent-primary);
+    margin-bottom: 1rem;
+}
+
+.header p {
+    font-family: var(--font-body-system);
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.orgList {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+}
+
+.orgSection {
+    background: rgba(10, 15, 44, 0.4);
+    border-radius: 20px;
+    padding: 3rem;
+    border: 1px solid rgba(255, 215, 0, 0.1);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.orgHeader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+@media (min-width: 768px) {
+    .orgHeader {
+        flex-direction: row;
+        text-align: left;
+        align-items: flex-start;
+    }
+}
+
+.orgLogoPlaceholder {
+    width: 100px;
+    height: 100px;
+    min-width: 100px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--color-navy-light);
+    border: 3px solid var(--accent-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading-system);
+    font-size: 2.5rem;
+    color: var(--accent-primary);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.15);
+    overflow: hidden;
+}
+
+.orgTitleArea h2 {
+    font-family: var(--font-heading-system);
+    color: var(--color-gold);
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.orgTitleArea p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    font-size: 1.1rem;
+}
+
+.leadersGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media (min-width: 600px) {
+    .leadersGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 900px) {
+    .leadersGrid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.leaderCard {
+    padding: 1.5rem !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.03) !important;
+}
+
+.leaderCard h3 {
+    font-family: var(--font-heading-system);
+    color: var(--text-primary);
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+}
+
+.roleBadge {
+    background: rgba(255, 215, 0, 0.1);
+    color: var(--accent-primary);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.divider {
+    position: absolute;
+    bottom: -2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--accent-primary);
+    font-size: 2rem;
+    opacity: 0.5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 100px;
+    height: 1px;
+    background: var(--accent-primary);
+    opacity: 0.3;
+}
+
+.divider::before {
+    right: 150%;
+}
+
+.divider::after {
+    left: 150%;
+}

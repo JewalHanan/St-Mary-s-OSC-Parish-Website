@@ -1,0 +1,140 @@
+.pageContainer {
+    min-height: 100vh;
+    padding: 2rem 1rem 4rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.heroSection {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.title {
+    font-family: var(--font-heading-system);
+    font-size: clamp(2rem, 5vw, 3rem);
+    color: var(--accent-primary);
+    margin-bottom: 0.75rem;
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+}
+
+.sectionsGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.sectionCard {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0 !important;
+    overflow: hidden;
+}
+
+.sectionCard:hover {
+    transform: translateY(-2px);
+}
+
+.sectionHeader {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem 2rem;
+}
+
+.sectionIcon {
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.sectionHeader h2 {
+    font-family: var(--font-heading-system);
+    color: var(--color-gold);
+    font-size: 1.4rem;
+    flex-grow: 1;
+    margin: 0;
+}
+
+.bookCount {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    background: rgba(255, 215, 0, 0.1);
+    padding: 4px 10px;
+    border-radius: 12px;
+    white-space: nowrap;
+}
+
+.expandArrow {
+    color: var(--color-gold);
+    flex-shrink: 0;
+    font-size: 0.9rem;
+}
+
+.booksList {
+    border-top: 1px solid rgba(255, 215, 0, 0.15);
+    padding: 0.5rem 0;
+}
+
+.bookItem {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 0.875rem 1.5rem;
+    border-bottom: 1px solid var(--card-border);
+    transition: background 0.2s ease;
+    flex-wrap: wrap;
+    min-height: 68px;
+}
+
+.bookItem:last-child {
+    border-bottom: none;
+}
+
+.bookItem:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.bookInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.bookTitle {
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.bookLang {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.emptyBooks {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+.expanded {
+    border-color: rgba(255, 215, 0, 0.25) !important;
+}
+
+@media (max-width: 600px) {
+    .sectionHeader {
+        padding: 1rem 1.25rem;
+        gap: 0.75rem;
+    }
+
+    .bookItem {
+        padding: 0.875rem 1.25rem;
+    }
+}

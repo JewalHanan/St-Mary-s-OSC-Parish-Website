@@ -1,0 +1,32 @@
+.tickerContainer {
+    width: 100%;
+    background-color: var(--color-navy-light);
+    color: var(--color-gold);
+    border-top: 2px solid var(--accent-primary);
+    border-bottom: 2px solid var(--accent-primary);
+    overflow: hidden;
+    padding: 1rem 0;
+    white-space: nowrap;
+    position: relative;
+    z-index: 10;
+}
+
+.tickerTrack {
+    display: inline-flex;
+    gap: 2rem;
+}
+
+.tickerItem {
+    font-family: var(--font-heading-system);
+    font-size: 1.25rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.separator {
+    color: var(--color-ivory);
+    margin: 0 1rem;
+    font-size: 1rem;
+}

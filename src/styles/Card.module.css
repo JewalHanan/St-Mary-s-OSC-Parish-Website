@@ -1,0 +1,32 @@
+.card {
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
+    transition: var(--transition-smooth);
+}
+
+.dark .card {
+    /* Using variables defined in .dark in globals.css now, no need for hardcoded values here */
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+}
+
+/* 3D Hover Effect Base */
+.card {
+    transform-style: preserve-3d;
+    perspective: 1000px;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px 0 rgba(0, 0, 0, 0.1);
+}
+
+.glow:hover {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3), 0 15px 40px 0 rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 215, 0, 0.4);
+}

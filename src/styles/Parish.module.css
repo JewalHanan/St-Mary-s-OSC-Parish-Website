@@ -1,0 +1,145 @@
+.pageContainer {
+    padding: 120px 2rem 6rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    min-height: 100vh;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 5rem;
+}
+
+.header h1 {
+    font-family: var(--font-heading-system);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    color: var(--accent-primary);
+    margin-bottom: 1rem;
+}
+
+.header p {
+    font-family: var(--font-body-system);
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    perspective: 1500px;
+}
+
+@media (min-width: 768px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 1280px) {
+    .grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* 3D Tilt container */
+.cardContainer {
+    transform-style: preserve-3d;
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.cardContainer:hover {
+    transform: translateY(-15px) rotateX(5deg) rotateY(5deg);
+    z-index: 10;
+}
+
+.memberCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+    padding: 2.5rem 1.5rem !important;
+    background: rgba(10, 15, 44, 0.6) !important;
+    border: 1px solid rgba(255, 215, 0, 0.1) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.cardContainer:hover .memberCard {
+    border-color: rgba(255, 215, 0, 0.4) !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 215, 0, 0.1);
+}
+
+.photoWrapper {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+    border: 4px solid var(--accent-primary);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+    background: var(--color-navy-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.photoPlaceholder {
+    font-family: var(--font-heading-system);
+    font-size: 3rem;
+    color: var(--accent-primary);
+}
+
+.name {
+    font-family: var(--font-heading-system);
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.roleBadge {
+    background: rgba(255, 215, 0, 0.15);
+    color: var(--accent-primary);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    width: 100%;
+}
+
+.details p,
+.details a {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: color 0.3s ease;
+}
+
+.details a:hover {
+    color: var(--accent-primary);
+}

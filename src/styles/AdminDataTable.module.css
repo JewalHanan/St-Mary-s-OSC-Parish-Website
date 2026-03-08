@@ -1,0 +1,108 @@
+.managerContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.header h1 {
+    font-family: var(--font-heading-system);
+    color: var(--accent-primary);
+    font-size: 2rem;
+}
+
+.header p {
+    color: var(--text-secondary);
+}
+
+.tableCard {
+    padding: 0 !important;
+    overflow: hidden;
+    background: var(--card-bg) !important;
+}
+
+.tableResponsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.dataTable {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.dataTable th {
+    padding: 1rem 1.5rem;
+    background: var(--input-bg);
+    color: var(--accent-primary);
+    font-family: var(--font-heading-system);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.dataTable td {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--card-border);
+    color: var(--text-primary);
+    vertical-align: middle;
+}
+
+.dataTable tbody tr {
+    transition: background 0.2s ease;
+}
+
+.dataTable tbody tr:hover {
+    background: var(--hover-overlay);
+}
+
+.badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.sick {
+    background: rgba(139, 26, 26, 0.2);
+    color: #ff6b6b;
+}
+
+.birthday {
+    background: rgba(30, 144, 255, 0.2);
+    color: #74b9ff;
+}
+
+.blessings {
+    background: rgba(255, 215, 0, 0.2);
+    color: var(--color-gold);
+}
+
+.statusBadge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.statusPending {
+    background: rgba(255, 165, 0, 0.2);
+    color: orange;
+    border: 1px solid rgba(255, 165, 0, 0.5);
+}
+
+.statusCompleted {
+    background: rgba(46, 204, 113, 0.2);
+    color: #2ecc71;
+    border: 1px solid rgba(46, 204, 113, 0.5);
+}

@@ -1,0 +1,130 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id            String     @id @default(uuid())
+  name          String
+  email         String     @unique
+  password_hash String
+  role          String     @default("VIEWER")
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  AuditLog      AuditLog[]
+
+  @@map("users")
+}
+
+model Event {
+  id          String   @id @default(uuid())
+  title       String
+  date        DateTime
+  time        String?
+  description String?
+  image_url   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("events")
+}
+
+model PrayerRequest {
+  id             String   @id @default(uuid())
+  requester_name String
+  target_name    String
+  age            Int?
+  email          String
+  phone          String?
+  date           DateTime
+  category       String
+  reason         String?
+  notes          String?
+  status         String   @default("PENDING")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("prayer_requests")
+}
+
+model CalendarEvent {
+  id               String   @id @default(uuid())
+  date             DateTime
+  title            String
+  description      String?
+  liturgical_color String?
+  is_service       Boolean  @default(false)
+  service_time     String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@map("calendar_events")
+}
+
+model ParishMember {
+  id        String   @id @default(uuid())
+  name      String
+  role      String
+  area      String?
+  phone     String?
+  email     String?
+  photo_url String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("parish_members")
+}
+
+model Organisation {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  logo_url    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("organisations")
+}
+
+model BookSection {
+  id        String   @id @default(uuid())
+  title     String
+  icon_url  String?
+  order     Int      @default(0)
+  books     Book[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("book_sections")
+}
+
+model Book {
+  id          String      @id @default(uuid())
+  title       String
+  language    String
+  file_url    String
+  section_id  String
+  section     BookSection @relation(fields: [section_id], references: [id], onDelete: Cascade)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@map("books")
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  user_id   String
+  user      User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  action    String
+  entity    String?
+  timestamp DateTime @default(now())
+
+  @@map("audit_logs")
+}

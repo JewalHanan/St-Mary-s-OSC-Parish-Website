@@ -1,0 +1,83 @@
+/* Hero section — church header + center-stage slider */
+
+.heroSection {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    padding-bottom: 4rem;
+    /* Background — transparent to show the 3D parallax scene behind it */
+    background: transparent;
+}
+
+/* ── Church name + logo block ── */
+.heroHeader {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 3.5rem 1rem 1.5rem;
+    pointer-events: none;
+}
+
+.logoContainer {
+    margin-bottom: 1.2rem;
+}
+
+.logoGlow {
+    width: 110px;
+    height: auto;
+    filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.5));
+    animation: pulseGlow 4s infinite alternate ease-in-out;
+}
+
+@keyframes pulseGlow {
+    0% {
+        filter: drop-shadow(0 0 14px rgba(255, 215, 0, 0.4));
+    }
+
+    100% {
+        filter: drop-shadow(0 0 32px rgba(255, 215, 0, 0.85));
+    }
+}
+
+.title {
+    font-family: var(--font-heading-system);
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 700;
+    color: var(--accent-primary);
+    text-transform: uppercase;
+    line-height: 1.15;
+    margin-bottom: 0.6rem;
+}
+
+.subtitle {
+    font-family: var(--font-body-system);
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    color: var(--text-secondary);
+    letter-spacing: 2px;
+}
+
+/* ── Slider block ── */
+.sliderArea {
+    width: 100%;
+    position: relative;
+    z-index: 5;
+}
+
+/* ── Scroll hint ── */
+.scrollIndicator {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--accent-primary);
+    font-size: 1.8rem;
+    z-index: 10;
+    opacity: 0.7;
+}

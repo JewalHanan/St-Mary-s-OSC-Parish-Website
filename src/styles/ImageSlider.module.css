@@ -1,0 +1,248 @@
+/* ImageSlider.module.css
+   Same cinematic center-stage system as CenterStageSlider.
+   Images use 9:16 (landscape-portrait) ratio — same as the original admin slider uploads. */
+
+.sliderWrapper {
+    width: 100%;
+    overflow: hidden;
+    padding: 2.5rem 0 2.5rem;
+    position: relative;
+}
+
+.stage {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+}
+
+/* ── Invisible spacer: drives stage height via 16:9 aspect ratio ── */
+.stageSpacer {
+    width: clamp(320px, 75vw, 1100px);
+    aspect-ratio: 16 / 9;
+    visibility: hidden;
+    pointer-events: none;
+    flex-shrink: 0;
+}
+
+/* ── All slides share the same center origin ── */
+.slide {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    /* 16:9 landscape, prominent but not full-screen */
+    width: clamp(320px, 75vw, 1100px);
+    aspect-ratio: 16 / 9;
+    border-radius: 24px;
+    overflow: hidden;
+    cursor: pointer;
+    transition:
+        transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1),
+        opacity 0.5s cubic-bezier(0.25, 0.1, 0.25, 1),
+        filter 0.5s cubic-bezier(0.25, 0.1, 0.25, 1),
+        box-shadow 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+    transform: translate(-50%, -50%);
+}
+
+.active {
+    transform: translate(-50%, -50%) translateX(0) scale(1);
+    opacity: 1;
+    filter: none;
+    z-index: 10;
+    box-shadow: 0 32px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.06);
+    cursor: default;
+    border-radius: 24px;
+}
+
+.neighborLeft {
+    transform: translate(-50%, -50%) translateX(-58%) scale(0.78) translateY(5%);
+    opacity: 0.55;
+    filter: blur(1.5px) brightness(0.72);
+    z-index: 6;
+}
+
+.neighborRight {
+    transform: translate(-50%, -50%) translateX(58%) scale(0.78) translateY(5%);
+    opacity: 0.55;
+    filter: blur(1.5px) brightness(0.72);
+    z-index: 6;
+}
+
+.farLeft {
+    transform: translate(-50%, -50%) translateX(-108%) scale(0.60) translateY(10%);
+    opacity: 0.28;
+    filter: blur(3px) brightness(0.55);
+    z-index: 3;
+    pointer-events: none;
+}
+
+.farRight {
+    transform: translate(-50%, -50%) translateX(108%) scale(0.60) translateY(10%);
+    opacity: 0.28;
+    filter: blur(3px) brightness(0.55);
+    z-index: 3;
+    pointer-events: none;
+}
+
+.hidden {
+    transform: translate(-50%, -50%) translateX(0) scale(0.4);
+    opacity: 0;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* ── Image box: 16:9 landscape ── */
+.imageBox {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    position: relative;
+    overflow: hidden;
+    border-radius: inherit;
+}
+
+.image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    pointer-events: none;
+    transition: transform 0.6s ease;
+}
+
+.active:hover .image {
+    transform: scale(1.04);
+}
+
+/* ── Caption gradient overlay ── */
+.captionArea {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 3rem 1.25rem 1.5rem;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.78) 0%, transparent 100%);
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.4s ease 0.15s, transform 0.4s ease 0.15s;
+    pointer-events: none;
+}
+
+.active .captionArea {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.slideTitle {
+    font-family: var(--font-heading-system);
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    color: var(--color-gold);
+    margin: 0 0 0.35rem;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+}
+
+.slideCaption {
+    font-family: var(--font-body-system);
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.85);
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* ── Navigation arrows ── */
+.navBtn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 30;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text-primary);
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    font-size: 1.8rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s ease;
+    line-height: 1;
+    user-select: none;
+    padding: 0;
+}
+
+.navBtn:hover {
+    background: var(--accent-primary);
+    color: var(--color-navy);
+    border-color: var(--accent-primary);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.prevBtn {
+    left: clamp(8px, 2.5vw, 24px);
+}
+
+.nextBtn {
+    right: clamp(8px, 2.5vw, 24px);
+}
+
+/* ── Dots ── */
+.dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 2rem;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--text-secondary);
+    opacity: 0.3;
+    cursor: pointer;
+    transition: opacity 0.3s, transform 0.3s, background 0.3s;
+    border: none;
+    padding: 0;
+}
+
+.activeDot {
+    opacity: 1;
+    transform: scale(1.55);
+    background: var(--accent-primary);
+}
+
+/* ── Responsive ── */
+@media (max-width: 680px) {
+
+    .slide,
+    .stageSpacer {
+        width: clamp(280px, 90vw, 480px);
+    }
+
+    .neighborLeft {
+        transform: translate(-50%, -50%) translateX(-64%) scale(0.72) translateY(5%);
+    }
+
+    .neighborRight {
+        transform: translate(-50%, -50%) translateX(64%) scale(0.72) translateY(5%);
+    }
+
+    .farLeft {
+        transform: translate(-50%, -50%) translateX(-118%) scale(0.54) translateY(10%);
+    }
+
+    .farRight {
+        transform: translate(-50%, -50%) translateX(118%) scale(0.54) translateY(10%);
+    }
+
+    .navBtn {
+        width: 40px;
+        height: 40px;
+        font-size: 1.3rem;
+    }
+}
