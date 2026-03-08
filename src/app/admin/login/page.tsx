@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, Suspense } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Card } from '@/components/ui/Card';
@@ -16,7 +16,7 @@ function sanitiseText(value: string, maxLen: number): string {
     return value.trim().slice(0, maxLen);
 }
 
-export default function AdminLoginPage() {
+function AdminLoginForm() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const callbackUrl = searchParams.get('callbackUrl') || '/admin';
@@ -152,5 +152,21 @@ export default function AdminLoginPage() {
                 </form>
             </Card>
         </div>
+    );
+}
+
+export default function AdminLoginPage() {
+    return (
+        <Suspense fallback={
+            <div className={styles.loginContainer}>
+                <Card className={styles.loginCard} withGlow>
+                    <div className={styles.header}>
+                        <h2>Loading...</h2>
+                    </div>
+                </Card>
+            </div>
+        }>
+            <AdminLoginForm />
+        </Suspense>
     );
 }
