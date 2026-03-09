@@ -1,5 +1,9 @@
 'use client';
 
+// Prevent Next.js from statically prerendering this page during build
+// (signIn from next-auth and useSearchParams require a live browser)
+export const dynamic = 'force-dynamic';
+
 import { useState, useCallback, Suspense } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
