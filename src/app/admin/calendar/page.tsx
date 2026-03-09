@@ -28,11 +28,11 @@ export default function CalendarManager() {
     const [search, setSearch] = useState('');
     const imgInputRef = useRef<HTMLInputElement>(null);
 
-    useEffect(() => { setDays(getSpecialDays()); }, []);
+    useEffect(() => { getSpecialDays().then(setDays); }, []);
 
-    const persist = (updated: SpecialDay[]) => {
+    const persist = async (updated: SpecialDay[]) => {
         setDays(updated);
-        saveSpecialDays(updated);
+        await saveSpecialDays(updated);
     };
 
     // ── Month navigation ──────────────────────────────────────

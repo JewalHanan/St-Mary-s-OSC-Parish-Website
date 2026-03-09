@@ -18,11 +18,11 @@ export default function OrganisationsManager() {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const orgLogoInputRef = useRef<HTMLInputElement>(null);
 
-    useEffect(() => { setOrgs(getOrganisations()); }, []);
+    useEffect(() => { getOrganisations().then(setOrgs); }, []);
 
-    const persist = (updated: Organisation[]) => {
+    const persist = async (updated: Organisation[]) => {
         setOrgs(updated);
-        saveOrganisations(updated);
+        await saveOrganisations(updated);
     };
 
     const addOrg = () => {

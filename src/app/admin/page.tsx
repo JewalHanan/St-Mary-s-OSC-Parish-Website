@@ -18,11 +18,13 @@ export default function AdminDashboardPage() {
     });
 
     useEffect(() => {
-        const update = () => {
-            const images = getSliderImages();
-            const events = getEvents();
-            const requests = getPrayerRequests();
-            const sections = getBookSections();
+        const update = async () => {
+            const [images, events, requests, sections] = await Promise.all([
+                getSliderImages(),
+                getEvents(),
+                getPrayerRequests(),
+                getBookSections(),
+            ]);
             setStats({
                 sliderImages: images.length,
                 events: events.length,
@@ -33,8 +35,6 @@ export default function AdminDashboardPage() {
             });
         };
         update();
-        window.addEventListener('storage', update);
-        return () => window.removeEventListener('storage', update);
     }, []);
 
     const cards = [

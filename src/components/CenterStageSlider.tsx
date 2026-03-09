@@ -20,16 +20,9 @@ export default function CenterStageSlider({
     const dragging = useRef(false);
     const autoTimer = useRef<ReturnType<typeof setInterval> | null>(null);
 
-    // ── Load + live-sync from store ───────────────────────────────
+    // ── Load from API ──────────────────────────────────────────
     useEffect(() => {
-        const load = () => setSlides(getEventBanners());
-        load();
-        window.addEventListener('stmosc-store-update', load);
-        window.addEventListener('storage', load);
-        return () => {
-            window.removeEventListener('stmosc-store-update', load);
-            window.removeEventListener('storage', load);
-        };
+        getEventBanners().then(setSlides);
     }, []);
 
     // ── Auto-play ─────────────────────────────────────────────────

@@ -14,11 +14,11 @@ export default function EventsManager() {
     const [form, setForm] = useState({ title: '', date: '', time: '', color: '#F5A623', type: 'feast', icon: '' });
     const iconInputRef = useRef<HTMLInputElement>(null);
 
-    useEffect(() => { setEvents(getEvents()); }, []);
+    useEffect(() => { getEvents().then(setEvents); }, []);
 
-    const persist = (updated: ChurchEvent[]) => {
+    const persist = async (updated: ChurchEvent[]) => {
         setEvents(updated);
-        saveEvents(updated);
+        await saveEvents(updated);
     };
 
     const openAdd = () => {

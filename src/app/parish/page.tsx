@@ -29,15 +29,7 @@ export default function ParishPage() {
     const [members, setMembers] = useState<ParishMember[]>([]);
 
     useEffect(() => {
-        setMembers(getParishMembers());
-
-        const handler = () => setMembers(getParishMembers());
-        window.addEventListener('stmosc-store-update', handler);
-        window.addEventListener('storage', handler);
-        return () => {
-            window.removeEventListener('stmosc-store-update', handler);
-            window.removeEventListener('storage', handler);
-        };
+        getParishMembers().then(setMembers);
     }, []);
 
     return (

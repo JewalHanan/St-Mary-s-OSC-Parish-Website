@@ -15,14 +15,14 @@ export default function SliderManager() {
     const [uploading, setUploading] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    useEffect(() => { setImages(getSliderImages()); }, []);
+    useEffect(() => { getSliderImages().then(setImages); }, []);
 
-    const persist = (updated: SliderImage[]) => {
+    const persist = async (updated: SliderImage[]) => {
         try {
             setImages(updated);
-            saveSliderImages(updated);
+            await saveSliderImages(updated);
         } catch {
-            alert('Storage limit reached. Please delete an existing slide before adding more.');
+            alert('Failed to save. Please try again.');
         }
     };
 

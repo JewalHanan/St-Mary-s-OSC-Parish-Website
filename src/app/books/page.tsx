@@ -53,14 +53,7 @@ export default function BooksPage() {
     };
 
     useEffect(() => {
-        setSections(getBookSections());
-        const handler = () => setSections(getBookSections());
-        window.addEventListener('stmosc-store-update', handler);
-        window.addEventListener('storage', handler);
-        return () => {
-            window.removeEventListener('stmosc-store-update', handler);
-            window.removeEventListener('storage', handler);
-        };
+        getBookSections().then(setSections);
     }, []);
 
     return (

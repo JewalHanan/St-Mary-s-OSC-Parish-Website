@@ -12,16 +12,9 @@ export default function ImageSlider() {
     const dragging = useRef(false);
     const autoTimer = useRef<ReturnType<typeof setInterval> | null>(null);
 
-    // Live sync
+    // Load from API
     useEffect(() => {
-        const load = () => setSlides(getSliderImages());
-        load();
-        window.addEventListener('stmosc-store-update', load);
-        window.addEventListener('storage', load);
-        return () => {
-            window.removeEventListener('stmosc-store-update', load);
-            window.removeEventListener('storage', load);
-        };
+        getSliderImages().then(setSlides);
     }, []);
 
     // Auto-play

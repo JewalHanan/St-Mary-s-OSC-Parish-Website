@@ -61,13 +61,12 @@ export default function EventBannersManager() {
     const fileRef = useRef<HTMLInputElement>(null);
     const dragSrcIdx = useRef<number | null>(null);
 
-    useEffect(() => { setBanners(getEventBanners()); }, []);
+    useEffect(() => { getEventBanners().then(setBanners); }, []);
 
-    const persist = (updated: EventBannerImage[]) => {
-        // Re-assign order after every change
+    const persist = async (updated: EventBannerImage[]) => {
         const withOrder = updated.map((b, i) => ({ ...b, order: i }));
         setBanners(withOrder);
-        saveEventBanners(withOrder);
+        await saveEventBanners(withOrder);
     };
 
     /* ── Upload ── */

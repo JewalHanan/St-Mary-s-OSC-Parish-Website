@@ -12,14 +12,7 @@ export default function UpcomingEvents() {
     const [events, setEvents] = useState<ChurchEvent[]>([]);
 
     useEffect(() => {
-        setEvents(getEvents());
-        const handler = () => setEvents(getEvents());
-        window.addEventListener('stmosc-store-update', handler);
-        window.addEventListener('storage', handler);
-        return () => {
-            window.removeEventListener('stmosc-store-update', handler);
-            window.removeEventListener('storage', handler);
-        };
+        getEvents().then(setEvents);
     }, []);
 
     return (

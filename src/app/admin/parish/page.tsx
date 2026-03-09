@@ -13,11 +13,11 @@ export default function ParishCommitteeManager() {
     const [form, setForm] = useState({ name: '', role: '', area: '', email: '', phone: '', image: '' });
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    useEffect(() => { setMembers(getParishMembers()); }, []);
+    useEffect(() => { getParishMembers().then(setMembers); }, []);
 
-    const persist = (updated: ParishMember[]) => {
+    const persist = async (updated: ParishMember[]) => {
         setMembers(updated);
-        saveParishMembers(updated);
+        await saveParishMembers(updated);
     };
 
     const openAdd = () => {

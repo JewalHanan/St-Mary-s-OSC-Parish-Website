@@ -12,11 +12,11 @@ import styles from '@/styles/AdminDataTable.module.css';
 export default function PrayerRequestsManager() {
     const [requests, setRequests] = useState<PrayerRequest[]>([]);
 
-    useEffect(() => { setRequests(getPrayerRequests()); }, []);
+    useEffect(() => { getPrayerRequests().then(setRequests); }, []);
 
-    const persist = (updated: PrayerRequest[]) => {
+    const persist = async (updated: PrayerRequest[]) => {
         setRequests(updated);
-        savePrayerRequests(updated);
+        await savePrayerRequests(updated);
     };
 
     const handleExportXLSX = () => {

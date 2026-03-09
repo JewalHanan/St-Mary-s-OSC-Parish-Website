@@ -10,14 +10,7 @@ export default function OrganisationsPage() {
     const [organisations, setOrganisations] = useState<Organisation[]>([]);
 
     useEffect(() => {
-        setOrganisations(getOrganisations());
-        const handler = () => setOrganisations(getOrganisations());
-        window.addEventListener('stmosc-store-update', handler);
-        window.addEventListener('storage', handler);
-        return () => {
-            window.removeEventListener('stmosc-store-update', handler);
-            window.removeEventListener('storage', handler);
-        };
+        getOrganisations().then(setOrganisations);
     }, []);
 
     return (

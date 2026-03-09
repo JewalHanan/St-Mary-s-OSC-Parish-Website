@@ -16,11 +16,11 @@ export default function BooksManager() {
     const pdfInputRef = useRef<HTMLInputElement>(null);
     const imgInputRef = useRef<HTMLInputElement>(null);
 
-    useEffect(() => { setSections(getBookSections()); }, []);
+    useEffect(() => { getBookSections().then(setSections); }, []);
 
-    const persist = (updated: BookSection[]) => {
+    const persist = async (updated: BookSection[]) => {
         setSections(updated);
-        saveBookSections(updated);
+        await saveBookSections(updated);
     };
 
     // ── Section CRUD ──

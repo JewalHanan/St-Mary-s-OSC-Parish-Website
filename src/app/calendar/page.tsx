@@ -61,17 +61,10 @@ export default function CalendarPage() {
     const [selectedDayInfo, setSelectedDayInfo] = useState<{ day: SpecialDay } | null>(null);
 
     useEffect(() => {
-        const loadData = () => {
-            setSpecialDays(getSpecialDays());
-            setEvents(getEvents());
-        };
-        loadData();
-        window.addEventListener('stmosc-store-update', loadData);
-        window.addEventListener('storage', loadData);
-        return () => {
-            window.removeEventListener('stmosc-store-update', loadData);
-            window.removeEventListener('storage', loadData);
-        };
+        Promise.all([getSpecialDays(), getEvents()]).then(([days, evts]) => {
+            setSpecialDays(days);
+            setEvents(evts);
+        });
     }, []);
 
     // Generate days for the selected month to render the grid
