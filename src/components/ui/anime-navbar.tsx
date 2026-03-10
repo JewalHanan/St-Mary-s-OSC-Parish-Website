@@ -35,30 +35,6 @@ export function AnimeNavBar({ items, className, defaultActive = "Home" }: NavBar
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ type: "spring", stiffness: 260, damping: 20 }}
                 >
-                    {/* Animated video logo */}
-                    <video
-                        src="/images/logo.mp4"
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        style={{
-                            height: '36px',
-                            width: 'auto',
-                            objectFit: 'contain',
-                            borderRadius: '50%',
-                            marginLeft: '0.4rem',
-                            marginRight: '0.25rem',
-                            flexShrink: 0,
-                        }}
-                    />
-                    <div style={{
-                        width: '1px',
-                        height: '24px',
-                        background: 'rgba(255, 215, 0, 0.2)',
-                        flexShrink: 0,
-                        marginRight: '0.15rem',
-                    }} />
                     {items.map((item) => {
                         const Icon = item.icon
                         const isActive = activeTab === item.name
