@@ -219,3 +219,246 @@ textarea {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--accent-primary);
 }
+
+/* ══════════════════════════════════════════════════════════
+   AnimeNavBar — Animated floating navigation bar
+   ══════════════════════════════════════════════════════════ */
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  50% {
+    transform: translateX(100%);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.anime-navbar-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.anime-navbar-center {
+  display: flex;
+  justify-content: center;
+  padding-top: 1.5rem;
+  pointer-events: none;
+}
+
+.anime-navbar-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: rgba(10, 15, 44, 0.65);
+  border: 1px solid rgba(255, 215, 0, 0.15);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 0.4rem 0.5rem;
+  border-radius: 9999px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 215, 0, 0.08) inset;
+  pointer-events: auto;
+  position: relative;
+}
+
+.anime-navbar-link {
+  position: relative;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: var(--font-body-system);
+  padding: 0.65rem 1.1rem;
+  border-radius: 9999px;
+  transition: all 0.3s ease;
+  color: rgba(248, 245, 238, 0.6);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.anime-navbar-link:hover {
+  color: var(--color-ivory);
+}
+
+.anime-navbar-link--active {
+  color: var(--color-gold) !important;
+}
+
+/* Desktop: show text, hide icon */
+.anime-navbar-label {
+  display: inline;
+  position: relative;
+  z-index: 10;
+}
+
+.anime-navbar-icon {
+  display: none;
+  position: relative;
+  z-index: 10;
+}
+
+/* Mobile: hide text, show icon */
+@media (max-width: 768px) {
+  .anime-navbar-label {
+    display: none;
+  }
+
+  .anime-navbar-icon {
+    display: inline-flex;
+  }
+
+  .anime-navbar-link {
+    padding: 0.6rem 0.8rem;
+  }
+
+  .anime-navbar-pill {
+    gap: 0.1rem;
+  }
+}
+
+/* ── Active tab glow ── */
+.anime-navbar-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.anime-navbar-glow__layer {
+  position: absolute;
+  border-radius: 9999px;
+}
+
+.anime-navbar-glow__layer--1 {
+  inset: 0;
+  background: rgba(255, 215, 0, 0.20);
+  filter: blur(6px);
+}
+
+.anime-navbar-glow__layer--2 {
+  inset: -4px;
+  background: rgba(255, 215, 0, 0.15);
+  filter: blur(10px);
+}
+
+.anime-navbar-glow__layer--3 {
+  inset: -8px;
+  background: rgba(255, 215, 0, 0.10);
+  filter: blur(16px);
+}
+
+.anime-navbar-glow__layer--4 {
+  inset: -12px;
+  background: rgba(255, 215, 0, 0.05);
+  filter: blur(24px);
+}
+
+.anime-navbar-glow__shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, transparent, rgba(255, 215, 0, 0.15), transparent);
+  animation: shine 3s ease-in-out infinite;
+}
+
+/* ── Hover highlight ── */
+.anime-navbar-hover-bg {
+  position: absolute;
+  inset: 0;
+  background: rgba(248, 245, 238, 0.08);
+  border-radius: 9999px;
+  z-index: -1;
+}
+
+/* ── Floating mascot ── */
+.anime-navbar-mascot {
+  position: absolute;
+  top: -3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.anime-navbar-mascot__container {
+  position: relative;
+  width: 3rem;
+  height: 3rem;
+}
+
+.anime-navbar-mascot__face {
+  position: absolute;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: var(--color-ivory);
+  border-radius: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.anime-navbar-mascot__eye {
+  position: absolute;
+  width: 0.45rem;
+  height: 0.45rem;
+  background: var(--color-navy);
+  border-radius: 50%;
+  top: 40%;
+}
+
+.anime-navbar-mascot__eye--left {
+  left: 25%;
+}
+
+.anime-navbar-mascot__eye--right {
+  right: 25%;
+}
+
+.anime-navbar-mascot__cheek {
+  position: absolute;
+  width: 0.5rem;
+  height: 0.35rem;
+  background: rgba(255, 215, 0, 0.45);
+  border-radius: 50%;
+  top: 55%;
+}
+
+.anime-navbar-mascot__cheek--left {
+  left: 15%;
+}
+
+.anime-navbar-mascot__cheek--right {
+  right: 15%;
+}
+
+.anime-navbar-mascot__mouth {
+  position: absolute;
+  width: 0.8rem;
+  height: 0.4rem;
+  border-bottom: 2px solid var(--color-navy);
+  border-radius: 50%;
+  left: 30%;
+  top: 60%;
+}
+
+.anime-navbar-mascot__tail {
+  position: absolute;
+  bottom: -0.25rem;
+  left: 50%;
+  width: 1rem;
+  height: 1rem;
+  transform: translateX(-50%);
+}
+
+.anime-navbar-mascot__tail-shape {
+  width: 100%;
+  height: 100%;
+  background: var(--color-ivory);
+  transform: rotate(45deg);
+  transform-origin: center;
+}

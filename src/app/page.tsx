@@ -7,14 +7,10 @@ import UpcomingEvents from '@/components/home/UpcomingEvents';
 import ImageSlider from '@/components/home/ImageSlider';
 import { ParallaxSection } from '@/components/ui/ParallaxSection';
 import { Button } from '@/components/ui/Button';
-import { BackgroundBeams } from '@/components/ui/background-beams';
 
 export default function Home() {
   return (
-    <div style={{ position: 'relative', minHeight: '100vh', overflow: 'hidden' }}>
-      {/* Animated background beams */}
-      <BackgroundBeams />
-
+    <>
       {/* Hero: church logo + name + center-stage event banner slider */}
       <Suspense fallback={<div style={{ height: '100vh' }} />}>
         <Hero />
@@ -39,6 +35,6 @@ export default function Home() {
         </p>
         <Button variant="primary">Learn More About Us</Button>
       </ParallaxSection>
-    </div>
+    </>
   );
 }
