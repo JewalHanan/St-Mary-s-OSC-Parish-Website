@@ -82,6 +82,13 @@ export default function Footer() {
                         &copy; {new Date().getFullYear()} St. Mary's Malankara Orthodox Church, Muthupilakkadu.
                         All rights reserved.
                     </p>
+                    <Link
+                        href="/admin/login"
+                        className={styles.adminLink}
+                        aria-label="Admin panel"
+                    >
+                        Admin
+                    </Link>
                 </div>
             </div>
         </footer>
