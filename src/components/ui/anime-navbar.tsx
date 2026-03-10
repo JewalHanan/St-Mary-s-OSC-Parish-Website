@@ -98,54 +98,7 @@ export function AnimeNavBar({ items, className, defaultActive = "Home" }: NavBar
                                     )}
                                 </AnimatePresence>
 
-                                {/* Floating mascot on active tab */}
-                                {isActive && (
-                                    <motion.div
-                                        layoutId="anime-mascot"
-                                        className="anime-navbar-mascot"
-                                        initial={false}
-                                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                                    >
-                                        <div className="anime-navbar-mascot__container">
-                                            {/* Face */}
-                                            <motion.div
-                                                className="anime-navbar-mascot__face"
-                                                animate={hoveredTab
-                                                    ? { scale: [1, 1.1, 1], rotate: [0, -5, 5, 0], transition: { duration: 0.5 } }
-                                                    : { y: [0, -3, 0], transition: { duration: 2, repeat: Infinity, ease: "easeInOut" } }
-                                                }
-                                            >
-                                                {/* Eyes */}
-                                                <motion.div
-                                                    className="anime-navbar-mascot__eye anime-navbar-mascot__eye--left"
-                                                    animate={hoveredTab ? { scaleY: [1, 0.2, 1], transition: { duration: 0.2 } } : {}}
-                                                />
-                                                <motion.div
-                                                    className="anime-navbar-mascot__eye anime-navbar-mascot__eye--right"
-                                                    animate={hoveredTab ? { scaleY: [1, 0.2, 1], transition: { duration: 0.2 } } : {}}
-                                                />
-                                                {/* Blush cheeks */}
-                                                <div className="anime-navbar-mascot__cheek anime-navbar-mascot__cheek--left" />
-                                                <div className="anime-navbar-mascot__cheek anime-navbar-mascot__cheek--right" />
-                                                {/* Mouth */}
-                                                <motion.div
-                                                    className="anime-navbar-mascot__mouth"
-                                                    animate={hoveredTab ? { scaleY: 1.5, y: -1 } : { scaleY: 1, y: 0 }}
-                                                />
-                                            </motion.div>
-                                            {/* Tail / chin pointer */}
-                                            <motion.div
-                                                className="anime-navbar-mascot__tail"
-                                                animate={hoveredTab
-                                                    ? { y: [0, -4, 0], transition: { duration: 0.3, repeat: Infinity, repeatType: "reverse" as const } }
-                                                    : { y: [0, 2, 0], transition: { duration: 1, repeat: Infinity, ease: "easeInOut", delay: 0.5 } }
-                                                }
-                                            >
-                                                <div className="anime-navbar-mascot__tail-shape" />
-                                            </motion.div>
-                                        </div>
-                                    </motion.div>
-                                )}
+
                             </Link>
                         )
                     })}
