@@ -1,7 +1,6 @@
 "use client"
 import React from "react"
 import { motion } from "framer-motion"
-import { cn } from "@/lib/utils"
 
 export const BackgroundBeams = React.memo(({ className }: { className?: string }) => {
     const paths = [
@@ -57,8 +56,34 @@ export const BackgroundBeams = React.memo(({ className }: { className?: string }
         "M-37 -581C-37 -581 31 -176 495 -49C959 78 1027 483 1027 483",
     ]
     return (
-        <div className={cn("absolute h-full w-full inset-0 flex items-center justify-center", className)}>
-            <svg className="z-0 h-full w-full pointer-events-none absolute" width="100%" height="100%" viewBox="0 0 696 316" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <div
+            className={className}
+            style={{
+                position: 'absolute',
+                height: '100%',
+                width: '100%',
+                inset: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: 0,
+                pointerEvents: 'none',
+            }}
+        >
+            <svg
+                style={{
+                    zIndex: 0,
+                    height: '100%',
+                    width: '100%',
+                    pointerEvents: 'none',
+                    position: 'absolute',
+                }}
+                width="100%"
+                height="100%"
+                viewBox="0 0 696 316"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+            >
                 {paths.map((path, index) => (
                     <motion.path key={`path-${index}`} d={path} stroke={`url(#linearGradient-${index})`} strokeOpacity="0.4" strokeWidth="0.5" />
                 ))}
