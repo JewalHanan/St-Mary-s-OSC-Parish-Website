@@ -20,6 +20,7 @@
     "@vercel/blob": "^2.3.1",
     "bcrypt": "^6.0.0",
     "better-sqlite3": "^12.6.2",
+    "clsx": "^2.1.1",
     "framer-motion": "^12.35.0",
     "jspdf": "^4.2.0",
     "jspdf-autotable": "^5.0.7",
@@ -32,6 +33,7 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-hook-form": "^7.71.2",
+    "tailwind-merge": "^3.5.0",
     "three": "^0.183.2",
     "xlsx": "^0.18.5",
     "zod": "^4.3.6"
