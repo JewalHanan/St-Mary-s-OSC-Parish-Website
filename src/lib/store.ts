@@ -263,11 +263,62 @@ export async function saveParishMembers(members: ParishMember[]): Promise<void> 
 // Note: The full liturgical calendar defaults are very large (~200 entries).
 // They are loaded from the blob store. If blob is empty, defaults are used.
 const DEFAULT_SPECIAL_DAYS: SpecialDay[] = [
-    { id: 100, title: 'New Year / Circumcision of our Lord', date: '2026-01-01', type: 'feast', description: 'New Year. Circumcision of our Lord. Feast of St. Basil, St. Gregory & all Holy Fathers. Tone 1.', is_countdown_target: false },
-    { id: 105, title: 'Epiphany / Denaha: Baptism of our Lord', date: '2026-01-06', type: 'feast', description: 'Epiphany — the Baptism of our Lord Jesus Christ. Tone 2.', is_countdown_target: false },
-    { id: 400, title: 'Palm Sunday', date: '2026-03-29', type: 'feast', description: 'Hosanna / Palm Sunday — The triumphant entry of our Lord into Jerusalem.', is_countdown_target: true },
-    { id: 405, title: 'Great Friday — Crucifixion of our Lord', date: '2026-04-03', type: 'commemoration', description: 'The Crucifixion, Death and Burial of our Lord Jesus Christ.', is_countdown_target: true },
-    { id: 406, title: 'Easter / Resurrection of our Lord ✝️', date: '2026-04-05', type: 'feast', description: 'Kyomtho / Easter Sunday — The Glorious Resurrection of our Lord Jesus Christ!', is_countdown_target: true },
+    // ── January ──
+    { id: 100, title: 'New Year / Circumcision of our Lord', date: '2026-01-01', type: 'feast', description: 'New Year. Circumcision of our Lord. Feast of St. Basil, St. Gregory & all Holy Fathers.', is_countdown_target: false },
+    { id: 101, title: 'Epiphany / Denaha: Baptism of our Lord', date: '2026-01-06', type: 'feast', description: 'Epiphany — the Baptism of our Lord Jesus Christ in the River Jordan.', is_countdown_target: true },
+    { id: 102, title: 'Feast of St. Basil', date: '2026-01-14', type: 'commemoration', description: 'Commemoration of St. Basil the Great, Archbishop of Caesarea.', is_countdown_target: false },
+
+    // ── February ──
+    { id: 200, title: 'Presentation of our Lord (Mayaltho)', date: '2026-02-02', type: 'feast', description: 'Presentation of our Lord Jesus Christ in the Temple — 40 days after Nativity.', is_countdown_target: false },
+    { id: 201, title: 'Start of Lent (Great Fast)', date: '2026-02-16', type: 'fast', description: 'Beginning of the 50-day Great Lent leading up to Easter.', is_countdown_target: true },
+
+    // ── March ──
+    { id: 300, title: 'Annunciation (Suboro)', date: '2026-03-25', type: 'feast', description: 'The Annunciation to the Blessed Virgin Mary by the Archangel Gabriel.', is_countdown_target: false },
+    { id: 301, title: 'Lazarus Saturday', date: '2026-03-28', type: 'feast', description: 'Commemoration of the resurrection of Lazarus by our Lord.', is_countdown_target: false },
+    { id: 302, title: 'Palm Sunday (Hosanna)', date: '2026-03-29', type: 'feast', description: 'Hosanna / Palm Sunday — The triumphant entry of our Lord into Jerusalem.', is_countdown_target: true },
+    { id: 303, title: 'Great Monday', date: '2026-03-30', type: 'commemoration', description: 'Great Monday of Holy Week — Cursing of the fig tree.', is_countdown_target: false },
+    { id: 304, title: 'Great Tuesday', date: '2026-03-31', type: 'commemoration', description: 'Great Tuesday of Holy Week — Parables and teachings.', is_countdown_target: false },
+
+    // ── April ──
+    { id: 400, title: 'Great Wednesday', date: '2026-04-01', type: 'commemoration', description: 'Great Wednesday — Anointing at Bethany, Judas\'s betrayal.', is_countdown_target: false },
+    { id: 401, title: 'Pesaha (Maundy Thursday)', date: '2026-04-02', type: 'feast', description: 'Pesaha — Institution of the Holy Eucharist, washing of the feet.', is_countdown_target: true },
+    { id: 402, title: 'Great Friday — Crucifixion', date: '2026-04-03', type: 'commemoration', description: 'The Crucifixion, Death and Burial of our Lord Jesus Christ.', is_countdown_target: true },
+    { id: 403, title: 'Great Saturday', date: '2026-04-04', type: 'commemoration', description: 'The Burial of our Lord. Descent into Hades.', is_countdown_target: false },
+    { id: 404, title: 'Easter / Resurrection ✝️', date: '2026-04-05', type: 'feast', description: 'Kyomtho / Easter Sunday — The Glorious Resurrection of our Lord Jesus Christ!', is_countdown_target: true },
+    { id: 405, title: 'New Sunday (Thomas Sunday)', date: '2026-04-12', type: 'feast', description: 'New Sunday — Commemoration of the appearance to St. Thomas the Apostle.', is_countdown_target: false },
+
+    // ── May ──
+    { id: 500, title: 'Ascension of our Lord', date: '2026-05-14', type: 'feast', description: 'Suloko / Ascension — Our Lord\'s glorious ascension into heaven, 40 days after Easter.', is_countdown_target: true },
+    { id: 501, title: 'Pentecost (Whitsunday)', date: '2026-05-24', type: 'feast', description: 'Pentecost — The descent of the Holy Spirit upon the Apostles.', is_countdown_target: true },
+    { id: 502, title: 'Apostles\' Fast begins', date: '2026-05-25', type: 'fast', description: 'Beginning of the Apostles\' Fast (Sleeha Nombu), ends June 29.', is_countdown_target: false },
+
+    // ── June ──
+    { id: 600, title: 'Nativity of St. John the Baptist', date: '2026-06-24', type: 'feast', description: 'Birth of St. John the Baptist, the Forerunner of our Lord.', is_countdown_target: false },
+    { id: 601, title: 'Feast of Sts. Peter & Paul', date: '2026-06-29', type: 'feast', description: 'Feast of the Holy Apostles Peter and Paul. End of Apostles\' Fast.', is_countdown_target: false },
+
+    // ── July ──
+    { id: 700, title: 'Feast of St. Thomas the Apostle', date: '2026-07-03', type: 'feast', description: 'Commemoration of the martyrdom of St. Thomas the Apostle, the Apostle of India.', is_countdown_target: false },
+
+    // ── August ──
+    { id: 800, title: 'Transfiguration of our Lord', date: '2026-08-06', type: 'feast', description: 'The Transfiguration of our Lord on Mount Tabor.', is_countdown_target: false },
+    { id: 801, title: '15-Day Lent (Shunoyo Fast)', date: '2026-08-01', type: 'fast', description: 'Beginning of the 15-day fast before the Assumption of the Blessed Virgin Mary.', is_countdown_target: false },
+    { id: 802, title: 'Assumption of the Blessed Virgin Mary', date: '2026-08-15', type: 'feast', description: 'Shoonoyo — The Assumption/Dormition of the Blessed Virgin Mary.', is_countdown_target: true },
+
+    // ── September ──
+    { id: 900, title: 'Nativity of the Blessed Virgin Mary', date: '2026-09-08', type: 'feast', description: 'Birthday of the Blessed Virgin Mary, Mother of God.', is_countdown_target: false },
+    { id: 901, title: 'Feast of the Holy Cross (Sleeba Perunnal)', date: '2026-09-14', type: 'feast', description: 'Exaltation of the Holy Cross — the Finding of the True Cross by St. Helena.', is_countdown_target: true },
+
+    // ── October ──
+    { id: 1000, title: 'Feast of St. Gregorios of Parumala', date: '2026-11-02', type: 'feast', description: 'Commemoration of Parumala Thirumeni — St. Gregorios of Parumala, first saint canonized by the Malankara Orthodox Church.', is_countdown_target: true },
+
+    // ── November ──
+    { id: 1100, title: '25-Day Lent (Advent) begins', date: '2026-12-01', type: 'fast', description: 'Beginning of the 25-day Advent Lent leading to Christmas.', is_countdown_target: false },
+    { id: 1101, title: 'Feast of St. Baselios Yeldho', date: '2026-10-18', type: 'feast', description: 'Commemoration of Baselios Yeldho Bava, Catholicose of the East.', is_countdown_target: false },
+
+    // ── December ──
+    { id: 1200, title: 'Christmas — Nativity of our Lord 🎄', date: '2026-12-25', type: 'feast', description: 'Yeldho — The Nativity of our Lord and Saviour Jesus Christ.', is_countdown_target: true },
+    { id: 1201, title: 'Feast of St. Stephen', date: '2026-12-26', type: 'commemoration', description: 'Commemoration of St. Stephen, the first Christian martyr.', is_countdown_target: false },
+    { id: 1202, title: 'Holy Innocents', date: '2026-12-28', type: 'commemoration', description: 'Commemoration of the Holy Innocents martyred by King Herod.', is_countdown_target: false },
 ];
 
 export async function getSpecialDays(): Promise<SpecialDay[]> {

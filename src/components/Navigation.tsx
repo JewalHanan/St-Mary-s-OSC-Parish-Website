@@ -18,7 +18,7 @@ const navItems = [
     { name: 'Prayer', url: '/prayer-requests', icon: HandHeart },
     { name: 'Calendar', url: '/calendar', icon: CalendarDays },
     { name: 'Parish', url: '/parish', icon: Church },
-    { name: 'Organisations', url: '/organisations', icon: Users },
+    { name: 'Ministries', url: '/ministries', icon: Users },
     { name: 'Contact', url: '/contact', icon: Mail },
 ];
 

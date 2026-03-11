@@ -33,7 +33,7 @@ export default function Footer() {
                             <li><Link href="/books">Service Books</Link></li>
                             <li><Link href="/calendar">Church Calendar</Link></li>
                             <li><Link href="/prayer-requests">Prayer Request</Link></li>
-                            <li><Link href="/organisations">Organisations</Link></li>
+                            <li><Link href="/ministries">Ministries</Link></li>
                             <li><Link href="/parish">Parish Committee</Link></li>
                             <li><Link href="/contact">Contact Us</Link></li>
                         </ul>

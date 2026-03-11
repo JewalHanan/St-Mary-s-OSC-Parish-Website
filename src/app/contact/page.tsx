@@ -42,7 +42,7 @@ export default function ContactPage() {
                     </a>
 
                     <h2>📞 Phone</h2>
-                    <p>+91 98765 43210</p>
+                    <p>+91 7034756977</p>
 
                     <h2>📧 Email</h2>
                     <p>info@stmosc.org</p>

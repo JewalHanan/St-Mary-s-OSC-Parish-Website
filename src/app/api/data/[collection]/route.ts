@@ -19,6 +19,7 @@ const VALID_COLLECTIONS = new Set([
     'special-days',
     'organisations',
     'event-banners',
+    'site-settings',
 ]);
 
 export async function GET(
