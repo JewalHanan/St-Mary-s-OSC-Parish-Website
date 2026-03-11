@@ -3,8 +3,9 @@
 import React, { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
-import { LucideIcon, Menu, X } from "lucide-react"
+import { LucideIcon, Menu, X, Moon, Sun } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useTheme } from "@/components/ThemeProvider"
 
 interface NavItem {
     name: string
@@ -23,6 +24,7 @@ export function AnimeNavBar({ items, className, defaultActive = "Home" }: NavBar
     const [hoveredTab, setHoveredTab] = useState<string | null>(null)
     const [activeTab, setActiveTab] = useState<string>(defaultActive)
     const [isMobileOpen, setIsMobileOpen] = useState(false)
+    const { theme, toggleTheme } = useTheme()
 
     useEffect(() => { setMounted(true) }, [])
 
@@ -99,6 +101,20 @@ export function AnimeNavBar({ items, className, defaultActive = "Home" }: NavBar
                             </Link>
                         )
                     })}
+                    
+                    {/* Theme Toggle Button (Desktop) */}
+                    <button
+                        onClick={toggleTheme}
+                        className="anime-navbar-link"
+                        aria-label="Toggle Theme"
+                        style={{ padding: '0.75rem 0.5rem', display: 'flex', alignItems: 'center' }}
+                    >
+                        {theme === 'dark' ? (
+                            <Sun size={20} strokeWidth={2.5} color="var(--color-gold)" />
+                        ) : (
+                            <Moon size={20} strokeWidth={2.5} color="var(--color-navy)" />
+                        )}
+                    </button>
                 </motion.div>
             </div>
 
@@ -125,13 +141,26 @@ export function AnimeNavBar({ items, className, defaultActive = "Home" }: NavBar
                     >
                         <div className="mobile-menu-header">
                             <span className="mobile-menu-title">Menu</span>
-                            <button
-                                onClick={() => setIsMobileOpen(false)}
-                                className="mobile-menu-close"
-                                aria-label="Close Menu"
-                            >
-                                <X size={28} strokeWidth={2.5} color="var(--color-gold)" />
-                            </button>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                <button
+                                    onClick={toggleTheme}
+                                    className="mobile-menu-close"
+                                    aria-label="Toggle Theme"
+                                >
+                                    {theme === 'dark' ? (
+                                        <Sun size={28} strokeWidth={2.5} color="var(--color-gold)" />
+                                    ) : (
+                                        <Moon size={28} strokeWidth={2.5} color="var(--color-navy)" />
+                                    )}
+                                </button>
+                                <button
+                                    onClick={() => setIsMobileOpen(false)}
+                                    className="mobile-menu-close"
+                                    aria-label="Close Menu"
+                                >
+                                    <X size={28} strokeWidth={2.5} color="var(--color-gold)" />
+                                </button>
+                            </div>
                         </div>
 
                         <div className="mobile-menu-links">

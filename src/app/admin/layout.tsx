@@ -4,6 +4,7 @@ import { ReactNode, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
+import { SessionSlidingWindow } from '@/components/SessionSlidingWindow';
 import styles from '@/styles/AdminLayout.module.css';
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
@@ -101,6 +102,9 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             <main className={styles.mainContent}>
                 {children}
             </main>
+            
+            {/* Invisible session tracker to implement 30m sliding window */}
+            {session && <SessionSlidingWindow />}
         </div>
     );
 }

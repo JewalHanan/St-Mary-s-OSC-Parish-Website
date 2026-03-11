@@ -95,5 +95,5 @@
 
 .readMoreBtn:hover {
     background: var(--accent-primary);
-    color: var(--color-navy);
+    color: var(--text-primary);
 }

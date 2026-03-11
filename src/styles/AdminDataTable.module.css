@@ -84,7 +84,7 @@
 
 .blessings {
     background: rgba(255, 215, 0, 0.2);
-    color: var(--color-gold);
+    color: var(--accent-primary);
 }
 
 .statusBadge {

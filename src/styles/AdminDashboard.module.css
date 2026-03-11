@@ -51,7 +51,7 @@
 .statValue {
     font-family: var(--font-heading-system);
     font-size: 2.5rem;
-    color: var(--color-gold);
+    color: var(--accent-primary);
     line-height: 1;
 }
 

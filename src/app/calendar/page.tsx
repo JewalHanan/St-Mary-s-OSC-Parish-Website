@@ -8,33 +8,59 @@ import styles from '@/styles/Calendar.module.css';
 
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-function CountdownTimer({ targetDate, title, icon }: { targetDate: string, title: string, icon: string }) {
-    const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0 });
+function CountdownTimer({ targetDay }: { targetDay: SpecialDay }) {
+    const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, mins: 0 });
 
     useEffect(() => {
         const calcTime = () => {
-            const difference = new Date(targetDate).getTime() - new Date().getTime();
+            const difference = new Date(`${targetDay.date}T00:00:00`).getTime() - new Date().getTime();
             if (difference > 0) {
                 setTimeLeft({
                     days: Math.floor(difference / (1000 * 60 * 60 * 24)),
                     hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+                    mins: Math.floor((difference / 1000 / 60) % 60),
                 });
             }
         };
         calcTime();
         const timer = setInterval(calcTime, 60000);
         return () => clearInterval(timer);
-    }, [targetDate]);
+    }, [targetDay.date]);
+
+    const formattedDate = new Date(`${targetDay.date}T00:00:00`).toLocaleDateString('en-US', {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+    });
 
     return (
         <Card className={styles.countdownCard} withGlow>
-            <div className={styles.countdownIcon}>{icon}</div>
-            <div className={styles.countdownInfo}>
-                <h3>{title}</h3>
-                <p>
-                    <span className={styles.number}>{timeLeft.days}</span> days
-                    <span className={styles.number}>{timeLeft.hours}</span> hrs
-                </p>
+            <div className={styles.countdownImage}>
+                {targetDay.image ? (
+                    <img src={targetDay.image} alt={targetDay.title} />
+                ) : (
+                    <div className={styles.countdownImageFallback}>⏳</div>
+                )}
+            </div>
+            <div className={styles.countdownContent}>
+                <div className={styles.countdownInfo}>
+                    <h3>{targetDay.title}</h3>
+                    <div className={styles.countdownDate}>{formattedDate}</div>
+                    {targetDay.description && <div className={styles.countdownDesc}>{targetDay.description}</div>}
+                </div>
+                
+                <div className={styles.countdownTimerBox}>
+                    <div className={styles.timerUnit}>
+                        <span className={styles.number}>{timeLeft.days}</span>
+                        <span className={styles.label}>Days</span>
+                    </div>
+                    <div className={styles.timerUnit}>
+                        <span className={styles.number}>{String(timeLeft.hours).padStart(2, '0')}</span>
+                        <span className={styles.label}>Hours</span>
+                    </div>
+                    <div className={styles.timerUnit}>
+                        <span className={styles.number}>{String(timeLeft.mins).padStart(2, '0')}</span>
+                        <span className={styles.label}>Mins</span>
+                    </div>
+                </div>
             </div>
         </Card>
     );
@@ -90,18 +116,8 @@ export default function CalendarPage() {
 
             <div className={styles.countdowns}>
                 {specialDays.filter(d => d.is_countdown_target).map(target => (
-                    <div key={target.id} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%', maxWidth: '600px', margin: '0 auto' }}>
-                        <CountdownTimer
-                            targetDate={`${target.date}T00:00:00`}
-                            title={target.title}
-                            icon="⏳"
-                        />
-                        <div style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>
-                            <p style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'var(--accent-primary)' }}>
-                                {new Date(target.date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-                            </p>
-                            <p style={{ marginTop: '0.5rem' }}>{target.description}</p>
-                        </div>
+                    <div key={target.id} style={{ display: 'flex', flexDirection: 'column', width: '100%', maxWidth: '900px', margin: '0 auto' }}>
+                        <CountdownTimer targetDay={target} />
                     </div>
                 ))}
             </div>
@@ -207,11 +223,13 @@ export default function CalendarPage() {
                         >
                             {/* Image */}
                             {selectedDayInfo.day.image && (
-                                <img
-                                    src={selectedDayInfo.day.image}
-                                    alt={selectedDayInfo.day.title}
-                                    style={{ width: 80, height: 80, borderRadius: '12px', objectFit: 'cover', border: `2px solid ${TYPE_COLORS[selectedDayInfo.day.type ?? 'feast']}`, marginBottom: '1rem', display: 'block' }}
-                                />
+                                <div style={{ width: '100%', height: '220px', marginBottom: '1.5rem', borderRadius: '12px', overflow: 'hidden', border: `1px solid ${TYPE_COLORS[selectedDayInfo.day.type ?? 'feast']}50` }}>
+                                    <img
+                                        src={selectedDayInfo.day.image}
+                                        alt={selectedDayInfo.day.title}
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                                    />
+                                </div>
                             )}
                             {/* Type badge */}
                             <span style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '12px', background: TYPE_COLORS[selectedDayInfo.day.type ?? 'feast'] + '25', color: TYPE_COLORS[selectedDayInfo.day.type ?? 'feast'], fontSize: '0.8rem', fontWeight: 600, marginBottom: '0.75rem' }}>

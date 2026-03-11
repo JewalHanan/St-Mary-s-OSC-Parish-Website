@@ -41,20 +41,25 @@ export default function UpcomingEvents() {
                                 animate={isInView ? { opacity: 1, z: 0, y: 0 } : { opacity: 0, z: -100, y: 50 }}
                                 transition={{ duration: 0.8, delay: index * 0.2 }}
                             >
-                                <Card withGlow className={styles.eventCard}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '0.5rem' }}>
-                                        {event.icon
-                                            ? <img src={event.icon} alt="" style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover', border: `2px solid ${event.color}`, flexShrink: 0 }} />
-                                            : <span style={{ width: 40, height: 40, borderRadius: '50%', background: event.color + '30', border: `2px solid ${event.color}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', flexShrink: 0 }}>📅</span>
-                                        }
-                                        <h3 className={styles.eventTitle} style={{ margin: 0 }}>{event.title}</h3>
+                                <Card withGlow className={styles.eventCard} style={{ padding: 0, overflow: 'hidden' }}>
+                                    {event.icon ? (
+                                        <div style={{ width: '100%', height: '160px', overflow: 'hidden', borderBottom: `2px solid ${event.color}50` }}>
+                                            <img src={event.icon} alt={event.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                        </div>
+                                    ) : (
+                                        <div style={{ width: '100%', height: '120px', background: event.color + '20', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '3rem', borderBottom: `2px solid ${event.color}50` }}>
+                                            📅
+                                        </div>
+                                    )}
+                                    <div style={{ padding: '1.5rem' }}>
+                                        <h3 className={styles.eventTitle} style={{ margin: '0 0 0.5rem', fontSize: '1.3rem' }}>{event.title}</h3>
+                                        <div style={{ margin: '0 0 1.5rem', display: 'flex', gap: '8px' }}>
+                                            <span className={styles.badge} style={{ background: event.color + '20', color: event.color, padding: '4px 8px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold' }}>
+                                                {event.type.toUpperCase()}
+                                            </span>
+                                        </div>
+                                        <button className={styles.readMoreBtn} onClick={() => setSelectedEvent(event)}>Read More</button>
                                     </div>
-                                    <div style={{ margin: '0.5rem 0 1.5rem', display: 'flex', gap: '8px' }}>
-                                        <span className={styles.badge} style={{ background: event.color + '20', color: event.color, padding: '4px 8px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold' }}>
-                                            {event.type.toUpperCase()}
-                                        </span>
-                                    </div>
-                                    <button className={styles.readMoreBtn} onClick={() => setSelectedEvent(event)}>Read More</button>
                                 </Card>
                             </motion.div>
                         ))
@@ -87,17 +92,16 @@ export default function UpcomingEvents() {
                             ✕
                         </button>
 
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '1.5rem' }}>
-                            {selectedEvent.icon
-                                ? <img src={selectedEvent.icon} alt="" style={{ width: 64, height: 64, borderRadius: '50%', objectFit: 'cover', border: `3px solid ${selectedEvent.color}` }} />
-                                : <span style={{ width: 64, height: 64, borderRadius: '50%', background: selectedEvent.color + '30', border: `3px solid ${selectedEvent.color}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem' }}>📅</span>
-                            }
-                            <div>
-                                <h2 style={{ margin: 0, color: 'var(--color-gold)', fontFamily: 'var(--font-heading-system)', fontSize: '1.5rem', lineHeight: 1.2 }}>{selectedEvent.title}</h2>
-                                <span style={{ display: 'inline-block', marginTop: '6px', background: selectedEvent.color + '20', color: selectedEvent.color, padding: '4px 10px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold', textTransform: 'uppercase' }}>
-                                    {selectedEvent.type}
-                                </span>
-                            </div>
+                        {selectedEvent.icon ? (
+                            <img src={selectedEvent.icon} alt="" style={{ width: '100%', height: '200px', borderRadius: '12px', objectFit: 'cover', marginBottom: '1.5rem', border: `1px solid ${selectedEvent.color}50` }} />
+                        ) : (
+                            <div style={{ width: '100%', height: '160px', borderRadius: '12px', background: selectedEvent.color + '30', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '4rem', marginBottom: '1.5rem', border: `1px solid ${selectedEvent.color}50` }}>📅</div>
+                        )}
+                        <div style={{ marginBottom: '1.5rem' }}>
+                            <h2 style={{ margin: 0, color: 'var(--color-gold)', fontFamily: 'var(--font-heading-system)', fontSize: '1.8rem', lineHeight: 1.2 }}>{selectedEvent.title}</h2>
+                            <span style={{ display: 'inline-block', marginTop: '8px', background: selectedEvent.color + '20', color: selectedEvent.color, padding: '4px 10px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold', textTransform: 'uppercase' }}>
+                                {selectedEvent.type}
+                            </span>
                         </div>
 
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '1.5rem' }}>

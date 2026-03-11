@@ -22,19 +22,19 @@
 }
 
 .primary {
-    background-color: var(--color-gold-dark);
-    color: var(--color-navy);
+    background-color: var(--accent-primary);
+    color: var(--text-primary);
 }
 
 .primary:hover {
-    background-color: var(--color-gold);
+    background-color: var(--accent-primary);
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
 }
 
 .secondary {
-    background-color: var(--color-crimson);
-    color: var(--color-ivory);
+    background-color: var(--accent-secondary);
+    color: var(--text-primary);
 }
 
 .secondary:hover {
@@ -51,7 +51,7 @@
 
 .outline:hover {
     background-color: var(--accent-primary);
-    color: var(--color-navy);
+    color: var(--text-primary);
 }
 
 .btn:disabled {

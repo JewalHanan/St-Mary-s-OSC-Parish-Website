@@ -68,14 +68,14 @@
     text-align: center;
     height: 100%;
     padding: 2.5rem 1.5rem !important;
-    background: rgba(10, 15, 44, 0.6) !important;
-    border: 1px solid rgba(255, 215, 0, 0.1) !important;
+    background: var(--card-bg) !important;
+    border: 1px solid var(--card-border) !important;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 .cardContainer:hover .memberCard {
-    border-color: rgba(255, 215, 0, 0.4) !important;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 215, 0, 0.1);
+    border-color: var(--accent-primary) !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), 0 0 20px rgba(184, 134, 11, 0.1);
 }
 
 .photoWrapper {
@@ -85,8 +85,8 @@
     margin-bottom: 1.5rem;
     overflow: hidden;
     border: 4px solid var(--accent-primary);
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
-    background: var(--color-navy-light);
+    box-shadow: 0 0 15px rgba(184, 134, 11, 0.2);
+    background: var(--bg-secondary);
     display: flex;
     align-items: center;
     justify-content: center;

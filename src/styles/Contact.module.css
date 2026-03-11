@@ -30,16 +30,16 @@
 }
 
 .infoCard {
-    background: rgba(10, 15, 44, 0.4);
+    background: var(--card-bg);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 215, 0, 0.15);
+    border: 1px solid var(--card-border);
     border-radius: 16px;
     padding: 2.5rem;
 }
 
 .infoCard h2 {
     font-family: var(--font-heading-system);
-    color: var(--color-gold);
+    color: var(--text-primary);
     font-size: 1.3rem;
     margin-top: 2rem;
     margin-bottom: 0.75rem;
@@ -57,13 +57,13 @@
 }
 
 .infoCard strong {
-    color: var(--color-ivory);
+    color: var(--accent-primary);
 }
 
 .mapContainer {
     border-radius: 16px;
     overflow: hidden;
-    border: 1px solid rgba(255, 215, 0, 0.15);
+    border: 1px solid var(--card-border);
 }
 
 @media (max-width: 768px) {

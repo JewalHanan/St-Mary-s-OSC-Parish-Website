@@ -212,7 +212,7 @@
 
 .navBtn:hover {
     background: var(--accent-primary);
-    color: var(--color-navy);
+    color: var(--text-primary);
     border-color: var(--accent-primary);
     transform: translateY(-50%) scale(1.1);
 }

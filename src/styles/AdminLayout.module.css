@@ -8,9 +8,9 @@
 /* ── Sidebar ── */
 .sidebar {
     width: 250px;
-    background-color: var(--color-navy);
-    color: var(--color-ivory);
-    border-right: 1px solid rgba(255, 215, 0, 0.2);
+    background-color: var(--nav-bg);
+    color: var(--text-primary);
+    border-right: 1px solid var(--nav-pill-border);
     display: flex;
     flex-direction: column;
     position: fixed;
@@ -23,25 +23,25 @@
 
 .sidebarHeader {
     padding: 2rem 1.5rem;
-    border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+    border-bottom: 1px solid var(--nav-pill-border);
 }
 
 .sidebarHeader h2 {
     font-family: var(--font-heading-system);
-    color: var(--color-gold);
+    color: var(--accent-primary);
     font-size: 1.5rem;
     margin-bottom: 0.5rem;
 }
 
 .userRoleBadge {
     display: inline-block;
-    background: rgba(255, 215, 0, 0.15);
+    background: var(--hover-overlay);
     padding: 2px 8px;
     border-radius: 4px;
     font-size: 0.8rem;
     font-weight: 600;
-    border: 1px solid rgba(255, 215, 0, 0.3);
-    color: var(--color-gold);
+    border: 1px solid var(--nav-pill-border);
+    color: var(--accent-primary);
 }
 
 .sidebarNav {
@@ -57,7 +57,7 @@
     display: flex;
     align-items: center;
     padding: 0.75rem 1.5rem;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--text-secondary);
     text-decoration: none;
     font-family: var(--font-body-system);
     font-size: 1rem;
@@ -67,14 +67,14 @@
 }
 
 .navLink:hover {
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--color-ivory);
+    background: var(--hover-overlay);
+    color: var(--text-primary);
 }
 
 .active {
-    background: rgba(255, 215, 0, 0.05);
-    color: var(--color-gold);
-    border-left-color: var(--color-gold);
+    background: var(--hover-overlay);
+    color: var(--accent-primary);
+    border-left-color: var(--accent-primary);
 }
 
 .icon {
@@ -84,7 +84,7 @@
 
 .sidebarFooter {
     padding: 1.5rem;
-    border-top: 1px solid rgba(255, 215, 0, 0.1);
+    border-top: 1px solid var(--nav-pill-border);
 }
 
 .logoutBtn {
@@ -94,8 +94,8 @@
     justify-content: flex-start;
     padding: 0.75rem 1rem;
     background: transparent;
-    border: 1px solid rgba(255, 215, 0, 0.3);
-    color: var(--color-ivory);
+    border: 1px solid var(--nav-pill-border);
+    color: var(--text-primary);
     border-radius: 6px;
     cursor: pointer;
     transition: var(--transition-fast);
@@ -105,9 +105,9 @@
 }
 
 .logoutBtn:hover {
-    background: rgba(255, 215, 0, 0.1);
-    color: var(--color-gold);
-    border-color: var(--color-gold);
+    background: var(--hover-overlay);
+    color: var(--accent-primary);
+    border-color: var(--accent-primary);
 }
 
 /* ── Main Content ── */
@@ -176,8 +176,8 @@
         height: 44px;
         border: none;
         border-radius: 8px;
-        background: var(--color-navy);
-        border: 1px solid rgba(255, 215, 0, 0.3);
+        background: var(--nav-bg);
+        border: 1px solid var(--nav-pill-border);
         cursor: pointer;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     }
@@ -192,7 +192,7 @@
     .hamburger span {
         display: block;
         height: 2px;
-        background: var(--color-gold);
+        background: var(--accent-primary);
         border-radius: 2px;
         transition: all 0.3s ease;
     }

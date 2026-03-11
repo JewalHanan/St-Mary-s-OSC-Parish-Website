@@ -8,6 +8,8 @@ import ImageSlider from '@/components/home/ImageSlider';
 import { ParallaxSection } from '@/components/ui/ParallaxSection';
 import { Button } from '@/components/ui/Button';
 
+import MainCountdown from '@/components/home/MainCountdown';
+
 export default function Home() {
   return (
     <>
@@ -21,6 +23,7 @@ export default function Home() {
 
       <Ticker />
       <UpcomingEvents />
+      <MainCountdown />
 
       <ParallaxSection
         backgroundImage="https://images.unsplash.com/photo-1548625361-ecaa842cebb0?auto=format&fit=crop&w=1920&q=80"

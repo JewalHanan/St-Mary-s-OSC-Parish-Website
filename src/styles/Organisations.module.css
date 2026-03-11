@@ -32,11 +32,11 @@
 }
 
 .orgSection {
-    background: rgba(10, 15, 44, 0.4);
+    background: var(--card-bg);
     border-radius: 20px;
     padding: 3rem;
-    border: 1px solid rgba(255, 215, 0, 0.1);
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--card-border);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
     position: relative;
 }
 
@@ -63,7 +63,7 @@
     min-width: 100px;
     flex-shrink: 0;
     border-radius: 50%;
-    background: var(--color-navy-light);
+    background: var(--bg-secondary);
     border: 3px solid var(--accent-primary);
     display: flex;
     align-items: center;
@@ -71,13 +71,13 @@
     font-family: var(--font-heading-system);
     font-size: 2.5rem;
     color: var(--accent-primary);
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.15);
+    box-shadow: 0 0 20px rgba(184, 134, 11, 0.15);
     overflow: hidden;
 }
 
 .orgTitleArea h2 {
     font-family: var(--font-heading-system);
-    color: var(--color-gold);
+    color: var(--text-primary);
     font-size: 2rem;
     margin-bottom: 1rem;
 }
@@ -112,7 +112,7 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    background: rgba(255, 255, 255, 0.03) !important;
+    background: var(--hover-overlay) !important;
 }
 
 .leaderCard h3 {

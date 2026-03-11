@@ -27,29 +27,120 @@
 
 .countdownCard {
     display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    padding: 1.5rem 2rem !important;
+    flex-direction: row;
+    align-items: stretch;
+    padding: 0 !important;
     min-width: 300px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-lg, 16px);
+    overflow: hidden;
+    position: relative;
 }
 
-.countdownIcon {
-    font-size: 3rem;
-    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));
+@media (max-width: 768px) {
+    .countdownCard {
+        flex-direction: column;
+    }
+}
+
+.countdownImage {
+    width: 250px;
+    flex-shrink: 0;
+    position: relative;
+    border-right: 1px solid var(--card-border);
+}
+
+@media (max-width: 768px) {
+    .countdownImage {
+        width: 100%;
+        height: 200px;
+        border-right: none;
+        border-bottom: 1px solid var(--card-border);
+    }
+}
+
+.countdownImage img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.countdownImageFallback {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    background: rgba(255, 215, 0, 0.1);
+}
+
+.countdownContent {
+    flex: 1;
+    padding: 1.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.countdownInfo {
+    margin-bottom: 0.5rem;
 }
 
 .countdownInfo h3 {
     font-family: var(--font-heading-system);
+    color: var(--color-gold);
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.countdownDate {
+    font-weight: bold;
+    color: var(--text-secondary);
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+}
+
+.countdownDesc {
     color: var(--text-primary);
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+}
+
+.countdownTimerBox {
+    display: inline-flex;
+    gap: 1.5rem;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    align-items: center;
+}
+
+.timerUnit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .number {
-    font-size: 1.5rem;
+    font-size: 2rem;
     font-weight: 700;
     color: var(--accent-primary);
-    margin-right: 4px;
+    line-height: 1;
+    margin-bottom: 4px;
+    font-family: var(--font-heading-system);
+}
+
+.label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    letter-spacing: 0.05em;
+    font-weight: 600;
 }
 
 .calendarContainer {
@@ -105,7 +196,7 @@
 
 .activeMonth {
     background: var(--accent-primary);
-    color: var(--color-navy);
+    color: var(--text-primary);
 }
 
 .weekdays {
@@ -128,7 +219,7 @@
 .dayCell {
     min-height: 80px;
     padding: 0.5rem;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--input-bg);
     border-radius: var(--radius-sm, 8px);
     display: flex;
     flex-direction: column;
@@ -142,8 +233,8 @@
 }
 
 .dayCell:hover {
-    background: rgba(255, 215, 0, 0.1);
-    border-color: rgba(255, 215, 0, 0.3);
+    background: var(--hover-overlay);
+    border-color: var(--accent-primary);
     transform: scale(1.05);
 }
 
@@ -169,7 +260,7 @@
     top: 6px;
     right: 8px;
     font-size: 1rem;
-    color: var(--color-crimson);
+    color: var(--accent-secondary);
 }
 
 .eventIndicator {
