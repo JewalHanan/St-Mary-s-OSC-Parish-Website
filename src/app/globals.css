@@ -333,6 +333,7 @@ textarea {
 /* ── Mobile Hamburger Button ── */
 .mobile-nav-toggle {
   display: none;
+  pointer-events: auto;
 }
 
 @media (max-width: 768px) {
@@ -376,6 +377,7 @@ textarea {
   flex-direction: column;
   padding: 1.5rem 1.5rem 3rem;
   overflow-y: auto;
+  pointer-events: auto;
 }
 
 .mobile-menu-header {
