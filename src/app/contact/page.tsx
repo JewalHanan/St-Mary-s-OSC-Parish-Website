@@ -1,9 +1,19 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { getSiteSettings, type SiteSettings } from '@/lib/store';
 import styles from '@/styles/Contact.module.css';
 
 export default function ContactPage() {
+    const [settings, setSettings] = useState<SiteSettings | null>(null);
+
+    useEffect(() => {
+        getSiteSettings().then(setSettings);
+    }, []);
+
+    if (!settings) return <div style={{ minHeight: '100vh', background: 'var(--bg-primary)' }} />;
+
     return (
         <div className={styles.pageContainer}>
             <motion.div
@@ -25,8 +35,8 @@ export default function ContactPage() {
                 >
                     <h2>📍 Address</h2>
                     <p>St. Mary&apos;s Malankara Orthodox Syrian Church</p>
-                    <p>Muthupilakkadu, Kollam</p>
-                    <p>Kerala — 691 578, India</p>
+                    <p>{settings.contact.addressLine1}</p>
+                    <p>{settings.contact.addressLine2}</p>
                     <a
                         href="https://maps.app.goo.gl/qi8XaMVmmYGMwbtG7"
                         target="_blank"
@@ -42,15 +52,15 @@ export default function ContactPage() {
                     </a>
 
                     <h2>📞 Phone</h2>
-                    <p>+91 7034756977</p>
+                    <p>{settings.contact.phone}</p>
 
                     <h2>📧 Email</h2>
-                    <p>info@stmosc.org</p>
+                    <p>{settings.contact.email}</p>
 
                     <h2>⏰ Service Timings</h2>
-                    <p><strong>Sunday Holy Qurbono:</strong> 8:30 AM</p>
-                    <p><strong>Wednesday Evening Prayer:</strong> 6:00 PM</p>
-                    <p><strong>Saturday Vespers:</strong> 5:30 PM</p>
+                    {settings.contact.serviceTimings.map((timing, i) => (
+                        <p key={i}><strong>{timing.label}:</strong> {timing.time}</p>
+                    ))}
                 </motion.div>
 
                 <motion.div

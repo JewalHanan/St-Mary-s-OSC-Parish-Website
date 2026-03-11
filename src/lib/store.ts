@@ -18,6 +18,8 @@ export interface ChurchEvent {
     time: string;
     color: string;
     type: string;
+    description?: string;
+    location?: string;
     icon?: string;
 }
 
@@ -38,6 +40,7 @@ export interface PrayerRequest {
 export interface BookSection {
     id: number;
     title: string;
+    image?: string;
     books: BookItem[];
 }
 
@@ -91,7 +94,45 @@ export interface EventBannerImage {
     order: number;
 }
 
+export interface SiteSettings {
+    tickerOverride?: string;
+    contact: {
+        phone: string;
+        email: string;
+        addressLine1: string;
+        addressLine2: string;
+        serviceTimings: { label: string; time: string }[];
+    };
+    social: {
+        facebook: string;
+        instagram: string;
+        whatsapp: string;
+        youtube: string;
+    };
+}
+
 // ──── Default data (used as fallback when blob store is empty) ───
+
+const DEFAULT_SITE_SETTINGS: SiteSettings = {
+    tickerOverride: '',
+    contact: {
+        phone: '+91 7034756977',
+        email: 'info@stmosc.org',
+        addressLine1: 'Muthupilakkadu, Kollam',
+        addressLine2: 'Kerala — 691 578, India',
+        serviceTimings: [
+            { label: 'Sunday Holy Qurbono', time: '8:30 AM' },
+            { label: 'Wednesday Evening Prayer', time: '6:00 PM' },
+            { label: 'Saturday Vespers', time: '5:30 PM' }
+        ]
+    },
+    social: {
+        facebook: 'https://facebook.com/',
+        instagram: 'https://instagram.com/',
+        whatsapp: 'https://wa.me/917034756977',
+        youtube: 'https://youtube.com/'
+    }
+};
 
 const DEFAULT_SLIDER_IMAGES: SliderImage[] = [
     { id: 1, image: 'https://images.unsplash.com/photo-1548625361-ecaa842cebb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80', title: 'Sacred Heritage', caption: 'Experience the beauty of Malankara Orthodox traditions.' },
@@ -347,6 +388,15 @@ export async function getEventBanners(): Promise<EventBannerImage[]> {
 }
 export async function saveEventBanners(banners: EventBannerImage[]): Promise<void> {
     return saveCollection('event-banners', banners);
+}
+
+// ──── Site Settings ───────────────────────────────────────────────
+
+export async function getSiteSettings(): Promise<SiteSettings> {
+    return fetchCollection('site-settings', DEFAULT_SITE_SETTINGS);
+}
+export async function saveSiteSettings(settings: SiteSettings): Promise<void> {
+    return saveCollection('site-settings', settings);
 }
 
 // ──── ID Generation (unchanged) ─────────────────────────────────

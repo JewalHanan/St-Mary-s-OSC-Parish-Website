@@ -11,7 +11,7 @@ const MAX_EVENTS = 5;
 export default function EventsManager() {
     const [events, setEvents] = useState<ChurchEvent[]>([]);
     const [editingId, setEditingId] = useState<number | null>(null);
-    const [form, setForm] = useState({ title: '', date: '', time: '', color: '#F5A623', type: 'feast', icon: '' });
+    const [form, setForm] = useState({ title: '', date: '', time: '', color: '#F5A623', type: 'feast', icon: '', description: '', location: '' });
     const iconInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => { getEvents().then(setEvents); }, []);
@@ -26,12 +26,12 @@ export default function EventsManager() {
             return alert(`Maximum of ${MAX_EVENTS} events allowed on the homepage. Please delete one first.`);
         }
         setEditingId(0);
-        setForm({ title: '', date: '', time: '', color: '#F5A623', type: 'feast', icon: '' });
+        setForm({ title: '', date: '', time: '', color: '#F5A623', type: 'feast', icon: '', description: '', location: '' });
     };
 
     const openEdit = (evt: ChurchEvent) => {
         setEditingId(evt.id);
-        setForm({ title: evt.title, date: evt.date, time: evt.time, color: evt.color, type: evt.type, icon: evt.icon || '' });
+        setForm({ title: evt.title, date: evt.date, time: evt.time, color: evt.color, type: evt.type, icon: evt.icon || '', description: evt.description || '', location: evt.location || '' });
     };
 
     // Compress icon to a small 80×80 square thumbnail
@@ -153,8 +153,22 @@ export default function EventsManager() {
                         </h2>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                             <input value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} placeholder="Event Title *" style={inputStyle} />
-                            <input type="date" value={form.date} onChange={e => setForm({ ...form, date: e.target.value })} style={inputStyle} />
-                            <input value={form.time} onChange={e => setForm({ ...form, time: e.target.value })} placeholder="Time (e.g. 07:30 AM)" style={inputStyle} />
+
+                            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                                <input type="date" value={form.date} onChange={e => setForm({ ...form, date: e.target.value })} style={{ ...inputStyle, flex: 1 }} />
+                                <input value={form.time} onChange={e => setForm({ ...form, time: e.target.value })} placeholder="Time (e.g. 07:30 AM)" style={{ ...inputStyle, flex: 1 }} />
+                            </div>
+
+                            <input value={form.location} onChange={e => setForm({ ...form, location: e.target.value })} placeholder="Location (optional)" style={inputStyle} />
+
+                            <textarea
+                                value={form.description}
+                                onChange={e => setForm({ ...form, description: e.target.value })}
+                                placeholder="Event Description (optional)"
+                                rows={3}
+                                style={{ ...inputStyle, resize: 'vertical' }}
+                            />
+
                             <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                                 <label style={{ color: 'var(--color-ivory)', fontSize: '0.9rem' }}>Color:</label>
                                 <input type="color" value={form.color} onChange={e => setForm({ ...form, color: e.target.value })} style={{ width: '50px', height: '35px', border: 'none', cursor: 'pointer' }} />

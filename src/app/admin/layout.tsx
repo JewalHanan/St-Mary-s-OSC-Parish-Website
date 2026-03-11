@@ -26,6 +26,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
 
     const navLinks = [
         { href: '/admin', label: 'Dashboard', icon: '📊' },
+        { href: '/admin/settings', label: 'Site Settings', icon: '⚙️' },
         { href: '/admin/slider', label: 'Homepage Slider', icon: '🖼️' },
         { href: '/admin/event-banners', label: 'Event Banner Images', icon: '🎬' },
         { href: '/admin/prayer-requests', label: 'Prayer Requests', icon: '🙏' },

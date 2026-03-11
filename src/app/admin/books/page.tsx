@@ -10,11 +10,13 @@ export default function BooksManager() {
     const [sections, setSections] = useState<BookSection[]>([]);
     const [editingSectionId, setEditingSectionId] = useState<number | null>(null);
     const [sectionTitle, setSectionTitle] = useState('');
+    const [sectionImage, setSectionImage] = useState('');
     const [editingBook, setEditingBook] = useState<{ sectionId: number; bookId: number | null } | null>(null);
     const [bookForm, setBookForm] = useState({ title: '', language: 'Malayalam', fileUrl: '', fileName: '', image: '' });
     const [uploading, setUploading] = useState(false);
     const pdfInputRef = useRef<HTMLInputElement>(null);
     const imgInputRef = useRef<HTMLInputElement>(null);
+    const sectionImgInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => { getBookSections().then(setSections); }, []);
 
@@ -23,15 +25,40 @@ export default function BooksManager() {
         await saveBookSections(updated);
     };
 
+    // ── Section Image Upload (Landscape) ──
+    const handleSectionImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+            const img = new Image();
+            img.onload = () => {
+                const W = 640;
+                const H = 360;
+                const canvas = document.createElement('canvas');
+                canvas.width = W; canvas.height = H;
+                const ctx = canvas.getContext('2d')!;
+                const ratio = Math.max(W / img.width, H / img.height);
+                const x = (W - img.width * ratio) / 2;
+                const y = (H - img.height * ratio) / 2;
+                ctx.drawImage(img, x, y, img.width * ratio, img.height * ratio);
+                setSectionImage(canvas.toDataURL('image/jpeg', 0.8));
+            };
+            img.src = ev.target?.result as string;
+        };
+        reader.readAsDataURL(file);
+        e.target.value = '';
+    };
+
     // ── Section CRUD ──
-    const addSection = () => { setEditingSectionId(0); setSectionTitle(''); };
-    const editSection = (s: BookSection) => { setEditingSectionId(s.id); setSectionTitle(s.title); };
+    const addSection = () => { setEditingSectionId(0); setSectionTitle(''); setSectionImage(''); };
+    const editSection = (s: BookSection) => { setEditingSectionId(s.id); setSectionTitle(s.title); setSectionImage(s.image || ''); };
     const saveSection = () => {
         if (!sectionTitle) return alert('Title is required.');
         if (editingSectionId === 0) {
-            persist([...sections, { id: nextId(sections), title: sectionTitle, books: [] }]);
+            persist([...sections, { id: nextId(sections), title: sectionTitle, image: sectionImage || undefined, books: [] }]);
         } else {
-            persist(sections.map(s => s.id === editingSectionId ? { ...s, title: sectionTitle } : s));
+            persist(sections.map(s => s.id === editingSectionId ? { ...s, title: sectionTitle, image: sectionImage || undefined } : s));
         }
         setEditingSectionId(null);
     };
@@ -197,7 +224,39 @@ export default function BooksManager() {
                         <h2 style={{ fontFamily: 'var(--font-heading-system)', color: 'var(--color-gold)', marginBottom: '1.5rem' }}>
                             {editingSectionId === 0 ? 'Add Section' : 'Rename Section'}
                         </h2>
-                        <input value={sectionTitle} onChange={e => setSectionTitle(e.target.value)} placeholder="Section Title *" style={inputStyle} />
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                            <input
+                                value={sectionTitle}
+                                onChange={e => setSectionTitle(e.target.value)}
+                                placeholder="Section Title *"
+                                style={inputStyle}
+                            />
+
+                            <div>
+                                <label style={{ color: 'var(--color-ivory)', fontWeight: 600, fontSize: '0.9rem', display: 'block', marginBottom: '0.5rem' }}>
+                                    📸 Section Cover Image (Optional, Landscape)
+                                </label>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                    {sectionImage
+                                        ? <img src={sectionImage} alt="preview" style={{ width: 120, height: 68, borderRadius: '8px', objectFit: 'cover', border: '2px solid var(--accent-primary)' }} />
+                                        : <span style={{ width: 120, height: 68, borderRadius: '8px', background: 'rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.8rem' }}>🖼️</span>
+                                    }
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                        <button type="button" onClick={() => sectionImgInputRef.current?.click()} style={{ ...inputStyle, width: 'auto', cursor: 'pointer', padding: '6px 12px', fontSize: '0.85rem' }}>
+                                            {sectionImage ? '🔄 Change' : '📷 Upload'}
+                                        </button>
+                                        {sectionImage && (
+                                            <button type="button" onClick={() => setSectionImage('')} style={{ color: '#ff6b6b', background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.85rem' }}>
+                                                ✕ Remove
+                                            </button>
+                                        )}
+                                    </div>
+                                    <input ref={sectionImgInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleSectionImageUpload} />
+                                </div>
+                            </div>
+                        </div>
+
                         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1.5rem' }}>
                             <Button variant="outline" onClick={() => setEditingSectionId(null)}>Cancel</Button>
                             <Button variant="primary" onClick={saveSection}>Save</Button>

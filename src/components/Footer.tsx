@@ -1,7 +1,11 @@
 import Link from 'next/link';
+import { getSiteSettings } from '@/lib/store';
 import styles from '@/styles/Footer.module.css';
 
-export default function Footer() {
+export default async function Footer() {
+    const settings = await getSiteSettings();
+    const { contact, social } = settings;
+
     return (
         <footer className={styles.footer}>
             <div className={styles.container}>
@@ -17,12 +21,9 @@ export default function Footer() {
                     {/* Service times */}
                     <div className={styles.section}>
                         <h3>Service Times</h3>
-                        <p>Holy Qurbono</p>
-                        <p><strong>Every Sunday at 8:30 AM</strong></p>
-                        <p style={{ marginTop: '0.75rem', opacity: 0.8, fontSize: '0.9rem' }}>
-                            Muthupilakkadu, Kollam<br />
-                            Kerala — 691 578, India
-                        </p>
+                        {contact.serviceTimings.map((timing, i) => (
+                            <p key={i}><strong>{timing.label}:</strong> {timing.time}</p>
+                        ))}
                     </div>
 
                     {/* Quick links */}
@@ -42,37 +43,21 @@ export default function Footer() {
                     {/* Contact */}
                     <div className={styles.section}>
                         <h3>Connect With Us</h3>
-                        <p>Muthupilakkadu, Kollam</p>
-                        <p>Kerala — 691 578, India</p>
+                        <p>{contact.addressLine1}</p>
+                        <p>{contact.addressLine2}</p>
                         <div className={styles.socials}>
-                            <a
-                                href="https://wa.me/"
-                                aria-label="WhatsApp"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                title="WhatsApp"
-                            >📱</a>
-                            <a
-                                href="https://instagram.com/"
-                                aria-label="Instagram"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                title="Instagram"
-                            >📸</a>
-                            <a
-                                href="https://facebook.com/"
-                                aria-label="Facebook"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                title="Facebook"
-                            >📘</a>
-                            <a
-                                href="https://youtube.com/"
-                                aria-label="YouTube"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                title="YouTube"
-                            >▶️</a>
+                            {social.whatsapp && (
+                                <a href={social.whatsapp} aria-label="WhatsApp" target="_blank" rel="noopener noreferrer" title="WhatsApp">📱</a>
+                            )}
+                            {social.instagram && (
+                                <a href={social.instagram} aria-label="Instagram" target="_blank" rel="noopener noreferrer" title="Instagram">📸</a>
+                            )}
+                            {social.facebook && (
+                                <a href={social.facebook} aria-label="Facebook" target="_blank" rel="noopener noreferrer" title="Facebook">📘</a>
+                            )}
+                            {social.youtube && (
+                                <a href={social.youtube} aria-label="YouTube" target="_blank" rel="noopener noreferrer" title="YouTube">▶️</a>
+                            )}
                         </div>
                     </div>
                 </div>
