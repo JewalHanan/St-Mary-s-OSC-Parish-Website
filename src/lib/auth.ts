@@ -8,16 +8,10 @@ const DEMO_ADMIN = {
     name: 'Super Admin',
     email: 'admin@stmosc.org',
     // bcrypt hash for 'admin123'
-    password_hash: '$2b$10$dummyhashfordevmode000000000000000000000000000',
+    password_hash: bcrypt.hashSync('admin123', 10),
     role: 'SUPER_ADMIN',
 };
 
-// Pre-hash the password at module load for the demo user
-let demoPasswordHash: string | null = null;
-(async () => {
-    demoPasswordHash = await bcrypt.hash('admin123', 10);
-    DEMO_ADMIN.password_hash = demoPasswordHash;
-})();
 
 export const authOptions: NextAuthOptions = {
     providers: [

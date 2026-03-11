@@ -13,7 +13,7 @@
 .title {
     font-family: var(--font-heading-system);
     font-size: clamp(2rem, 5vw, 3rem);
-    color: var(--accent-primary);
+    color: var(--text-accent);
     margin-bottom: 0.75rem;
 }
 
@@ -72,7 +72,7 @@
 
 .sectionHeader h2 {
     font-family: var(--font-heading-system);
-    color: var(--accent-primary);
+    color: var(--text-accent);
     font-size: 1.3rem;
     margin: 0;
     line-height: 1.2;

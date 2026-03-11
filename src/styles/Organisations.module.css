@@ -13,7 +13,7 @@
 .header h1 {
     font-family: var(--font-heading-system);
     font-size: clamp(2.5rem, 5vw, 4rem);
-    color: var(--accent-primary);
+    color: var(--text-accent);
     margin-bottom: 1rem;
 }
 
@@ -70,7 +70,7 @@
     justify-content: center;
     font-family: var(--font-heading-system);
     font-size: 2.5rem;
-    color: var(--accent-primary);
+    color: var(--text-accent);
     box-shadow: 0 0 20px rgba(184, 134, 11, 0.15);
     overflow: hidden;
 }
@@ -124,7 +124,7 @@
 
 .roleBadge {
     background: rgba(255, 215, 0, 0.1);
-    color: var(--accent-primary);
+    color: var(--text-accent);
     padding: 4px 12px;
     border-radius: 20px;
     font-size: 0.85rem;
@@ -137,7 +137,7 @@
     bottom: -2.5rem;
     left: 50%;
     transform: translateX(-50%);
-    color: var(--accent-primary);
+    color: var(--text-accent);
     font-size: 2rem;
     opacity: 0.5;
     display: flex;

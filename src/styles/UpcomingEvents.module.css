@@ -61,7 +61,7 @@
     justify-content: space-between;
     font-size: 0.9rem;
     font-weight: 600;
-    color: var(--accent-primary);
+    color: var(--text-accent);
     margin-bottom: 1rem;
     padding-bottom: 0.5rem;
     border-bottom: 1px solid rgba(255, 215, 0, 0.2);

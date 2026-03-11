@@ -124,7 +124,7 @@ export default function ParishCommitteeManager() {
                                     </td>
                                     <td style={{ fontWeight: 'bold' }}>{member.name}</td>
                                     <td>
-                                        <span className={styles.badge} style={{ background: 'rgba(255, 215, 0, 0.15)', color: 'var(--color-gold)' }}>
+                                        <span className={styles.badge} style={{ background: 'rgba(255, 215, 0, 0.15)', color: 'var(--text-accent)' }}>
                                             {member.role}
                                         </span>
                                     </td>
@@ -153,7 +153,7 @@ export default function ParishCommitteeManager() {
             {editingId !== null && (
                 <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
                     <Card style={{ width: '100%', maxWidth: '520px', background: 'var(--card-bg)', padding: '2rem' }}>
-                        <h2 style={{ fontFamily: 'var(--font-heading-system)', color: 'var(--color-gold)', marginBottom: '1.5rem' }}>
+                        <h2 style={{ fontFamily: 'var(--font-heading-system)', color: 'var(--text-accent)', marginBottom: '1.5rem' }}>
                             {editingId === 0 ? 'Add Committee Member' : 'Edit Member'}
                         </h2>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>

@@ -162,7 +162,7 @@ export default function CalendarManager() {
                 <Card style={{ marginBottom: '1.5rem', padding: '1rem', background: 'var(--card-bg)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Button variant="outline" onClick={prevMonth} style={{ padding: '8px 16px' }}>◀ {viewMonth === 0 ? 'Dec' : MONTHS[viewMonth - 1].slice(0, 3)}</Button>
                     <div style={{ textAlign: 'center' }}>
-                        <h2 style={{ color: 'var(--color-gold)', margin: 0, fontFamily: 'var(--font-heading-system)' }}>{MONTHS[viewMonth]} {viewYear}</h2>
+                        <h2 style={{ color: 'var(--text-accent)', margin: 0, fontFamily: 'var(--font-heading-system)' }}>{MONTHS[viewMonth]} {viewYear}</h2>
                         <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', margin: '4px 0 0' }}>{daysInView.length} special day{daysInView.length !== 1 ? 's' : ''} this month</p>
                     </div>
                     <Button variant="outline" onClick={nextMonth} style={{ padding: '8px 16px' }}>{viewMonth === 11 ? 'Jan' : MONTHS[viewMonth + 1].slice(0, 3)} ▶</Button>
@@ -181,7 +181,7 @@ export default function CalendarManager() {
             {/* ── Edit / Add Modal ── */}
             {editingId !== null && (
                 <Card style={{ marginBottom: '2rem', background: 'var(--card-bg)', padding: '2rem' }}>
-                    <h2 style={{ marginBottom: '1.5rem', color: 'var(--color-gold)' }}>
+                    <h2 style={{ marginBottom: '1.5rem', color: 'var(--text-accent)' }}>
                         {editingId === 0 ? '➕ Add Special Day' : '✏️ Edit Special Day'}
                     </h2>
                     <div style={{ display: 'grid', gap: '1rem', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))' }}>

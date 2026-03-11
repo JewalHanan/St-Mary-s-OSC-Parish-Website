@@ -24,7 +24,7 @@
 
 .header h2 {
     font-family: var(--font-heading-system);
-    color: var(--accent-primary);
+    color: var(--text-accent);
     font-size: 2rem;
     margin-bottom: 0.5rem;
 }
@@ -98,5 +98,5 @@
 }
 
 .footerLink a:hover {
-    color: var(--accent-primary);
+    color: var(--text-accent);
 }

@@ -151,7 +151,7 @@ export default function SliderManager() {
             {editingId !== null && (
                 <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
                     <Card style={{ width: '100%', maxWidth: '580px', background: 'var(--color-navy)', padding: '2rem' }}>
-                        <h2 style={{ fontFamily: 'var(--font-heading-system)', color: 'var(--color-gold)', marginBottom: '1.5rem' }}>
+                        <h2 style={{ fontFamily: 'var(--font-heading-system)', color: 'var(--text-accent)', marginBottom: '1.5rem' }}>
                             {editingId === 0 ? 'Add New Slide' : 'Edit Slide'}
                         </h2>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -169,7 +169,7 @@ export default function SliderManager() {
                                 }}
                             >
                                 {uploading ? (
-                                    <p style={{ margin: 0, color: 'var(--color-gold)' }}>⏳ Compressing image…</p>
+                                    <p style={{ margin: 0, color: 'var(--text-accent)' }}>⏳ Compressing image…</p>
                                 ) : form.image ? (
                                     <img
                                         src={form.image}

@@ -30,7 +30,7 @@ export default function Home() {
         speed={0.6}
         overlayOpacity={0.7}
       >
-        <h2 style={{ fontFamily: 'var(--font-heading-system)', fontSize: 'clamp(2.5rem, 5vw, 4rem)', color: 'var(--color-gold)', marginBottom: '1.5rem' }}>
+        <h2 style={{ fontFamily: 'var(--font-heading-system)', fontSize: 'clamp(2.5rem, 5vw, 4rem)', color: 'var(--text-accent)', marginBottom: '1.5rem' }}>
           Welcome to Our Parish
         </h2>
         <p style={{ fontFamily: 'var(--font-body-system)', fontSize: '1.5rem', color: 'var(--color-ivory)', marginBottom: '2rem', maxWidth: '800px', margin: '0 auto 2rem' }}>

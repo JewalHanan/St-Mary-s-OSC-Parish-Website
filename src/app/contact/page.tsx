@@ -80,7 +80,7 @@ export default function ContactPage() {
                         referrerPolicy="no-referrer-when-downgrade"
                     />
                     <p style={{ textAlign: 'center', marginTop: '0.75rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                        <a href="https://maps.app.goo.gl/qi8XaMVmmYGMwbtG7" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-primary)' }}>
+                        <a href="https://maps.app.goo.gl/qi8XaMVmmYGMwbtG7" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-accent)' }}>
                             View exact location on Google Maps ↗
                         </a>
                     </p>

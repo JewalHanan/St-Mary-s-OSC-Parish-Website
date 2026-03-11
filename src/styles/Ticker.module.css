@@ -1,7 +1,7 @@
 .tickerContainer {
     width: 100%;
     background-color: var(--bg-secondary);
-    color: var(--accent-primary);
+    color: var(--text-accent);
     border-top: 2px solid var(--accent-primary);
     border-bottom: 2px solid var(--accent-primary);
     overflow: hidden;

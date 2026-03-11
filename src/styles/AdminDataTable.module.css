@@ -14,7 +14,7 @@
 
 .header h1 {
     font-family: var(--font-heading-system);
-    color: var(--accent-primary);
+    color: var(--text-accent);
     font-size: 2rem;
 }
 
@@ -42,7 +42,7 @@
 .dataTable th {
     padding: 1rem 1.5rem;
     background: var(--input-bg);
-    color: var(--accent-primary);
+    color: var(--text-accent);
     font-family: var(--font-heading-system);
     font-weight: 600;
     white-space: nowrap;
@@ -84,7 +84,7 @@
 
 .blessings {
     background: rgba(255, 215, 0, 0.2);
-    color: var(--accent-primary);
+    color: var(--text-accent);
 }
 
 .statusBadge {

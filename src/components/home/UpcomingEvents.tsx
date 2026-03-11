@@ -53,9 +53,12 @@ export default function UpcomingEvents() {
                                     )}
                                     <div style={{ padding: '1.5rem' }}>
                                         <h3 className={styles.eventTitle} style={{ margin: '0 0 0.5rem', fontSize: '1.3rem' }}>{event.title}</h3>
-                                        <div style={{ margin: '0 0 1.5rem', display: 'flex', gap: '8px' }}>
+                                        <div style={{ margin: '0 0 1.5rem', display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
                                             <span className={styles.badge} style={{ background: event.color + '20', color: event.color, padding: '4px 8px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold' }}>
                                                 {event.type.toUpperCase()}
+                                            </span>
+                                            <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                                📅 {event.date}
                                             </span>
                                         </div>
                                         <button className={styles.readMoreBtn} onClick={() => setSelectedEvent(event)}>Read More</button>
@@ -98,7 +101,7 @@ export default function UpcomingEvents() {
                             <div style={{ width: '100%', height: '160px', borderRadius: '12px', background: selectedEvent.color + '30', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '4rem', marginBottom: '1.5rem', border: `1px solid ${selectedEvent.color}50` }}>📅</div>
                         )}
                         <div style={{ marginBottom: '1.5rem' }}>
-                            <h2 style={{ margin: 0, color: 'var(--color-gold)', fontFamily: 'var(--font-heading-system)', fontSize: '1.8rem', lineHeight: 1.2 }}>{selectedEvent.title}</h2>
+                            <h2 style={{ margin: 0, color: 'var(--text-accent)', fontFamily: 'var(--font-heading-system)', fontSize: '1.8rem', lineHeight: 1.2 }}>{selectedEvent.title}</h2>
                             <span style={{ display: 'inline-block', marginTop: '8px', background: selectedEvent.color + '20', color: selectedEvent.color, padding: '4px 10px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold', textTransform: 'uppercase' }}>
                                 {selectedEvent.type}
                             </span>

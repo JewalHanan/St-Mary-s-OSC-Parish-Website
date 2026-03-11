@@ -11,12 +11,13 @@
   --color-black: #000000;
 
   /* ── Theming (Light Mode Default) ───────────────────── */
-  --bg-primary: var(--color-ivory);
-  --bg-secondary: var(--color-white);
-  --text-primary: var(--color-navy);
-  --text-secondary: #2d3748; /* Darkened from #4a5568 for better contrast */
-  --accent-primary: #A67C00; /* Restored to a vibrant golden yellow for better pop on white, per user request */
+  --bg-primary: #f5f0e8;
+  --bg-secondary: #faf8f4;
+  --text-primary: #1a2744;
+  --text-secondary: #2d3748;
+  --accent-primary: #9a7a00;
   --accent-secondary: var(--color-crimson);
+  --text-accent: var(--text-primary); /* Dark navy for text in light mode, replacing gold */
 
   /* ── Component Tokens ───────────────────────────────── */
   --card-bg: rgba(255, 255, 255, 0.85);
@@ -83,6 +84,7 @@
   --text-secondary: #a0aec0;
   --accent-primary: var(--color-gold);
   --accent-secondary: var(--color-crimson);
+  --text-accent: var(--accent-primary); /* Gold for text in dark mode */
   --card-bg: rgba(255, 255, 255, 0.05);
   --card-border: rgba(255, 215, 0, 0.15);
   --nav-bg: rgba(10, 15, 44, 0.96);

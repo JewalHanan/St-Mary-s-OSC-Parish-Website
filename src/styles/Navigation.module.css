@@ -45,7 +45,7 @@
     font-family: var(--font-heading-system);
     font-size: 1.1rem;
     font-weight: 700;
-    color: var(--accent-primary);
+    color: var(--text-accent);
     text-transform: uppercase;
     letter-spacing: 1.5px;
     white-space: nowrap;
@@ -88,7 +88,7 @@
 }
 
 .navLink:hover {
-    color: var(--accent-primary);
+    color: var(--text-accent);
 }
 
 .navLink:hover::after,
@@ -97,7 +97,7 @@
 }
 
 .navLink.active {
-    color: var(--accent-primary);
+    color: var(--text-accent);
     font-weight: 600;
 }
 
@@ -125,7 +125,7 @@
 }
 
 .iconButton:hover {
-    color: var(--accent-primary);
+    color: var(--text-accent);
     background: var(--hover-overlay);
 }
 
@@ -229,7 +229,7 @@
 
 .mobileNavLink:hover,
 .mobileNavLink.active {
-    color: var(--accent-primary);
+    color: var(--text-accent);
     padding-left: 0.5rem;
 }
 

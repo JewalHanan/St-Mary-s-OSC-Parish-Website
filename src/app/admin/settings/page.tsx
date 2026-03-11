@@ -54,7 +54,7 @@ export default function SiteSettingsManager() {
 
             {/* Ticker settings */}
             <Card style={sectionStyle}>
-                <h3 style={{ color: 'var(--color-gold)', marginBottom: '1rem' }}>Homepage Ticker</h3>
+                <h3 style={{ color: 'var(--text-accent)', marginBottom: '1rem' }}>Homepage Ticker</h3>
                 <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '1rem' }}>
                     By default, the ticker shows the date of the next Sunday Qurbono. You can type a custom message here to override it (e.g. for special announcements). Leave blank to use the default.
                 </p>
@@ -68,7 +68,7 @@ export default function SiteSettingsManager() {
 
             {/* Contact details */}
             <Card style={sectionStyle}>
-                <h3 style={{ color: 'var(--color-gold)', marginBottom: '1rem' }}>Contact Information</h3>
+                <h3 style={{ color: 'var(--text-accent)', marginBottom: '1rem' }}>Contact Information</h3>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
                     <div>
                         <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Phone Number</label>
@@ -90,7 +90,7 @@ export default function SiteSettingsManager() {
                     </div>
                 </div>
 
-                <h4 style={{ color: 'var(--color-gold)', marginTop: '2rem', marginBottom: '1rem' }}>Service Timings</h4>
+                <h4 style={{ color: 'var(--text-accent)', marginTop: '2rem', marginBottom: '1rem' }}>Service Timings</h4>
                 {settings.contact.serviceTimings.map((timing, idx) => (
                     <div key={idx} style={{ display: 'flex', gap: '1rem', marginBottom: '0.5rem' }}>
                         <input
@@ -135,7 +135,7 @@ export default function SiteSettingsManager() {
 
             {/* Social links */}
             <Card style={sectionStyle}>
-                <h3 style={{ color: 'var(--color-gold)', marginBottom: '1rem' }}>Social Media Links</h3>
+                <h3 style={{ color: 'var(--text-accent)', marginBottom: '1rem' }}>Social Media Links</h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                         <span style={{ fontSize: '1.5rem', width: '30px' }}>📘</span>

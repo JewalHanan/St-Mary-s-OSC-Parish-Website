@@ -235,10 +235,10 @@ export default function CalendarPage() {
                             <span style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '12px', background: TYPE_COLORS[selectedDayInfo.day.type ?? 'feast'] + '25', color: TYPE_COLORS[selectedDayInfo.day.type ?? 'feast'], fontSize: '0.8rem', fontWeight: 600, marginBottom: '0.75rem' }}>
                                 {TYPE_LABELS[selectedDayInfo.day.type ?? 'feast']}
                             </span>
-                            <h2 style={{ color: 'var(--color-gold)', marginBottom: '0.5rem', fontFamily: 'var(--font-heading-system)', fontSize: '1.6rem', lineHeight: 1.3 }}>
+                            <h2 style={{ color: 'var(--text-accent)', marginBottom: '0.5rem', fontFamily: 'var(--font-heading-system)', fontSize: '1.6rem', lineHeight: 1.3 }}>
                                 {selectedDayInfo.day.title}
                             </h2>
-                            <p style={{ color: 'var(--accent-primary)', fontWeight: 'bold', marginBottom: '1rem' }}>
+                            <p style={{ color: 'var(--text-accent)', fontWeight: 'bold', marginBottom: '1rem' }}>
                                 {new Date(selectedDayInfo.day.date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
                             </p>
                             {selectedDayInfo.day.description && (

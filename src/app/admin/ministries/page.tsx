@@ -145,7 +145,7 @@ export default function MinistriesManager() {
 
             {showAddOrg && (
                 <Card style={{ marginBottom: '1.5rem', padding: '1.5rem', background: 'var(--card-bg)' }}>
-                    <h3 style={{ color: 'var(--color-gold)', marginBottom: '1rem' }}>New Ministry</h3>
+                    <h3 style={{ color: 'var(--text-accent)', marginBottom: '1rem' }}>New Ministry</h3>
                     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
                         <div onClick={() => orgLogoInputRef.current?.click()} style={{ width: 56, height: 56, borderRadius: '12px', border: '2px dashed var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', overflow: 'hidden', flexShrink: 0, background: 'var(--input-bg)' }}>
                             {newOrgLogo ? <img src={newOrgLogo} alt="logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <span style={{ fontSize: '1.5rem' }}>🏛️</span>}
@@ -168,7 +168,7 @@ export default function MinistriesManager() {
                                 : <div style={{ width: 52, height: 52, borderRadius: '12px', background: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.6rem', fontWeight: 'bold', color: 'var(--color-navy)', flexShrink: 0 }}>{org.name.charAt(0)}</div>
                             }
                             <div>
-                                <h2 style={{ color: 'var(--accent-primary)', fontSize: '1.4rem', fontFamily: 'var(--font-heading-system)', margin: 0 }}>
+                                <h2 style={{ color: 'var(--text-accent)', fontSize: '1.4rem', fontFamily: 'var(--font-heading-system)', margin: 0 }}>
                                     {expandedOrgId === org.id ? '▼' : '▶'} {org.name}
                                 </h2>
                                 <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', margin: 0 }}>{org.bearers.length} bearer(s)</p>
@@ -198,7 +198,7 @@ export default function MinistriesManager() {
                                                 <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'var(--card-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', margin: '0 auto 1rem', border: '3px solid var(--card-border)' }}>👤</div>
                                             )}
                                             <h4 style={{ color: 'var(--text-primary)', fontWeight: 'bold', marginBottom: '0.25rem' }}>{bearer.name}</h4>
-                                            <p style={{ color: 'var(--accent-primary)', fontWeight: '600', fontSize: '0.9rem', marginBottom: '0.5rem' }}>{bearer.position}</p>
+                                            <p style={{ color: 'var(--text-accent)', fontWeight: '600', fontSize: '0.9rem', marginBottom: '0.5rem' }}>{bearer.position}</p>
                                             <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>{bearer.contact}</p>
                                             <div style={{ display: 'flex', gap: '6px', justifyContent: 'center', marginTop: '1rem' }}>
                                                 <Button variant="outline" onClick={() => openEditBearer(org.id, bearer)} style={{ padding: '4px 10px', fontSize: '0.8rem' }}>✏️</Button>
@@ -217,7 +217,7 @@ export default function MinistriesManager() {
             {editingBearer && (
                 <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
                     <Card style={{ width: '100%', maxWidth: '480px', background: 'var(--card-bg)', padding: '2rem' }}>
-                        <h2 style={{ fontFamily: 'var(--font-heading-system)', color: 'var(--color-gold)', marginBottom: '1.5rem' }}>
+                        <h2 style={{ fontFamily: 'var(--font-heading-system)', color: 'var(--text-accent)', marginBottom: '1.5rem' }}>
                             {editingBearer.bearerId === null ? 'Add Office Bearer' : 'Edit Office Bearer'}
                         </h2>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>

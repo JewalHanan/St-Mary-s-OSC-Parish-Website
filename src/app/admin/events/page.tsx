@@ -148,7 +148,7 @@ export default function EventsManager() {
             {editingId !== null && (
                 <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
                     <Card style={{ width: '100%', maxWidth: '500px', background: 'var(--color-navy)', padding: '2rem' }}>
-                        <h2 style={{ fontFamily: 'var(--font-heading-system)', color: 'var(--color-gold)', marginBottom: '1.5rem' }}>
+                        <h2 style={{ fontFamily: 'var(--font-heading-system)', color: 'var(--text-accent)', marginBottom: '1.5rem' }}>
                             {editingId === 0 ? 'Add New Event' : 'Edit Event'}
                         </h2>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>

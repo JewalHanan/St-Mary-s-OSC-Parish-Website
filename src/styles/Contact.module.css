@@ -13,7 +13,7 @@
 .header h1 {
     font-family: var(--font-heading-system);
     font-size: 3rem;
-    color: var(--accent-primary);
+    color: var(--text-accent);
     margin-bottom: 1rem;
 }
 
@@ -57,7 +57,7 @@
 }
 
 .infoCard strong {
-    color: var(--accent-primary);
+    color: var(--text-accent);
 }
 
 .mapContainer {
