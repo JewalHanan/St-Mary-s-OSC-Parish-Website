@@ -79,7 +79,7 @@
 .dark .input,
 .dark .textarea {
     background: rgba(10, 15, 44, 0.6);
-    color: var(--text-primary);
+    color: var(--color-ivory);
 }
 
 .input:focus,
@@ -112,7 +112,7 @@
 
 .radioLabel:has(input:checked) {
     background: var(--accent-primary);
-    color: var(--text-primary);
+    color: var(--color-navy);
     font-weight: bold;
 }
 

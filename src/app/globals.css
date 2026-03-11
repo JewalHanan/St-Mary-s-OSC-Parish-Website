@@ -15,7 +15,7 @@
   --bg-secondary: var(--color-white);
   --text-primary: var(--color-navy);
   --text-secondary: #2d3748; /* Darkened from #4a5568 for better contrast */
-  --accent-primary: #7d5b03; /* Darkened from var(--color-gold-dark) for WCAG AA */
+  --accent-primary: #A67C00; /* Restored to a vibrant golden yellow for better pop on white, per user request */
   --accent-secondary: var(--color-crimson);
 
   /* ── Component Tokens ───────────────────────────────── */

@@ -23,7 +23,7 @@
 
 .primary {
     background-color: var(--accent-primary);
-    color: var(--text-primary);
+    color: var(--color-navy);
 }
 
 .primary:hover {
@@ -34,7 +34,7 @@
 
 .secondary {
     background-color: var(--accent-secondary);
-    color: var(--text-primary);
+    color: var(--color-ivory);
 }
 
 .secondary:hover {

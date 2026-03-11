@@ -19,6 +19,88 @@ interface NavBarProps {
     defaultActive?: string
 }
 
+const ThemeToggle = ({ theme, toggleTheme, isMobile = false }: { theme: 'dark' | 'light', toggleTheme: () => void, isMobile?: boolean }) => {
+    const isDark = theme === 'dark';
+    const scale = isMobile ? 1.2 : 1;
+
+    return (
+        <button
+            onClick={toggleTheme}
+            aria-label="Toggle Theme"
+            style={{
+                position: 'relative',
+                display: 'flex',
+                alignItems: 'center',
+                width: `${56 * scale}px`,
+                height: `${28 * scale}px`,
+                borderRadius: '9999px',
+                padding: `${4 * scale}px`,
+                cursor: 'pointer',
+                border: '1px solid var(--nav-pill-border)',
+                background: isDark ? 'rgba(0, 0, 0, 0.4)' : 'var(--input-bg)',
+                boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.1)',
+                marginLeft: isMobile ? '0' : '0.5rem',
+                flexShrink: 0
+            }}
+        >
+            {/* Background track icons */}
+            <div style={{ position: 'absolute', left: `${6 * scale}px`, display: 'flex', alignItems: 'center' }}>
+                <Moon size={14 * scale} color="var(--text-secondary)" opacity={isDark ? 0 : 0.6} />
+            </div>
+            <div style={{ position: 'absolute', right: `${6 * scale}px`, display: 'flex', alignItems: 'center' }}>
+                <Sun size={14 * scale} color="var(--text-secondary)" opacity={isDark ? 0.6 : 0} />
+            </div>
+
+            <motion.div
+                layout
+                initial={false}
+                animate={{
+                    x: isDark ? (28 * scale) : 0,
+                    backgroundColor: isDark ? 'var(--accent-primary)' : 'var(--color-navy)'
+                }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                style={{
+                    width: `${20 * scale}px`,
+                    height: `${20 * scale}px`,
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
+                    zIndex: 2,
+                    position: 'relative'
+                }}
+            >
+                <AnimatePresence mode="wait" initial={false}>
+                    {isDark ? (
+                        <motion.div
+                            key="sun"
+                            initial={{ opacity: 0, rotate: -90 }}
+                            animate={{ opacity: 1, rotate: 0 }}
+                            exit={{ opacity: 0, rotate: 90 }}
+                            transition={{ duration: 0.15 }}
+                            style={{ display: 'flex' }}
+                        >
+                            <Sun size={12 * scale} strokeWidth={3} color="var(--color-navy)" />
+                        </motion.div>
+                    ) : (
+                        <motion.div
+                            key="moon"
+                            initial={{ opacity: 0, rotate: 90 }}
+                            animate={{ opacity: 1, rotate: 0 }}
+                            exit={{ opacity: 0, rotate: -90 }}
+                            transition={{ duration: 0.15 }}
+                            style={{ display: 'flex' }}
+                        >
+                            <Moon size={12 * scale} strokeWidth={3} color="var(--color-ivory)" />
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
+        </button>
+    );
+};
+
 export function AnimeNavBar({ items, className, defaultActive = "Home" }: NavBarProps) {
     const [mounted, setMounted] = useState(false)
     const [hoveredTab, setHoveredTab] = useState<string | null>(null)
@@ -103,18 +185,7 @@ export function AnimeNavBar({ items, className, defaultActive = "Home" }: NavBar
                     })}
                     
                     {/* Theme Toggle Button (Desktop) */}
-                    <button
-                        onClick={toggleTheme}
-                        className="anime-navbar-link"
-                        aria-label="Toggle Theme"
-                        style={{ padding: '0.75rem 0.5rem', display: 'flex', alignItems: 'center' }}
-                    >
-                        {theme === 'dark' ? (
-                            <Sun size={20} strokeWidth={2.5} color="var(--color-gold)" />
-                        ) : (
-                            <Moon size={20} strokeWidth={2.5} color="var(--color-navy)" />
-                        )}
-                    </button>
+                    <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
                 </motion.div>
             </div>
 
@@ -142,17 +213,7 @@ export function AnimeNavBar({ items, className, defaultActive = "Home" }: NavBar
                         <div className="mobile-menu-header">
                             <span className="mobile-menu-title">Menu</span>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                <button
-                                    onClick={toggleTheme}
-                                    className="mobile-menu-close"
-                                    aria-label="Toggle Theme"
-                                >
-                                    {theme === 'dark' ? (
-                                        <Sun size={28} strokeWidth={2.5} color="var(--color-gold)" />
-                                    ) : (
-                                        <Moon size={28} strokeWidth={2.5} color="var(--color-navy)" />
-                                    )}
-                                </button>
+                                <ThemeToggle theme={theme} toggleTheme={toggleTheme} isMobile={true} />
                                 <button
                                     onClick={() => setIsMobileOpen(false)}
                                     className="mobile-menu-close"
