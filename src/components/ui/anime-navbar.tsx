@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
-import { LucideIcon } from "lucide-react"
+import { LucideIcon, Menu, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface NavItem {
@@ -22,13 +22,23 @@ export function AnimeNavBar({ items, className, defaultActive = "Home" }: NavBar
     const [mounted, setMounted] = useState(false)
     const [hoveredTab, setHoveredTab] = useState<string | null>(null)
     const [activeTab, setActiveTab] = useState<string>(defaultActive)
+    const [isMobileOpen, setIsMobileOpen] = useState(false)
 
     useEffect(() => { setMounted(true) }, [])
+
+    // Prevent body scroll when mobile menu is open
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            document.body.style.overflow = isMobileOpen ? 'hidden' : '';
+        }
+    }, [isMobileOpen]);
+
     if (!mounted) return null
 
     return (
         <div className="anime-navbar-wrapper">
-            <div className="anime-navbar-center">
+            {/* Desktop Navbar (Hidden on mobile via CSS) */}
+            <div className="anime-navbar-center desktop-nav">
                 <motion.div
                     className={cn("anime-navbar-pill", className)}
                     initial={{ y: -20, opacity: 0 }}
@@ -67,7 +77,6 @@ export function AnimeNavBar({ items, className, defaultActive = "Home" }: NavBar
                                     </motion.div>
                                 )}
 
-                                {/* Desktop: text label */}
                                 <motion.span
                                     className="anime-navbar-label"
                                     initial={{ opacity: 0 }}
@@ -77,16 +86,6 @@ export function AnimeNavBar({ items, className, defaultActive = "Home" }: NavBar
                                     {item.name}
                                 </motion.span>
 
-                                {/* Mobile: icon */}
-                                <motion.span
-                                    className="anime-navbar-icon"
-                                    whileHover={{ scale: 1.2 }}
-                                    whileTap={{ scale: 0.9 }}
-                                >
-                                    <Icon size={18} strokeWidth={2.5} />
-                                </motion.span>
-
-                                {/* Hover highlight */}
                                 <AnimatePresence>
                                     {isHovered && !isActive && (
                                         <motion.div
@@ -97,13 +96,79 @@ export function AnimeNavBar({ items, className, defaultActive = "Home" }: NavBar
                                         />
                                     )}
                                 </AnimatePresence>
-
-
                             </Link>
                         )
                     })}
                 </motion.div>
             </div>
+
+            {/* Mobile Hamburger Button (floating) */}
+            <div className="mobile-nav-toggle">
+                <button
+                    onClick={() => setIsMobileOpen(true)}
+                    className="mobile-hamburger-btn"
+                    aria-label="Open Navigation Menu"
+                >
+                    <Menu size={24} strokeWidth={2.5} color="var(--color-gold)" />
+                </button>
+            </div>
+
+            {/* Mobile Fullscreen Menu Overlay */}
+            <AnimatePresence>
+                {isMobileOpen && (
+                    <motion.div
+                        className="mobile-menu-overlay"
+                        initial={{ opacity: 0, backdropFilter: 'blur(0px)' }}
+                        animate={{ opacity: 1, backdropFilter: 'blur(20px)' }}
+                        exit={{ opacity: 0, backdropFilter: 'blur(0px)' }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        <div className="mobile-menu-header">
+                            <span className="mobile-menu-title">Menu</span>
+                            <button
+                                onClick={() => setIsMobileOpen(false)}
+                                className="mobile-menu-close"
+                                aria-label="Close Menu"
+                            >
+                                <X size={28} strokeWidth={2.5} color="var(--color-gold)" />
+                            </button>
+                        </div>
+
+                        <div className="mobile-menu-links">
+                            {items.map((item, i) => {
+                                const Icon = item.icon;
+                                const isActive = activeTab === item.name;
+                                return (
+                                    <motion.div
+                                        key={item.name}
+                                        initial={{ opacity: 0, x: -20 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        exit={{ opacity: 0, x: -20 }}
+                                        transition={{ delay: i * 0.05, duration: 0.2 }}
+                                    >
+                                        <Link
+                                            href={item.url}
+                                            onClick={() => {
+                                                setActiveTab(item.name);
+                                                setIsMobileOpen(false);
+                                            }}
+                                            className={cn(
+                                                "mobile-menu-item",
+                                                isActive && "mobile-menu-item--active"
+                                            )}
+                                        >
+                                            <span className="mobile-menu-icon-wrapper">
+                                                <Icon size={20} strokeWidth={2.5} />
+                                            </span>
+                                            {item.name}
+                                        </Link>
+                                    </motion.div>
+                                );
+                            })}
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     )
 }

@@ -16,6 +16,11 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         setSidebarOpen(false);
     }, [pathname]);
 
+    // If on the login page, render clean without the admin sidebar wrapper
+    if (pathname === '/admin/login') {
+        return <>{children}</>;
+    }
+
     // Lock body scroll when mobile sidebar is open
     useEffect(() => {
         if (typeof window !== 'undefined' && window.innerWidth < 768) {

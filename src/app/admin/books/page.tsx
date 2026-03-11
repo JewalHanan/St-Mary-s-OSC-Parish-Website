@@ -165,7 +165,7 @@ export default function BooksManager() {
 
             {sections.map(section => (
                 <Card key={section.id} className={styles.tableCard} style={{ marginBottom: '1.5rem' }}>
-                    <div style={{ padding: '1.25rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,215,0,0.1)' }}>
+                    <div style={{ padding: '1.25rem 1.5rem', display: 'flex', flexWrap: 'wrap', gap: '1rem', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,215,0,0.1)' }}>
                         <h2 style={{ fontFamily: 'var(--font-heading-system)', color: 'var(--color-gold)', margin: 0, fontSize: '1.3rem' }}>
                             📚 {section.title} <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontFamily: 'var(--font-body-system)' }}>({section.books.length} books)</span>
                         </h2>

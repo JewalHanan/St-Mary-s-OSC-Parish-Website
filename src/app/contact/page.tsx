@@ -71,7 +71,7 @@ export default function ContactPage() {
                 >
                     <iframe
                         title="Church Location — St. Mary's Malankara Orthodox Church, Muthupilakkadu"
-                        src="https://maps.google.com/maps?q=Muthupilakkadu+Malankara+Orthodox+Church+Kollam&output=embed&z=15"
+                        src="https://maps.google.com/maps?q=St.+Mary's+Malankara+Orthodox+Syrian+Church,+Muthupilakkadu,+Kerala&t=&z=16&ie=UTF8&iwloc=&output=embed"
                         width="100%"
                         height="450"
                         style={{ border: 0, borderRadius: '16px' }}

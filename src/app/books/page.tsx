@@ -78,54 +78,47 @@ export default function BooksPage() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: idx * 0.1 }}
                     >
-                        <Card
-                            className={`${styles.sectionCard} ${expandedSection === section.id ? styles.expanded : ''}`}
-                            withGlow
-                        >
-                            <div
-                                className={styles.sectionHeader}
-                                onClick={() => setExpandedSection(expandedSection === section.id ? null : section.id)}
-                            >
-                                <div className={styles.sectionIcon}>📚</div>
-                                <h2>{section.title}</h2>
-                                <span className={styles.bookCount}>{section.books.length} book{section.books.length !== 1 ? 's' : ''}</span>
-                                <span className={styles.expandArrow}>
-                                    {expandedSection === section.id ? '▲' : '▼'}
-                                </span>
+                        <Card className={styles.sectionCard} withGlow>
+                            <div className={styles.sectionImageContainer}>
+                                {section.image ? (
+                                    <img src={section.image} alt={section.title} className={styles.sectionImage} />
+                                ) : (
+                                    <span className={styles.sectionPlaceholder}>📚</span>
+                                )}
                             </div>
 
-                            {expandedSection === section.id && (
-                                <motion.div
-                                    className={styles.booksList}
-                                    initial={{ height: 0, opacity: 0 }}
-                                    animate={{ height: 'auto', opacity: 1 }}
-                                    transition={{ duration: 0.3 }}
-                                >
-                                    {section.books.map((book) => (
-                                        <div key={book.id} className={styles.bookItem}>
-                                            {/* Thumbnail: uploaded image or default icon */}
-                                            {book.image
-                                                ? <img src={book.image} alt={book.title} style={{ width: 48, height: 48, borderRadius: '8px', objectFit: 'cover', flexShrink: 0, border: '1px solid var(--card-border)' }} />
-                                                : <span style={{ width: 48, height: 48, borderRadius: '8px', background: 'var(--card-bg)', border: '1px solid var(--card-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.6rem', flexShrink: 0 }}>📖</span>
-                                            }
+                            <div className={styles.sectionHeader}>
+                                <h2>{section.title}</h2>
+                                <span className={styles.bookCount}>{section.books.length} book{section.books.length !== 1 ? 's' : ''}</span>
+                            </div>
+
+                            <div className={styles.booksList}>
+                                {section.books.map((book) => (
+                                    <div key={book.id} className={styles.bookItem}>
+                                        <div className={styles.bookThumbAndInfo}>
+                                            {book.image ? (
+                                                <img src={book.image} alt={book.title} style={{ width: 44, height: 44, borderRadius: '6px', objectFit: 'cover', flexShrink: 0, border: '1px solid var(--card-border)' }} />
+                                            ) : (
+                                                <span style={{ width: 44, height: 44, borderRadius: '6px', background: 'var(--card-bg)', border: '1px solid var(--card-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', flexShrink: 0 }}>📖</span>
+                                            )}
                                             <div className={styles.bookInfo}>
                                                 <span className={styles.bookTitle}>{book.title}</span>
                                                 <span className={styles.bookLang}>{book.language}</span>
                                             </div>
-                                            <Button
-                                                variant="outline"
-                                                style={{ padding: '6px 14px', fontSize: '0.85rem', flexShrink: 0 }}
-                                                onClick={() => handleOpen(book)}
-                                            >
-                                                📖 Open / Read
-                                            </Button>
                                         </div>
-                                    ))}
-                                    {section.books.length === 0 && (
-                                        <p className={styles.emptyBooks}>No books uploaded yet for this section.</p>
-                                    )}
-                                </motion.div>
-                            )}
+                                        <Button
+                                            variant="secondary"
+                                            style={{ padding: '8px', fontSize: '0.85rem', width: '100%' }}
+                                            onClick={() => handleOpen(book)}
+                                        >
+                                            📖 Read Book
+                                        </Button>
+                                    </div>
+                                ))}
+                                {section.books.length === 0 && (
+                                    <p className={styles.emptyBooks}>No books uploaded yet for this section.</p>
+                                )}
+                            </div>
                         </Card>
                     </motion.div>
                 ))}

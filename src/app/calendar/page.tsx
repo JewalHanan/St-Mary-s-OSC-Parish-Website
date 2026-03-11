@@ -197,12 +197,12 @@ export default function CalendarPage() {
                 {selectedDayInfo && (
                     <motion.div
                         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                        style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.75)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}
+                        style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(4px)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}
                         onClick={() => setSelectedDayInfo(null)}
                     >
                         <motion.div
-                            initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.9, y: 20 }}
-                            style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', padding: '2rem', borderRadius: '16px', maxWidth: '500px', width: '100%', borderTop: `4px solid ${TYPE_COLORS[selectedDayInfo.day.type ?? 'feast']}` }}
+                            initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, y: 20 }}
+                            style={{ background: 'var(--color-navy)', boxShadow: '0 20px 50px rgba(0,0,0,0.5)', border: '1px solid rgba(255,215,0,0.2)', padding: '2.5rem', borderRadius: '16px', maxWidth: '500px', width: '100%', borderTop: `4px solid ${TYPE_COLORS[selectedDayInfo.day.type ?? 'feast']}` }}
                             onClick={e => e.stopPropagation()}
                         >
                             {/* Image */}
