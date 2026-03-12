@@ -67,17 +67,18 @@ export default function MainCountdown() {
                     viewport={{ once: true, margin: "-100px" }}
                     transition={{ duration: 0.8 }}
                 >
-                    <span style={{ display: 'inline-block', padding: '6px 16px', background: 'rgba(255, 215, 0, 0.15)', border: '1px solid rgba(255, 215, 0, 0.3)', color: 'var(--text-accent)', borderRadius: '20px', textTransform: 'uppercase', letterSpacing: '0.1em', fontSize: '0.85rem', fontWeight: 'bold', marginBottom: '1.5rem' }}>
+                    <span style={{ display: 'inline-block', padding: '6px 16px', background: 'rgba(255, 215, 0, 0.15)', border: '1px solid rgba(255, 215, 0, 0.3)', color: 'var(--color-gold)', borderRadius: '20px', textTransform: 'uppercase', letterSpacing: '0.1em', fontSize: '0.85rem', fontWeight: 'bold', marginBottom: '1.5rem' }}>
                         Upcoming Special Day
                     </span>
-                    <h2 style={{ fontFamily: 'var(--font-heading-system)', fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', color: 'var(--color-ivory)', marginBottom: '0.5rem', lineHeight: 1.1, textShadow: '0 4px 20px rgba(0,0,0,0.5)' }}>
-                        {targetDay.title}
+                    <h2 style={{ fontFamily: 'var(--font-heading-system)', fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', color: '#ffffff', marginBottom: '0.5rem', lineHeight: 1.1, textShadow: '0 4px 20px rgba(0,0,0,0.5)' }}>
+                        <span style={{ color: 'var(--color-gold)', marginRight: '10px' }}>✝</span>
+                        {targetDay.title.replace('✝️', '').trim()}
                     </h2>
-                    <p style={{ fontSize: '1.25rem', color: 'var(--text-accent)', fontWeight: 'bold', marginBottom: '1rem', textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>
+                    <p style={{ fontSize: '1.25rem', color: '#fff8ee', fontWeight: 'bold', marginBottom: '1rem', textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>
                         {formattedDate}
                     </p>
                     {targetDay.description && (
-                        <p style={{ fontSize: '1.1rem', color: 'var(--text-secondary)', maxWidth: '600px', margin: '0 auto 3rem', lineHeight: 1.6 }}>
+                        <p style={{ fontSize: '1.1rem', color: 'rgba(255, 255, 255, 0.85)', maxWidth: '600px', margin: '0 auto 3rem', lineHeight: 1.6 }}>
                             {targetDay.description}
                         </p>
                     )}
@@ -89,11 +90,11 @@ export default function MainCountdown() {
                             { value: timeLeft.mins, label: 'Minutes' },
                             { value: timeLeft.secs, label: 'Seconds' }
                         ].map((unit, idx) => (
-                            <div key={idx} style={{ background: 'rgba(10, 25, 47, 0.6)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 215, 0, 0.2)', borderRadius: '16px', padding: '1.5rem', minWidth: '120px', display: 'flex', flexDirection: 'column', alignItems: 'center', boxShadow: '0 10px 30px rgba(0,0,0,0.3)' }}>
-                                <span style={{ fontFamily: 'var(--font-heading-system)', fontSize: '3.5rem', fontWeight: 700, color: 'var(--text-accent)', lineHeight: 1, marginBottom: '0.5rem' }}>
+                            <div key={idx} style={{ background: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.25)', borderRadius: '16px', padding: '1.5rem', minWidth: '120px', display: 'flex', flexDirection: 'column', alignItems: 'center', boxShadow: '0 10px 30px rgba(0,0,0,0.3)' }}>
+                                <span style={{ fontFamily: 'var(--font-heading-system)', fontSize: '3.5rem', fontWeight: 700, color: '#ffffff', lineHeight: 1, marginBottom: '0.5rem' }}>
                                     {String(unit.value).padStart(2, '0')}
                                 </span>
-                                <span style={{ textTransform: 'uppercase', fontSize: '0.85rem', letterSpacing: '0.1em', color: 'var(--text-secondary)', fontWeight: 600 }}>
+                                <span style={{ textTransform: 'uppercase', fontSize: '0.85rem', letterSpacing: '0.1em', color: 'rgba(255, 255, 255, 0.9)', fontWeight: 600 }}>
                                     {unit.label}
                                 </span>
                             </div>
