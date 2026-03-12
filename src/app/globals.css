@@ -10,26 +10,29 @@
   --color-white: #ffffff;
   --color-black: #000000;
 
-  /* ── Theming (Light Mode Default) ───────────────────── */
-  --bg-primary: #f5f0e8;
-  --bg-secondary: #faf8f4;
+  /* ── Theming (Light Mode Default) ──────────────────────── */
+  --bg-primary: #FAF9F6;
+  --bg-secondary: #F0EAD6;
   --text-primary: #1a2744;
-  --text-secondary: #2d3748;
-  --accent-primary: #9a7a00;
-  --accent-secondary: var(--color-crimson);
-  --text-accent: var(--text-primary); /* Dark navy for text in light mode, replacing gold */
+  --text-secondary: #4a5a75;
+  --accent-primary: #FFC72C; /* Updated gold */
+  --accent-secondary: #8c6e00;
+
+  /* UI Elements - Light */
+  --nav-bg: rgba(250, 249, 246, 0.85);
+  --nav-backdrop: blur(16px);
+  --nav-border: rgba(0, 0, 0, 0.08); /* Dark navy for text in light mode, replacing gold */
 
   /* ── Component Tokens ───────────────────────────────── */
   --card-bg: rgba(255, 255, 255, 0.85);
   --card-border: rgba(184, 134, 11, 0.2);
-  --nav-bg: rgba(248, 245, 238, 0.95);
   --hover-overlay: rgba(0, 0, 0, 0.05);
   --input-bg: rgba(0, 0, 0, 0.03);
   --input-border: rgba(0, 0, 0, 0.15);
   --nav-pill-bg: rgba(255, 255, 255, 0.85);
   --nav-pill-border: rgba(125, 91, 3, 0.15);
   --nav-pill-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(125, 91, 3, 0.08) inset;
-  --nav-link-color: rgba(10, 15, 44, 0.7);
+  --nav-link-color: #1a2744;
   --nav-link-hover: var(--color-navy);
   --mobile-menu-bg: rgba(248, 245, 238, 0.95);
   --mobile-hamburger-bg: rgba(255, 255, 255, 0.85);

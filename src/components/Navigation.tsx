@@ -10,11 +10,15 @@ import {
     Church,
     Users,
     Mail,
+    Images,
+    FileText,
 } from 'lucide-react';
 
 const navItems = [
     { name: 'Home', url: '/', icon: Home },
     { name: 'Books', url: '/books', icon: BookOpen },
+    { name: 'Gallery', url: '/gallery', icon: Images },
+    { name: 'Publications', url: '/publications', icon: FileText },
     { name: 'Prayer', url: '/prayer-requests', icon: HandHeart },
     { name: 'Calendar', url: '/calendar', icon: CalendarDays },
     { name: 'Parish', url: '/parish', icon: Church },
@@ -35,3 +39,4 @@ export default function Navigation() {
 
     return <AnimeNavBar items={navItems} defaultActive={activeTab} />;
 }
+

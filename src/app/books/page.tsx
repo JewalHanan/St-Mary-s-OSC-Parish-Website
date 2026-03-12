@@ -6,7 +6,6 @@ import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { getBookSections, type BookSection } from '@/lib/store';
 import styles from '@/styles/Books.module.css';
-import { BookOpen } from 'lucide-react';
 
 export default function BooksPage() {
     const [sections, setSections] = useState<BookSection[]>([]);
@@ -109,10 +108,10 @@ export default function BooksPage() {
                                         </div>
                                         <Button
                                             variant="secondary"
-                                            style={{ padding: '8px', fontSize: '0.85rem', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+                                            style={{ padding: '8px', fontSize: '0.85rem', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#FFC72C', color: '#1a2744', border: 'none', fontWeight: 600 }}
                                             onClick={() => handleOpen(book)}
                                         >
-                                            <BookOpen size={16} style={{ color: 'var(--color-gold)' }} /> Read Book
+                                            Read Book
                                         </Button>
                                     </div>
                                 ))}

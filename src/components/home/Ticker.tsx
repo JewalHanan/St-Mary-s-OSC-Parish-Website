@@ -27,8 +27,9 @@ export default function Ticker() {
 
     useEffect(() => {
         // Build default text based on the next upcoming Sunday
+        // Use setting if provided; else dynamic auto-generated string
         const nextSun = getNextSunday();
-        const defaultText = `Next Holy Qurbono — Sunday ${formatDate(nextSun)} at 7:00 AM — St. Mary's Malankara Orthodox Church, Muthupilakkadu`;
+        const defaultText = `Next Holy Qurbono — Sunday ${formatDate(nextSun)} at 7:00 AM — St. Mary's Malankara Orthodox Syrian Church, Muthupilakkadu`;
         setTickerText(defaultText);
 
         // Try to fetch ticker override from site-settings

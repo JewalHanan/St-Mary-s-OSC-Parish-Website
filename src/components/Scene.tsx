@@ -4,6 +4,7 @@ import { useRef, useState, useEffect, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Stars } from '@react-three/drei';
 import * as THREE from 'three';
+import { useTheme } from '@/components/ThemeProvider';
 
 /* ── Animated star field with mouse parallax ──────────────── */
 function ParticleField() {
@@ -53,10 +54,18 @@ function ParticleField() {
 /* ── GlobalScene — fixed background canvas ────────────────── */
 export default function GlobalScene() {
     const [mounted, setMounted] = useState(false);
+    const { theme } = useTheme();
 
     // Only render the Canvas client-side (avoids SSR issues with WebGL)
     useEffect(() => { setMounted(true); }, []);
     if (!mounted) return null;
+
+    // In light mode, apply a CSS filter to tint the white stars to a soft warm gold (#c8a85a).
+    // This avoids touching the Stars PointsMaterial props and is fully type-safe.
+    // Dark mode: no filter — stars remain bright white.
+    const canvasFilter = theme === 'light'
+        ? 'sepia(1) saturate(0.6) brightness(0.82)'
+        : 'none';
 
     return (
         <div
@@ -67,7 +76,8 @@ export default function GlobalScene() {
                 height: '100vh',
                 zIndex: -1,
                 pointerEvents: 'none',
-                background: 'transparent'
+                background: 'transparent',
+                filter: canvasFilter,
             }}
             aria-hidden="true"
         >

@@ -91,9 +91,10 @@
     transition: var(--transition-fast);
     align-self: flex-start;
     font-family: var(--font-body-system);
+    font-weight: 600;
 }
 
 .readMoreBtn:hover {
     background: var(--accent-primary);
-    color: var(--text-primary);
+    color: var(--color-navy);
 }

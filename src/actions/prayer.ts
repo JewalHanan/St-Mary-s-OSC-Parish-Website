@@ -27,10 +27,11 @@ export async function submitPrayerRequest(data: z.infer<typeof prayerRequestSche
 
         // 3. Send confirmation email to user
         const emailHtml = `
-      <div style="font-family: Arial, sans-serif; color: #0A0F2C; max-width: 600px; margin: 0 auto; border: 1px solid #FFD700; border-radius: 8px; overflow: hidden;">
-        <div style="background-color: #0A0F2C; color: #FFD700; padding: 20px; text-align: center;">
-          <h2 style="margin: 0; font-family: serif;">St. Mary's Malankara Orthodox Church</h2>
-        </div>
+        <div style="font-family: sans-serif; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #eee; border-radius: 8px; overflow: hidden;">
+          <div style="background-color: #f7f4ed; padding: 20px; text-align: center; border-bottom: 3px solid #FFC72C;">
+          <h2 style="margin: 0; font-family: serif;">St. Mary's Malankara Orthodox Syrian Church</h2>
+          <p style="margin: 5px 0 0; color: #666;">New Prayer Request</p>
+          </div>
         <div style="padding: 30px; background-color: #F8F5EE;">
           <p>Dear ${parsedData.requester_name},</p>
           <p>We have successfully received your prayer request for <strong>${parsedData.target_name}</strong>.</p>

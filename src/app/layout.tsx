@@ -22,8 +22,8 @@ const robotoSlab = Roboto_Slab({
 });
 
 export const metadata: Metadata = {
-  title: "St. Mary's Malankara Orthodox Church",
-  description: "St. Mary's Malankara Orthodox Church, Muthupilakkadu, Kollam",
+  title: "St. Mary's Malankara Orthodox Syrian Church",
+  description: "St. Mary's Malankara Orthodox Syrian Church, Muthupilakkadu, Kollam",
 };
 
 export default function RootLayout({

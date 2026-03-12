@@ -111,8 +111,35 @@ export interface SiteSettings {
     };
 }
 
+export interface HistoryImage {
+    id: number;
+    url: string;
+    caption?: string;
+}
+
 export interface ParishHistory {
     content: string;
+    images?: HistoryImage[];
+}
+
+export interface GalleryImage {
+    id: number;
+    url: string;
+    caption?: string;
+}
+
+export interface GallerySection {
+    id: number;
+    name: string;
+    images: GalleryImage[];
+}
+
+export interface Publication {
+    id: number;
+    name: string;
+    description: string;
+    fileUrl: string;
+    fileName?: string;
 }
 
 // ──── Default data (used as fallback when blob store is empty) ───
@@ -140,7 +167,8 @@ const DEFAULT_SITE_SETTINGS: SiteSettings = {
 
 const DEFAULT_PARISH_HISTORY: ParishHistory = {
     content: `<p>Welcome to our parish history. This section is currently being updated.</p>
-<p>Our church has a rich history spanning many years, established by the grace of God and the dedication of our founding fathers.</p>`
+<p>Our church has a rich history spanning many years, established by the grace of God and the dedication of our founding fathers.</p>`,
+    images: [],
 };
 
 const DEFAULT_SLIDER_IMAGES: SliderImage[] = [
@@ -415,6 +443,28 @@ export async function getParishHistory(): Promise<ParishHistory> {
 }
 export async function saveParishHistory(history: ParishHistory): Promise<void> {
     return saveCollection('parish-history', history);
+}
+
+// ──── Gallery Sections ───────────────────────────────────────────
+
+const DEFAULT_GALLERY_SECTIONS: GallerySection[] = [];
+
+export async function getGallerySections(): Promise<GallerySection[]> {
+    return fetchCollection('gallery-sections', DEFAULT_GALLERY_SECTIONS);
+}
+export async function saveGallerySections(sections: GallerySection[]): Promise<void> {
+    return saveCollection('gallery-sections', sections);
+}
+
+// ──── Publications ────────────────────────────────────────────────
+
+const DEFAULT_PUBLICATIONS: Publication[] = [];
+
+export async function getPublications(): Promise<Publication[]> {
+    return fetchCollection('publications', DEFAULT_PUBLICATIONS);
+}
+export async function savePublications(pubs: Publication[]): Promise<void> {
+    return saveCollection('publications', pubs);
 }
 
 // ──── ID Generation (unchanged) ─────────────────────────────────

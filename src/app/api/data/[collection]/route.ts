@@ -20,6 +20,9 @@ const VALID_COLLECTIONS = new Set([
     'organisations',
     'event-banners',
     'site-settings',
+    'parish-history',
+    'gallery-sections',
+    'publications',
 ]);
 
 export async function GET(

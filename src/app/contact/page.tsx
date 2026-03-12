@@ -70,8 +70,8 @@ export default function ContactPage() {
                     transition={{ duration: 0.6, delay: 0.4 }}
                 >
                     <iframe
-                        title="Church Location — St. Mary's Malankara Orthodox Church, Muthupilakkadu"
-                        src="https://maps.google.com/maps?q=St.+Mary's+Malankara+Orthodox+Syrian+Church,+Muthupilakkadu,+Kerala&t=&z=16&ie=UTF8&iwloc=&output=embed"
+                        title="Church Location — St. Mary's Malankara Orthodox Syrian Church, Muthupilakkadu"
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.6974288594246!2d76.657074474932!3d9.00000000000000!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b060f0f0f0f0f0f%3A0x0!2sSt.%20Mary&#39;s%20Malankara%20Orthodox%20Church%2C%20Muthupilakkadu!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
                         width="100%"
                         height="450"
                         style={{ border: 0, borderRadius: '16px' }}

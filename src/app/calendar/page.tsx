@@ -218,12 +218,12 @@ export default function CalendarPage() {
                     >
                         <motion.div
                             initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, y: 20 }}
-                            style={{ background: 'var(--color-navy)', boxShadow: '0 20px 50px rgba(0,0,0,0.5)', border: '1px solid rgba(255,215,0,0.2)', padding: '2.5rem', borderRadius: '16px', maxWidth: '500px', width: '100%', borderTop: `4px solid ${TYPE_COLORS[selectedDayInfo.day.type ?? 'feast']}` }}
+                            style={{ background: 'var(--bg-secondary)', boxShadow: '0 20px 50px rgba(0,0,0,0.5)', border: '1px solid var(--card-border)', padding: '2.5rem', borderRadius: '16px', maxWidth: '500px', width: '100%', maxHeight: '90vh', overflowY: 'auto', borderTop: `4px solid ${TYPE_COLORS[selectedDayInfo.day.type ?? 'feast']}` }}
                             onClick={e => e.stopPropagation()}
                         >
                             {/* Image */}
                             {selectedDayInfo.day.image && (
-                                <div style={{ width: '100%', height: '220px', marginBottom: '1.5rem', borderRadius: '12px', overflow: 'hidden', border: `1px solid ${TYPE_COLORS[selectedDayInfo.day.type ?? 'feast']}50` }}>
+                                <div style={{ width: '100%', aspectRatio: '16/9', marginBottom: '1.5rem', borderRadius: '12px', overflow: 'hidden', border: `1px solid ${TYPE_COLORS[selectedDayInfo.day.type ?? 'feast']}50` }}>
                                     <img
                                         src={selectedDayInfo.day.image}
                                         alt={selectedDayInfo.day.title}
@@ -235,10 +235,10 @@ export default function CalendarPage() {
                             <span style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '12px', background: TYPE_COLORS[selectedDayInfo.day.type ?? 'feast'] + '25', color: TYPE_COLORS[selectedDayInfo.day.type ?? 'feast'], fontSize: '0.8rem', fontWeight: 600, marginBottom: '0.75rem' }}>
                                 {TYPE_LABELS[selectedDayInfo.day.type ?? 'feast']}
                             </span>
-                            <h2 style={{ color: 'var(--text-accent)', marginBottom: '0.5rem', fontFamily: 'var(--font-heading-system)', fontSize: '1.6rem', lineHeight: 1.3 }}>
+                            <h2 style={{ color: 'var(--text-primary)', marginBottom: '0.5rem', fontFamily: 'var(--font-heading-system)', fontSize: '1.6rem', lineHeight: 1.3 }}>
                                 {selectedDayInfo.day.title}
                             </h2>
-                            <p style={{ color: 'var(--text-accent)', fontWeight: 'bold', marginBottom: '1rem' }}>
+                            <p style={{ color: 'var(--text-primary)', fontWeight: 'bold', marginBottom: '1rem' }}>
                                 {new Date(selectedDayInfo.day.date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
                             </p>
                             {selectedDayInfo.day.description && (
@@ -248,7 +248,7 @@ export default function CalendarPage() {
                             )}
                             <button
                                 onClick={() => setSelectedDayInfo(null)}
-                                style={{ marginTop: '2rem', width: '100%', padding: '12px', background: 'var(--input-bg)', border: '1px solid var(--card-border)', borderRadius: '8px', color: 'var(--text-primary)', cursor: 'pointer', fontWeight: 'bold' }}
+                                style={{ marginTop: '2rem', width: '100%', padding: '12px', background: 'var(--accent-primary)', border: 'none', borderRadius: '8px', color: 'var(--color-navy)', cursor: 'pointer', fontWeight: 'bold', fontSize: '1rem' }}
                             >
                                 Close
                             </button>

@@ -42,6 +42,8 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         { href: '/admin/history', label: 'Parish History', icon: '📜' },
         { href: '/admin/ministries', label: 'Ministries', icon: '🏛️' },
         { href: '/admin/books', label: 'Service Books', icon: '📚' },
+        { href: '/admin/gallery', label: 'Gallery', icon: '🖼️' },
+        { href: '/admin/publications', label: 'Publications', icon: '📄' },
     ];
 
     const userRole = (session?.user as any)?.role;
