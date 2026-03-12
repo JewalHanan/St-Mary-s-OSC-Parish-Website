@@ -112,7 +112,7 @@ export default function BooksPage() {
                                             style={{ padding: '8px', fontSize: '0.85rem', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
                                             onClick={() => handleOpen(book)}
                                         >
-                                            <BookOpen size={16} style={{ color: 'var(--text-accent)' }} /> Read Book
+                                            <BookOpen size={16} style={{ color: 'var(--color-gold)' }} /> Read Book
                                         </Button>
                                     </div>
                                 ))}

@@ -39,6 +39,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         { href: '/admin/events', label: 'Events List', icon: '📅' },
         { href: '/admin/calendar', label: 'Calendar Special Days', icon: '✨' },
         { href: '/admin/parish', label: 'Parish Members', icon: '👥' },
+        { href: '/admin/history', label: 'Parish History', icon: '📜' },
         { href: '/admin/ministries', label: 'Ministries', icon: '🏛️' },
         { href: '/admin/books', label: 'Service Books', icon: '📚' },
     ];

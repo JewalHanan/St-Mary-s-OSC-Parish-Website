@@ -111,6 +111,10 @@ export interface SiteSettings {
     };
 }
 
+export interface ParishHistory {
+    content: string;
+}
+
 // ──── Default data (used as fallback when blob store is empty) ───
 
 const DEFAULT_SITE_SETTINGS: SiteSettings = {
@@ -132,6 +136,11 @@ const DEFAULT_SITE_SETTINGS: SiteSettings = {
         whatsapp: 'https://wa.me/917034756977',
         youtube: 'https://youtube.com/'
     }
+};
+
+const DEFAULT_PARISH_HISTORY: ParishHistory = {
+    content: `<p>Welcome to our parish history. This section is currently being updated.</p>
+<p>Our church has a rich history spanning many years, established by the grace of God and the dedication of our founding fathers.</p>`
 };
 
 const DEFAULT_SLIDER_IMAGES: SliderImage[] = [
@@ -397,6 +406,15 @@ export async function getSiteSettings(): Promise<SiteSettings> {
 }
 export async function saveSiteSettings(settings: SiteSettings): Promise<void> {
     return saveCollection('site-settings', settings);
+}
+
+// ──── Parish History ──────────────────────────────────────────────
+
+export async function getParishHistory(): Promise<ParishHistory> {
+    return fetchCollection('parish-history', DEFAULT_PARISH_HISTORY);
+}
+export async function saveParishHistory(history: ParishHistory): Promise<void> {
+    return saveCollection('parish-history', history);
 }
 
 // ──── ID Generation (unchanged) ─────────────────────────────────
