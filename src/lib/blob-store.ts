@@ -1,78 +1,59 @@
-/**
- * blob-store.ts
- * Thin wrapper around @vercel/blob for storing/retrieving named JSON blobs.
- * Each data collection (slider-images, events, etc.) is a single JSON file in the blob store.
- *
- * Gracefully handles missing BLOB_READ_WRITE_TOKEN — returns default data
- * instead of crashing, so the site works (with defaults) even before the
- * blob store is configured.
- */
+import { S3Client, GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
 
 const BLOB_PREFIX = 'stmosc-data/';
 
-function hasBlobToken(): boolean {
-    return !!process.env.BLOB_READ_WRITE_TOKEN;
+function hasR2Config(): boolean {
+  return !!(process.env.R2_ACCOUNT_ID && process.env.R2_ACCESS_KEY_ID &&
+            process.env.R2_SECRET_ACCESS_KEY && process.env.R2_BUCKET_NAME);
 }
 
-/**
- * Read a named JSON blob. Returns the parsed data, or the supplied default if:
- * - The blob doesn't exist yet
- * - BLOB_READ_WRITE_TOKEN is not configured
- * - Any error occurs
- */
+function getR2Client() {
+  return new S3Client({
+    region: 'auto',
+    endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+    credentials: {
+      accessKeyId: process.env.R2_ACCESS_KEY_ID!,
+      secretAccessKey: process.env.R2_SECRET_ACCESS_KEY!,
+    },
+  });
+}
+
 export async function readBlob<T>(name: string, defaultData: T): Promise<T> {
-    if (!hasBlobToken()) {
-        console.warn(`[blob-store] BLOB_READ_WRITE_TOKEN not set — returning default data for "${name}"`);
-        return defaultData;
-    }
-
-    try {
-        const { list } = await import('@vercel/blob');
-        const { blobs } = await list({ prefix: `${BLOB_PREFIX}${name}` });
-        if (blobs.length === 0) return defaultData;
-
-        // Use the most recent blob
-        const latest = blobs.sort(
-            (a, b) => new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime()
-        )[0];
-
-        const res = await fetch(latest.url, { cache: 'no-store' });
-        if (!res.ok) return defaultData;
-        return (await res.json()) as T;
-    } catch (error) {
-        console.error(`[blob-store] Failed to read "${name}":`, error);
-        return defaultData;
-    }
+  if (!hasR2Config()) {
+    console.warn(`[blob-store] R2 not configured — returning default for "${name}"`);
+    return defaultData;
+  }
+  try {
+    const r2 = getR2Client();
+    const result = await r2.send(new GetObjectCommand({
+      Bucket: process.env.R2_BUCKET_NAME!,
+      Key: `${BLOB_PREFIX}${name}.json`,
+    }));
+    const body = await result.Body?.transformToString();
+    if (!body) return defaultData;
+    return JSON.parse(body) as T;
+  } catch (err: any) {
+    if (err?.name === 'NoSuchKey') return defaultData;
+    console.error(`[blob-store] readBlob "${name}" failed:`, err);
+    return defaultData;
+  }
 }
 
-/**
- * Write a named JSON blob, replacing the previous version.
- * No-ops if BLOB_READ_WRITE_TOKEN is not set.
- */
 export async function writeBlob<T>(name: string, data: T): Promise<void> {
-    if (!hasBlobToken()) {
-        console.warn(`[blob-store] BLOB_READ_WRITE_TOKEN not set — cannot write "${name}"`);
-        return;
-    }
-
-    try {
-        const { put, list, del } = await import('@vercel/blob');
-
-        // Delete old blobs with this name first
-        const { blobs } = await list({ prefix: `${BLOB_PREFIX}${name}` });
-        for (const blob of blobs) {
-            await del(blob.url);
-        }
-
-        // Write new blob
-        const json = JSON.stringify(data);
-        await put(`${BLOB_PREFIX}${name}.json`, json, {
-            access: 'public',
-            contentType: 'application/json',
-            addRandomSuffix: false,
-        });
-    } catch (error) {
-        console.error(`[blob-store] Failed to write "${name}":`, error);
-        throw error;
-    }
+  if (!hasR2Config()) {
+    console.warn(`[blob-store] R2 not configured — cannot write "${name}"`);
+    return;
+  }
+  try {
+    const r2 = getR2Client();
+    await r2.send(new PutObjectCommand({
+      Bucket: process.env.R2_BUCKET_NAME!,
+      Key: `${BLOB_PREFIX}${name}.json`,
+      Body: JSON.stringify(data),
+      ContentType: 'application/json',
+    }));
+  } catch (err) {
+    console.error(`[blob-store] writeBlob "${name}" failed:`, err);
+    throw err;
+  }
 }
