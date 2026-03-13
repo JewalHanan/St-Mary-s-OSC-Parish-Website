@@ -19,8 +19,8 @@ const SECURITY_HEADERS: Record<string, string> = {
         "script-src 'self' 'unsafe-inline' 'unsafe-eval'", // Next.js requires these
         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
         "font-src 'self' https://fonts.gstatic.com data:",
-        "img-src 'self' data: blob: https:",
-        "connect-src 'self' https://*.blob.vercel-storage.com https://*.public.blob.vercel-storage.com",
+        "img-src 'self' data: blob: https://*.r2.dev https://*.cloudflarestorage.com https://images.unsplash.com",
+        "connect-src 'self' https://*.r2.dev https://*.r2.cloudflarestorage.com",
         "frame-src https://www.google.com", // Google Maps embed
         "object-src 'none'",
         "base-uri 'self'",
