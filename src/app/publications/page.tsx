@@ -1,14 +1,21 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import { getPublications, type Publication } from '@/lib/store';
-import { useStoreData } from '@/lib/useStoreData';
 import styles from '@/styles/Publications.module.css';
 
+export interface Publication {
+    id: string;
+    name: string;
+    description: string;
+    file_url: string;
+    file_name: string;
+}
+
 function openPdf(pub: Publication) {
-    const url = pub.fileUrl;
+    const url = pub.file_url;
     if (!url) { alert('No file uploaded for this publication yet.'); return; }
 
     try {
@@ -38,7 +45,22 @@ function openPdf(pub: Publication) {
 }
 
 export default function PublicationsPage() {
-    const { data: publications } = useStoreData(getPublications, [] as Publication[]);
+    const [publications, setPublications] = useState<Publication[]>([]);
+
+    useEffect(() => {
+        async function fetchPublications() {
+            try {
+                const res = await fetch('/api/publications', { cache: 'no-store' });
+                if (res.ok) {
+                    const data = await res.json();
+                    setPublications(data);
+                }
+            } catch (error) {
+                console.error('Failed to fetch publications:', error);
+            }
+        }
+        fetchPublications();
+    }, []);
 
     return (
         <div className={styles.pageContainer}>

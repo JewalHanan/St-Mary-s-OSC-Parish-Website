@@ -3,13 +3,15 @@
 import { useState, useEffect, useRef } from 'react';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import {
-    getPublications,
-    savePublications,
-    nextId,
-    type Publication,
-} from '@/lib/store';
 import styles from '@/styles/AdminDataTable.module.css';
+
+export interface Publication {
+    id: string;
+    name: string;
+    description: string;
+    file_url: string;
+    file_name: string;
+}
 
 const inp: React.CSSProperties = {
     padding: '10px 14px',
@@ -21,75 +23,144 @@ const inp: React.CSSProperties = {
     width: '100%',
 };
 
-const EMPTY_FORM = { name: '', description: '', fileUrl: '', fileName: '' };
+const EMPTY_FORM = { name: '', description: '', file_url: '', file_name: '' };
 
 export default function PublicationsManager() {
     const [publications, setPublications] = useState<Publication[]>([]);
-    const [modal, setModal] = useState<{ pub: Partial<Publication> & { fileName: string } } | null>(null);
+    const [modal, setModal] = useState<{ pub: Partial<Publication> } | null>(null);
     const [uploading, setUploading] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
+    const [message, setMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
+
     const pdfInputRef = useRef<HTMLInputElement>(null);
 
-    useEffect(() => { getPublications().then(setPublications); }, []);
-
-    const persist = async (updated: Publication[]) => {
-        setPublications(updated);
-        await savePublications(updated);
+    const showMessage = (text: string, type: 'success' | 'error') => {
+        setMessage({ text, type });
+        setTimeout(() => setMessage(null), 4000);
     };
 
-    // Open modal for add or edit
-    const openAdd = () => setModal({ pub: { ...EMPTY_FORM } });
-    const openEdit = (pub: Publication) => setModal({ pub: { ...pub, fileName: '' } });
+    const fetchPublications = async () => {
+        try {
+            const res = await fetch('/api/publications', { cache: 'no-store' });
+            if (res.ok) {
+                const data = await res.json();
+                setPublications(data);
+            }
+        } catch (error) {
+            console.error('Failed to fetch publications', error);
+        }
+    };
 
-    // PDF upload
-    const handlePdfUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    useEffect(() => {
+        fetchPublications();
+    }, []);
+
+    const uploadFile = async (file: File, prefix: string): Promise<string | null> => {
+        if (!file) return null;
+        setUploading(true);
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('prefix', prefix);
+
+        try {
+            const res = await fetch('/api/upload', {
+                method: 'POST',
+                body: formData,
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Upload failed');
+            return data.url;
+        } catch (error) {
+            console.error('Upload Error:', error);
+            showMessage('Failed to upload file. Please try again.', 'error');
+            return null;
+        } finally {
+            setUploading(false);
+        }
+    };
+
+    const openAdd = () => setModal({ pub: { ...EMPTY_FORM } });
+    const openEdit = (pub: Publication) => setModal({ pub: { ...pub } });
+
+    const handlePdfUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
-        if (file.type !== 'application/pdf') { alert('Please select a PDF file.'); return; }
-        setUploading(true);
-        const reader = new FileReader();
-        reader.onload = () => {
+        if (file.type !== 'application/pdf') return showMessage('Please select a PDF file.', 'error');
+        
+        const url = await uploadFile(file, 'publications');
+        if (url) {
             setModal(prev => prev ? {
-                pub: { ...prev.pub, fileUrl: reader.result as string, fileName: file.name }
+                pub: { ...prev.pub, file_url: url, file_name: file.name }
             } : prev);
-            setUploading(false);
-        };
-        reader.readAsDataURL(file);
+            showMessage('PDF uploaded temporarily. Save to finalize.', 'success');
+        }
         e.target.value = '';
     };
 
     const save = async () => {
         if (!modal) return;
-        const { name, description, fileUrl, fileName } = modal.pub;
-        if (!name?.trim()) return alert('Publication name is required.');
-        if (!description?.trim()) return alert('Description is required.');
+        const { name, description, file_url, file_name } = modal.pub;
+        if (!name?.trim()) return showMessage('Publication name is required.', 'error');
+        if (!description?.trim()) return showMessage('Description is required.', 'error');
+        if (!file_url?.trim()) return showMessage('A PDF file or URL link is required.', 'error');
 
-        const record: Publication = {
-            id: modal.pub.id ?? nextId(publications),
-            name: name.trim(),
-            description: description.trim(),
-            fileUrl: fileUrl || '',
-            fileName: fileName || modal.pub.fileName || '',
-        };
+        setIsSaving(true);
+        try {
+            const method = modal.pub.id ? 'PUT' : 'POST';
+            const payload = {
+                id: modal.pub.id,
+                name: name.trim(),
+                description: description.trim(),
+                file_url: file_url,
+                file_name: file_name || '',
+            };
 
-        if (modal.pub.id) {
-            await persist(publications.map(p => p.id === record.id ? record : p));
-        } else {
-            await persist([...publications, record]);
+            const res = await fetch('/api/publications', {
+                method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+            
+            if (!res.ok) throw new Error('Saving failed');
+            showMessage('Publication saved successfully.', 'success');
+            setModal(null);
+            fetchPublications();
+        } catch (error) {
+            showMessage('Failed to save publication.', 'error');
+        } finally {
+            setIsSaving(false);
         }
-        setModal(null);
     };
 
-    const deletePub = (id: number) => {
+    const deletePub = async (id: string) => {
         if (!confirm('Delete this publication?')) return;
-        persist(publications.filter(p => p.id !== id));
+        try {
+            const res = await fetch(`/api/publications?id=${id}`, { method: 'DELETE' });
+            if (!res.ok) throw new Error('Deletion failed');
+            showMessage('Publication deleted.', 'success');
+            fetchPublications();
+        } catch (error) {
+            showMessage('Failed to delete publication.', 'error');
+        }
     };
 
     return (
-        <div className={styles.managerContainer}>
+        <div className={styles.managerContainer} style={{ position: 'relative' }}>
+            {message && (
+                <div style={{
+                    position: 'fixed', top: '20px', right: '20px', zIndex: 9999,
+                    padding: '1rem 2rem', borderRadius: '8px', fontWeight: 'bold',
+                    background: message.type === 'success' ? '#27AE60' : '#E74C3C', color: 'white',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.3)', transition: 'all 0.3s'
+                }}>
+                    {message.type === 'success' ? '✅' : '❌'} {message.text}
+                </div>
+            )}
+
             <header className={styles.header}>
                 <div>
                     <h1>Publications Manager</h1>
-                    <p>Upload church publications and supplement papers as PDFs. Changes are live immediately.</p>
+                    <p>Upload church publications and supplement papers as PDFs. Changes save instantly to the DB and are live on the public page.</p>
                 </div>
                 <Button variant="primary" onClick={openAdd}>➕ Add Publication</Button>
             </header>
@@ -120,8 +191,8 @@ export default function PublicationsManager() {
                                             {pub.description}
                                         </td>
                                         <td>
-                                            {pub.fileUrl
-                                                ? <span style={{ color: '#27AE60', fontSize: '0.85rem' }}>✅ PDF Ready</span>
+                                            {pub.file_url
+                                                ? <a href={pub.file_url} target="_blank" rel="noopener noreferrer" style={{ color: '#27AE60', fontSize: '0.85rem', textDecoration: 'underline' }}>✅ Open PDF</a>
                                                 : <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>No file</span>
                                             }
                                         </td>
@@ -170,23 +241,23 @@ export default function PublicationsManager() {
                                     Upload PDF File
                                 </label>
                                 <div
-                                    onClick={() => pdfInputRef.current?.click()}
+                                    onClick={() => !uploading && pdfInputRef.current?.click()}
                                     style={{
                                         border: '2px dashed rgba(255,215,0,0.3)',
                                         borderRadius: '8px',
                                         padding: '1.5rem',
                                         textAlign: 'center',
-                                        cursor: 'pointer',
+                                        cursor: uploading ? 'not-allowed' : 'pointer',
                                         background: 'rgba(255,255,255,0.03)',
                                         transition: 'all 0.2s',
                                     }}
                                 >
                                     {uploading ? (
-                                        <p style={{ color: 'var(--text-accent)', margin: 0 }}>⏳ Loading PDF…</p>
-                                    ) : modal.pub.fileName ? (
-                                        <p style={{ color: '#27AE60', margin: 0 }}>✅ {modal.pub.fileName}</p>
-                                    ) : modal.pub.fileUrl ? (
-                                        <p style={{ color: '#27AE60', margin: 0 }}>✅ PDF already uploaded — click to replace</p>
+                                        <p style={{ color: 'var(--text-accent)', margin: 0 }}>⏳ Uploading to Server…</p>
+                                    ) : modal.pub.file_name ? (
+                                        <p style={{ color: '#27AE60', margin: 0 }}>✅ {modal.pub.file_name}</p>
+                                    ) : modal.pub.file_url ? (
+                                        <p style={{ color: '#27AE60', margin: 0 }}>✅ PDF active — click to replace</p>
                                     ) : (
                                         <>
                                             <p style={{ color: 'var(--text-secondary)', margin: '0 0 0.5rem' }}>📄 Click to upload a PDF</p>
@@ -205,8 +276,8 @@ export default function PublicationsManager() {
                             </div>
 
                             <input
-                                value={modal.pub.fileUrl?.startsWith('data:') ? '' : (modal.pub.fileUrl ?? '')}
-                                onChange={e => setModal({ pub: { ...modal.pub, fileUrl: e.target.value, fileName: '' } })}
+                                value={modal.pub.file_url ?? ''}
+                                onChange={e => setModal({ pub: { ...modal.pub, file_url: e.target.value, file_name: '' } })}
                                 placeholder="Paste a file URL (Google Drive, etc.)"
                                 style={inp}
                             />
@@ -214,7 +285,7 @@ export default function PublicationsManager() {
 
                         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1.5rem' }}>
                             <Button variant="outline" onClick={() => setModal(null)}>Cancel</Button>
-                            <Button variant="primary" onClick={save}>Save Publication</Button>
+                            <Button variant="primary" onClick={save} disabled={isSaving || uploading}>{isSaving ? 'Saving...' : 'Save Publication'}</Button>
                         </div>
                     </Card>
                 </div>

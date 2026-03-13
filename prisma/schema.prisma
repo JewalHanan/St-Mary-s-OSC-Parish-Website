@@ -96,7 +96,7 @@ model Organisation {
 model BookSection {
   id        String   @id @default(uuid())
   title     String
-  icon_url  String?
+  image_url String?
   order     Int      @default(0)
   books     Book[]
   createdAt DateTime @default(now())
@@ -110,12 +110,25 @@ model Book {
   title       String
   language    String
   file_url    String
+  image_url   String?
   section_id  String
   section     BookSection @relation(fields: [section_id], references: [id], onDelete: Cascade)
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 
   @@map("books")
+}
+
+model Publication {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  file_url    String
+  file_name   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("publications")
 }
 
 model AuditLog {

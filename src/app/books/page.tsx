@@ -1,20 +1,48 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import { getBookSections, type BookSection } from '@/lib/store';
-import { useStoreData } from '@/lib/useStoreData';
 import styles from '@/styles/Books.module.css';
 
-export default function BooksPage() {
-    const { data: sections } = useStoreData(getBookSections, [] as BookSection[]);
-    const [expandedSection, setExpandedSection] = useState<number | null>(null);
+export interface Book {
+    id: string;
+    title: string;
+    language: string;
+    file_url: string;
+    image_url?: string;
+    section_id: string;
+}
 
-    const handleOpen = (book: any) => {
-        // The store uses camelCase `fileUrl` — fall back to snake_case just in case
-        const url: string = book.fileUrl || book.file_url || '';
+export interface BookSection {
+    id: string;
+    title: string;
+    image_url?: string;
+    order: number;
+    books: Book[];
+}
+
+export default function BooksPage() {
+    const [sections, setSections] = useState<BookSection[]>([]);
+    
+    useEffect(() => {
+        async function fetchSections() {
+            try {
+                const res = await fetch('/api/book-sections', { cache: 'no-store' });
+                if (res.ok) {
+                    const data = await res.json();
+                    setSections(data);
+                }
+            } catch (error) {
+                console.error('Failed to fetch sections:', error);
+            }
+        }
+        fetchSections();
+    }, []);
+
+    const handleOpen = (book: Book) => {
+        const url: string = book.file_url || '';
 
         if (!url || url === '#') {
             alert('No file has been uploaded for this book yet.');
@@ -23,7 +51,6 @@ export default function BooksPage() {
 
         try {
             if (url.startsWith('data:')) {
-                // Base64 PDF → convert to Blob → open in new tab so the browser renders it inline
                 const [header, base64] = url.split(',');
                 const mime = header.match(/:(.*?);/)?.[1] ?? 'application/pdf';
                 const byteStr = atob(base64);
@@ -32,19 +59,15 @@ export default function BooksPage() {
                 const blob = new Blob([bytes], { type: mime });
                 const blobUrl = URL.createObjectURL(blob);
 
-                // Open inline in a new tab (readable in browser PDF viewer)
                 const win = window.open(blobUrl, '_blank');
                 if (!win) {
-                    // Pop-up blocked → fall back to download
                     const a = document.createElement('a');
                     a.href = blobUrl;
                     a.download = `${book.title}.pdf`;
                     a.click();
                 }
-                // Clean up after a short delay
                 setTimeout(() => URL.revokeObjectURL(blobUrl), 60_000);
             } else {
-                // External URL — open directly in new tab
                 window.open(url, '_blank', 'noopener,noreferrer');
             }
         } catch (err) {
@@ -77,8 +100,8 @@ export default function BooksPage() {
                     >
                         <Card className={styles.sectionCard} withGlow>
                             <div className={styles.sectionImageContainer}>
-                                {section.image ? (
-                                    <img src={section.image} alt={section.title} className={styles.sectionImage} />
+                                {section.image_url ? (
+                                    <img src={section.image_url} alt={section.title} className={styles.sectionImage} />
                                 ) : (
                                     <span className={styles.sectionPlaceholder}>📚</span>
                                 )}
@@ -93,8 +116,8 @@ export default function BooksPage() {
                                 {section.books.map((book) => (
                                     <div key={book.id} className={styles.bookItem}>
                                         <div className={styles.bookThumbAndInfo}>
-                                            {book.image ? (
-                                                <img src={book.image} alt={book.title} style={{ width: 44, height: 44, borderRadius: '6px', objectFit: 'cover', flexShrink: 0, border: '1px solid var(--card-border)' }} />
+                                            {book.image_url ? (
+                                                <img src={book.image_url} alt={book.title} style={{ width: 44, height: 44, borderRadius: '6px', objectFit: 'cover', flexShrink: 0, border: '1px solid var(--card-border)' }} />
                                             ) : (
                                                 <span style={{ width: 44, height: 44, borderRadius: '6px', background: 'var(--card-bg)', border: '1px solid var(--card-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', flexShrink: 0 }}>📖</span>
                                             )}
