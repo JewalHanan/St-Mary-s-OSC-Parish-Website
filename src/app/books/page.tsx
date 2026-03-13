@@ -1,48 +1,19 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
+import { getBookSections, type BookSection, type BookItem } from '@/lib/store';
+import { useStoreData } from '@/lib/useStoreData';
 import styles from '@/styles/Books.module.css';
 
-export interface Book {
-    id: string;
-    title: string;
-    language: string;
-    file_url: string;
-    image_url?: string;
-    section_id: string;
-}
-
-export interface BookSection {
-    id: string;
-    title: string;
-    image_url?: string;
-    order: number;
-    books: Book[];
-}
-
 export default function BooksPage() {
-    const [sections, setSections] = useState<BookSection[]>([]);
-    
-    useEffect(() => {
-        async function fetchSections() {
-            try {
-                const res = await fetch('/api/book-sections', { cache: 'no-store' });
-                if (res.ok) {
-                    const data = await res.json();
-                    setSections(data);
-                }
-            } catch (error) {
-                console.error('Failed to fetch sections:', error);
-            }
-        }
-        fetchSections();
-    }, []);
+    const { data: sections } = useStoreData(getBookSections, [] as BookSection[]);
+    const safeSections = Array.isArray(sections) ? sections : [];
 
-    const handleOpen = (book: Book) => {
-        const url: string = book.file_url || '';
+    const handleOpen = (book: BookItem) => {
+        const url: string = book.fileUrl || '';
 
         if (!url || url === '#') {
             alert('No file has been uploaded for this book yet.');
@@ -91,7 +62,7 @@ export default function BooksPage() {
             </div>
 
             <div className={styles.sectionsGrid}>
-                {sections.map((section, idx) => (
+                {safeSections.map((section, idx) => (
                     <motion.div
                         key={section.id}
                         initial={{ opacity: 0, y: 30 }}
@@ -100,8 +71,8 @@ export default function BooksPage() {
                     >
                         <Card className={styles.sectionCard} withGlow>
                             <div className={styles.sectionImageContainer}>
-                                {section.image_url ? (
-                                    <img src={section.image_url} alt={section.title} className={styles.sectionImage} />
+                                {section.image ? (
+                                    <img src={section.image} alt={section.title} className={styles.sectionImage} />
                                 ) : (
                                     <span className={styles.sectionPlaceholder}>📚</span>
                                 )}
@@ -109,15 +80,15 @@ export default function BooksPage() {
 
                             <div className={styles.sectionHeader}>
                                 <h2>{section.title}</h2>
-                                <span className={styles.bookCount}>{section.books.length} book{section.books.length !== 1 ? 's' : ''}</span>
+                                <span className={styles.bookCount}>{section.books?.length || 0} book{(section.books?.length || 0) !== 1 ? 's' : ''}</span>
                             </div>
 
                             <div className={styles.booksList}>
-                                {section.books.map((book) => (
+                                {(section.books || []).map((book) => (
                                     <div key={book.id} className={styles.bookItem}>
                                         <div className={styles.bookThumbAndInfo}>
-                                            {book.image_url ? (
-                                                <img src={book.image_url} alt={book.title} style={{ width: 44, height: 44, borderRadius: '6px', objectFit: 'cover', flexShrink: 0, border: '1px solid var(--card-border)' }} />
+                                            {book.image ? (
+                                                <img src={book.image} alt={book.title} style={{ width: 44, height: 44, borderRadius: '6px', objectFit: 'cover', flexShrink: 0, border: '1px solid var(--card-border)' }} />
                                             ) : (
                                                 <span style={{ width: 44, height: 44, borderRadius: '6px', background: 'var(--card-bg)', border: '1px solid var(--card-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', flexShrink: 0 }}>📖</span>
                                             )}
@@ -135,7 +106,7 @@ export default function BooksPage() {
                                         </Button>
                                     </div>
                                 ))}
-                                {section.books.length === 0 && (
+                                {(!section.books || section.books.length === 0) && (
                                     <p className={styles.emptyBooks}>No books uploaded yet for this section.</p>
                                 )}
                             </div>

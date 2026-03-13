@@ -3,32 +3,16 @@
 import { useState, useEffect, useRef } from 'react';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
+import { getBookSections, saveBookSections, nextId, type BookSection, type BookItem } from '@/lib/store';
 import styles from '@/styles/AdminDataTable.module.css';
-
-export interface Book {
-    id: string;
-    title: string;
-    language: string;
-    file_url: string;
-    image_url?: string;
-    section_id: string;
-}
-
-export interface BookSection {
-    id: string;
-    title: string;
-    image_url?: string;
-    order: number;
-    books: Book[];
-}
 
 export default function BooksManager() {
     const [sections, setSections] = useState<BookSection[]>([]);
-    const [editingSectionId, setEditingSectionId] = useState<string | null>(null);
+    const [editingSectionId, setEditingSectionId] = useState<number | 'new' | null>(null);
     const [sectionTitle, setSectionTitle] = useState('');
     const [sectionImage, setSectionImage] = useState('');
     
-    const [editingBook, setEditingBook] = useState<{ sectionId: string; bookId: string | null } | null>(null);
+    const [editingBook, setEditingBook] = useState<{ sectionId: number; bookId: number | null } | null>(null);
     const [bookForm, setBookForm] = useState({ title: '', language: 'Malayalam', fileUrl: '', fileName: '', image: '' });
     
     const [uploading, setUploading] = useState(false);
@@ -41,11 +25,8 @@ export default function BooksManager() {
 
     const fetchSections = async () => {
         try {
-            const res = await fetch('/api/book-sections', { cache: 'no-store' });
-            if (res.ok) {
-                const data = await res.json();
-                setSections(data);
-            }
+            const data = await getBookSections();
+            setSections(Array.isArray(data) ? data : []);
         } catch (error) {
             console.error('Failed to fetch sections', error);
         }
@@ -86,7 +67,7 @@ export default function BooksManager() {
 
     // ── Section CRUD ──
     const addSection = () => { setEditingSectionId('new'); setSectionTitle(''); setSectionImage(''); };
-    const editSection = (s: BookSection) => { setEditingSectionId(s.id); setSectionTitle(s.title); setSectionImage(s.image_url || ''); };
+    const editSection = (s: BookSection) => { setEditingSectionId(s.id); setSectionTitle(s.title); setSectionImage(s.image || ''); };
     
     const handleSectionImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -103,21 +84,26 @@ export default function BooksManager() {
         if (!sectionTitle) return showMessage('Title is required.', 'error');
         setIsSaving(true);
         try {
-            const method = editingSectionId === 'new' ? 'POST' : 'PUT';
-            const payload = {
-                id: editingSectionId === 'new' ? undefined : editingSectionId,
-                title: sectionTitle,
-                image_url: sectionImage || null,
-            };
-            const res = await fetch('/api/book-sections', {
-                method,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
-            });
-            if (!res.ok) throw new Error('Saving failed');
+            let updated: BookSection[];
+            if (editingSectionId === 'new') {
+                const newSection: BookSection = {
+                    id: nextId(sections),
+                    title: sectionTitle,
+                    image: sectionImage || undefined,
+                    books: [],
+                };
+                updated = [...sections, newSection];
+            } else {
+                updated = sections.map(s =>
+                    s.id === editingSectionId
+                        ? { ...s, title: sectionTitle, image: sectionImage || undefined }
+                        : s
+                );
+            }
+            await saveBookSections(updated);
+            setSections(updated);
             showMessage('Section saved successfully.', 'success');
             setEditingSectionId(null);
-            fetchSections();
         } catch (error) {
             showMessage('Failed to save section.', 'error');
         } finally {
@@ -125,26 +111,26 @@ export default function BooksManager() {
         }
     };
 
-    const deleteSection = async (id: string) => {
+    const deleteSection = async (id: number) => {
         if (!confirm('Delete this section and all its books?')) return;
         try {
-            const res = await fetch(`/api/book-sections?id=${id}`, { method: 'DELETE' });
-            if (!res.ok) throw new Error('Deletion failed');
+            const updated = sections.filter(s => s.id !== id);
+            await saveBookSections(updated);
+            setSections(updated);
             showMessage('Section deleted.', 'success');
-            fetchSections();
         } catch (error) {
             showMessage('Failed to delete section.', 'error');
         }
     };
 
     // ── Book CRUD ──
-    const openAddBook = (sectionId: string) => {
+    const openAddBook = (sectionId: number) => {
         setEditingBook({ sectionId, bookId: null });
         setBookForm({ title: '', language: 'Malayalam', fileUrl: '', fileName: '', image: '' });
     };
-    const openEditBook = (sectionId: string, book: Book) => {
+    const openEditBook = (sectionId: number, book: BookItem) => {
         setEditingBook({ sectionId, bookId: book.id });
-        setBookForm({ title: book.title, language: book.language, fileUrl: book.file_url, fileName: '', image: book.image_url || '' });
+        setBookForm({ title: book.title, language: book.language, fileUrl: book.fileUrl, fileName: '', image: book.image || '' });
     };
 
     const handlePdfUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -175,24 +161,33 @@ export default function BooksManager() {
         if (!bookForm.fileUrl) return showMessage('A PDF file or URL link is required.', 'error');
         setIsSaving(true);
         try {
-            const method = editingBook.bookId === null ? 'POST' : 'PUT';
-            const payload = {
-                id: editingBook.bookId,
-                title: bookForm.title,
-                language: bookForm.language,
-                file_url: bookForm.fileUrl,
-                image_url: bookForm.image || null,
-                section_id: editingBook.sectionId
-            };
-            const res = await fetch('/api/books', {
-                method,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
+            const updated = sections.map(s => {
+                if (s.id !== editingBook.sectionId) return s;
+                let updatedBooks: BookItem[];
+                if (editingBook.bookId === null) {
+                    // Add new book
+                    const newBook: BookItem = {
+                        id: nextId(s.books || []),
+                        title: bookForm.title,
+                        language: bookForm.language,
+                        fileUrl: bookForm.fileUrl,
+                        image: bookForm.image || undefined,
+                    };
+                    updatedBooks = [...(s.books || []), newBook];
+                } else {
+                    // Edit existing book
+                    updatedBooks = (s.books || []).map(b =>
+                        b.id === editingBook.bookId
+                            ? { ...b, title: bookForm.title, language: bookForm.language, fileUrl: bookForm.fileUrl, image: bookForm.image || undefined }
+                            : b
+                    );
+                }
+                return { ...s, books: updatedBooks };
             });
-            if (!res.ok) throw new Error('Saving failed');
+            await saveBookSections(updated);
+            setSections(updated);
             showMessage('Book saved successfully.', 'success');
             setEditingBook(null);
-            fetchSections();
         } catch (error) {
             showMessage('Failed to save book.', 'error');
         } finally {
@@ -200,13 +195,16 @@ export default function BooksManager() {
         }
     };
 
-    const deleteBook = async (bookId: string) => {
+    const deleteBook = async (sectionId: number, bookId: number) => {
         if (!confirm('Delete this book?')) return;
         try {
-            const res = await fetch(`/api/books?id=${bookId}`, { method: 'DELETE' });
-            if (!res.ok) throw new Error('Deletion failed');
+            const updated = sections.map(s => {
+                if (s.id !== sectionId) return s;
+                return { ...s, books: (s.books || []).filter(b => b.id !== bookId) };
+            });
+            await saveBookSections(updated);
+            setSections(updated);
             showMessage('Book deleted.', 'success');
-            fetchSections();
         } catch (error) {
             showMessage('Failed to delete book.', 'error');
         }
@@ -235,7 +233,7 @@ export default function BooksManager() {
             <header className={styles.header}>
                 <div>
                     <h1>Service Books Manager</h1>
-                    <p>Manage book sections and upload liturgical books (PDF). Changes save instantly to the DB and are live on the public page.</p>
+                    <p>Manage book sections and upload liturgical books (PDF). Changes save instantly and are live on the public page.</p>
                 </div>
                 <Button variant="primary" onClick={addSection}>➕ Add Section</Button>
             </header>
@@ -244,11 +242,11 @@ export default function BooksManager() {
                 <Card key={section.id} className={styles.tableCard} style={{ marginBottom: '1.5rem' }}>
                     <div style={{ padding: '1.25rem 1.5rem', display: 'flex', flexWrap: 'wrap', gap: '1rem', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,215,0,0.1)' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                            {section.image_url && (
-                                <img src={section.image_url} alt={section.title} style={{ width: 60, height: 40, objectFit: 'cover', borderRadius: '4px' }} />
+                            {section.image && (
+                                <img src={section.image} alt={section.title} style={{ width: 60, height: 40, objectFit: 'cover', borderRadius: '4px' }} />
                             )}
                             <h2 style={{ fontFamily: 'var(--font-heading-system)', color: 'var(--text-accent)', margin: 0, fontSize: '1.3rem' }}>
-                                📚 {section.title} <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontFamily: 'var(--font-body-system)' }}>({section.books.length} books)</span>
+                                📚 {section.title} <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontFamily: 'var(--font-body-system)' }}>({(section.books || []).length} books)</span>
                             </h2>
                         </div>
                         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
@@ -258,7 +256,7 @@ export default function BooksManager() {
                         </div>
                     </div>
 
-                    {section.books.length > 0 && (
+                    {(section.books || []).length > 0 && (
                         <div className={styles.tableResponsive}>
                             <table className={styles.dataTable}>
                                 <thead>
@@ -270,20 +268,20 @@ export default function BooksManager() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {section.books.map(book => (
+                                    {(section.books || []).map(book => (
                                         <tr key={book.id}>
                                             <td style={{ fontWeight: 'bold' }}>{book.title}</td>
                                             <td>{book.language}</td>
                                             <td>
-                                                {book.file_url
-                                                    ? <a href={book.file_url} target="_blank" rel="noopener noreferrer" style={{ color: '#27AE60', fontSize: '0.85rem', textDecoration: 'underline' }}>✅ Open PDF</a>
+                                                {book.fileUrl
+                                                    ? <a href={book.fileUrl} target="_blank" rel="noopener noreferrer" style={{ color: '#27AE60', fontSize: '0.85rem', textDecoration: 'underline' }}>✅ Open PDF</a>
                                                     : <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>No file</span>
                                                 }
                                             </td>
                                             <td>
                                                 <div style={{ display: 'flex', gap: '6px' }}>
                                                     <Button variant="outline" onClick={() => openEditBook(section.id, book)} style={{ padding: '4px 8px', fontSize: '0.8rem' }}>Edit</Button>
-                                                    <Button variant="secondary" onClick={() => deleteBook(book.id)} style={{ padding: '4px 8px', fontSize: '0.8rem' }}>🗑️</Button>
+                                                    <Button variant="secondary" onClick={() => deleteBook(section.id, book.id)} style={{ padding: '4px 8px', fontSize: '0.8rem' }}>🗑️</Button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -292,8 +290,8 @@ export default function BooksManager() {
                             </table>
                         </div>
                     )}
-                    {section.books.length === 0 && (
-                        <p style={{ padding: '1.5rem', color: 'var(--text-secondary)', textAlign: 'center', margin: 0 }}>No books yet. Click "+ Add Book" to upload a PDF.</p>
+                    {(!section.books || section.books.length === 0) && (
+                        <p style={{ padding: '1.5rem', color: 'var(--text-secondary)', textAlign: 'center', margin: 0 }}>No books yet. Click &quot;+ Add Book&quot; to upload a PDF.</p>
                     )}
                 </Card>
             ))}
