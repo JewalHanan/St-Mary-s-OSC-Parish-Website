@@ -14,7 +14,7 @@
 .title {
     font-family: var(--font-heading-system);
     font-size: clamp(2rem, 5vw, 3.5rem);
-    background: linear-gradient(135deg, #ffffff 0%, var(--color-gold, #F5A623) 100%);
+    background: linear-gradient(135deg, var(--text-primary) 0%, var(--color-gold, #F5A623) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -45,20 +45,23 @@
     gap: 0;
     overflow: hidden;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
 }
 
 .pubCard:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 36px rgba(0,0,0,0.4);
+    box-shadow: var(--shadow-hover);
 }
 
 .cardIconBar {
-    background: linear-gradient(135deg, rgba(245,166,35,0.15) 0%, rgba(10,15,30,0) 100%);
+    background: var(--hero-bg-top);
     padding: 1.5rem 1.5rem 1rem;
     display: flex;
     align-items: center;
     gap: 1rem;
-    border-bottom: 1px solid rgba(255,215,0,0.08);
+    border-bottom: 1px solid var(--card-border);
 }
 
 .fileIcon {
