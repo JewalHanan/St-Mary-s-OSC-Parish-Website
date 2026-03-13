@@ -1,43 +1,44 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { put } from '@vercel/blob';
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
+import { NextRequest, NextResponse } from 'next/server';
+
+const r2 = new S3Client({
+  region: 'auto',
+  endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+  credentials: {
+    accessKeyId: process.env.R2_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.R2_SECRET_ACCESS_KEY!,
+  },
+});
 
 export async function POST(request: NextRequest) {
-    // Auth check — only admin users can upload
-    const session = await getServerSession(authOptions);
-    if (!session) {
-        return NextResponse.json({ error: 'Unauthorized — please log in again' }, { status: 401 });
-    }
+  const session = await getServerSession(authOptions);
+  if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-    if (!process.env.BLOB_READ_WRITE_TOKEN) {
-        console.error('[api/upload] BLOB_READ_WRITE_TOKEN is not set');
-        return NextResponse.json({ error: 'Server misconfigured — BLOB_READ_WRITE_TOKEN is missing' }, { status: 500 });
-    }
+  try {
+    const formData = await request.formData();
+    const file = formData.get('file') as File | null;
+    const prefix = (formData.get('prefix') as string) || 'uploads';
 
-    try {
-        const formData = await request.formData();
-        const file = formData.get('file') as File | null;
-        const prefix = formData.get('prefix') as string || 'uploads';
+    if (!file) return NextResponse.json({ error: 'No file provided' }, { status: 400 });
 
-        if (!file) {
-            return NextResponse.json({ error: 'No file provided' }, { status: 400 });
-        }
+    const buffer = Buffer.from(await file.arrayBuffer());
+    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+    const key = `${prefix}/${Date.now()}-${safeName}`;
 
-        const arrayBuffer = await file.arrayBuffer();
-        const buffer = Buffer.from(arrayBuffer);
+    await r2.send(new PutObjectCommand({
+      Bucket: process.env.R2_BUCKET_NAME!,
+      Key: key,
+      Body: buffer,
+      ContentType: file.type,
+    }));
 
-        const filename = `${prefix}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
+    const url = `${process.env.R2_PUBLIC_URL}/${key}`;
+    return NextResponse.json({ url });
 
-        const blob = await put(filename, buffer, {
-            access: 'public',
-            contentType: file.type,
-        });
-
-        return NextResponse.json({ url: blob.url });
-    } catch (error: any) {
-        console.error('[api/upload] POST error:', error);
-        const msg = error?.message || 'Failed to upload file';
-        return NextResponse.json({ error: msg }, { status: 500 });
-    }
+  } catch (error) {
+    console.error('[api/upload] R2 error:', error);
+    return NextResponse.json({ error: 'Upload failed' }, { status: 500 });
+  }
 }
