@@ -3,15 +3,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
+import { getPublications, savePublications, nextId, type Publication } from '@/lib/store';
 import styles from '@/styles/AdminDataTable.module.css';
-
-export interface Publication {
-    id: string;
-    name: string;
-    description: string;
-    file_url: string;
-    file_name: string;
-}
 
 const inp: React.CSSProperties = {
     padding: '10px 14px',
@@ -23,7 +16,7 @@ const inp: React.CSSProperties = {
     width: '100%',
 };
 
-const EMPTY_FORM = { name: '', description: '', file_url: '', file_name: '' };
+const EMPTY_FORM = { name: '', description: '', fileUrl: '', fileName: '' };
 
 export default function PublicationsManager() {
     const [publications, setPublications] = useState<Publication[]>([]);
@@ -39,20 +32,17 @@ export default function PublicationsManager() {
         setTimeout(() => setMessage(null), 4000);
     };
 
-    const fetchPublications = async () => {
+    const fetchPubs = async () => {
         try {
-            const res = await fetch('/api/publications', { cache: 'no-store' });
-            if (res.ok) {
-                const data = await res.json();
-                setPublications(data);
-            }
+            const data = await getPublications();
+            setPublications(Array.isArray(data) ? data : []);
         } catch (error) {
             console.error('Failed to fetch publications', error);
         }
     };
 
     useEffect(() => {
-        fetchPublications();
+        fetchPubs();
     }, []);
 
     const uploadFile = async (file: File, prefix: string): Promise<string | null> => {
@@ -90,7 +80,7 @@ export default function PublicationsManager() {
         const url = await uploadFile(file, 'publications');
         if (url) {
             setModal(prev => prev ? {
-                pub: { ...prev.pub, file_url: url, file_name: file.name }
+                pub: { ...prev.pub, fileUrl: url, fileName: file.name }
             } : prev);
             showMessage('PDF uploaded temporarily. Save to finalize.', 'success');
         }
@@ -99,32 +89,36 @@ export default function PublicationsManager() {
 
     const save = async () => {
         if (!modal) return;
-        const { name, description, file_url, file_name } = modal.pub;
+        const { name, description, fileUrl, fileName } = modal.pub;
         if (!name?.trim()) return showMessage('Publication name is required.', 'error');
         if (!description?.trim()) return showMessage('Description is required.', 'error');
-        if (!file_url?.trim()) return showMessage('A PDF file or URL link is required.', 'error');
+        if (!fileUrl?.trim()) return showMessage('A PDF file or URL link is required.', 'error');
 
         setIsSaving(true);
         try {
-            const method = modal.pub.id ? 'PUT' : 'POST';
-            const payload = {
-                id: modal.pub.id,
-                name: name.trim(),
-                description: description.trim(),
-                file_url: file_url,
-                file_name: file_name || '',
-            };
-
-            const res = await fetch('/api/publications', {
-                method,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
-            });
-            
-            if (!res.ok) throw new Error('Saving failed');
+            let updated: Publication[];
+            if (modal.pub.id) {
+                // Edit existing
+                updated = publications.map(p =>
+                    p.id === modal.pub.id
+                        ? { ...p, name: name!.trim(), description: description!.trim(), fileUrl: fileUrl!, fileName: fileName || '' }
+                        : p
+                );
+            } else {
+                // Add new
+                const newPub: Publication = {
+                    id: nextId(publications),
+                    name: name!.trim(),
+                    description: description!.trim(),
+                    fileUrl: fileUrl!,
+                    fileName: fileName || '',
+                };
+                updated = [...publications, newPub];
+            }
+            await savePublications(updated);
+            setPublications(updated);
             showMessage('Publication saved successfully.', 'success');
             setModal(null);
-            fetchPublications();
         } catch (error) {
             showMessage('Failed to save publication.', 'error');
         } finally {
@@ -132,13 +126,13 @@ export default function PublicationsManager() {
         }
     };
 
-    const deletePub = async (id: string) => {
+    const deletePub = async (id: number) => {
         if (!confirm('Delete this publication?')) return;
         try {
-            const res = await fetch(`/api/publications?id=${id}`, { method: 'DELETE' });
-            if (!res.ok) throw new Error('Deletion failed');
+            const updated = publications.filter(p => p.id !== id);
+            await savePublications(updated);
+            setPublications(updated);
             showMessage('Publication deleted.', 'success');
-            fetchPublications();
         } catch (error) {
             showMessage('Failed to delete publication.', 'error');
         }
@@ -160,7 +154,7 @@ export default function PublicationsManager() {
             <header className={styles.header}>
                 <div>
                     <h1>Publications Manager</h1>
-                    <p>Upload church publications and supplement papers as PDFs. Changes save instantly to the DB and are live on the public page.</p>
+                    <p>Upload church publications and supplement papers as PDFs. Changes save instantly and are live on the public page.</p>
                 </div>
                 <Button variant="primary" onClick={openAdd}>➕ Add Publication</Button>
             </header>
@@ -168,7 +162,7 @@ export default function PublicationsManager() {
             {publications.length === 0 ? (
                 <Card className={styles.tableCard} style={{ padding: '3rem', textAlign: 'center' }}>
                     <p style={{ color: 'var(--text-secondary)', margin: 0 }}>
-                        No publications yet. Click "➕ Add Publication" to upload your first PDF.
+                        No publications yet. Click &quot;➕ Add Publication&quot; to upload your first PDF.
                     </p>
                 </Card>
             ) : (
@@ -191,8 +185,8 @@ export default function PublicationsManager() {
                                             {pub.description}
                                         </td>
                                         <td>
-                                            {pub.file_url
-                                                ? <a href={pub.file_url} target="_blank" rel="noopener noreferrer" style={{ color: '#27AE60', fontSize: '0.85rem', textDecoration: 'underline' }}>✅ Open PDF</a>
+                                            {pub.fileUrl
+                                                ? <a href={pub.fileUrl} target="_blank" rel="noopener noreferrer" style={{ color: '#27AE60', fontSize: '0.85rem', textDecoration: 'underline' }}>✅ Open PDF</a>
                                                 : <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>No file</span>
                                             }
                                         </td>
@@ -254,9 +248,9 @@ export default function PublicationsManager() {
                                 >
                                     {uploading ? (
                                         <p style={{ color: 'var(--text-accent)', margin: 0 }}>⏳ Uploading to Server…</p>
-                                    ) : modal.pub.file_name ? (
-                                        <p style={{ color: '#27AE60', margin: 0 }}>✅ {modal.pub.file_name}</p>
-                                    ) : modal.pub.file_url ? (
+                                    ) : modal.pub.fileName ? (
+                                        <p style={{ color: '#27AE60', margin: 0 }}>✅ {modal.pub.fileName}</p>
+                                    ) : modal.pub.fileUrl ? (
                                         <p style={{ color: '#27AE60', margin: 0 }}>✅ PDF active — click to replace</p>
                                     ) : (
                                         <>
@@ -276,8 +270,8 @@ export default function PublicationsManager() {
                             </div>
 
                             <input
-                                value={modal.pub.file_url ?? ''}
-                                onChange={e => setModal({ pub: { ...modal.pub, file_url: e.target.value, file_name: '' } })}
+                                value={modal.pub.fileUrl ?? ''}
+                                onChange={e => setModal({ pub: { ...modal.pub, fileUrl: e.target.value, fileName: '' } })}
                                 placeholder="Paste a file URL (Google Drive, etc.)"
                                 style={inp}
                             />

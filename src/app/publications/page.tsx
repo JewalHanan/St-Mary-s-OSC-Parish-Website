@@ -1,21 +1,15 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
+import { getPublications, type Publication } from '@/lib/store';
+import { useStoreData } from '@/lib/useStoreData';
 import styles from '@/styles/Publications.module.css';
 
-export interface Publication {
-    id: string;
-    name: string;
-    description: string;
-    file_url: string;
-    file_name: string;
-}
-
 function openPdf(pub: Publication) {
-    const url = pub.file_url;
+    const url = pub.fileUrl;
     if (!url) { alert('No file uploaded for this publication yet.'); return; }
 
     try {
@@ -45,22 +39,8 @@ function openPdf(pub: Publication) {
 }
 
 export default function PublicationsPage() {
-    const [publications, setPublications] = useState<Publication[]>([]);
-
-    useEffect(() => {
-        async function fetchPublications() {
-            try {
-                const res = await fetch('/api/publications', { cache: 'no-store' });
-                if (res.ok) {
-                    const data = await res.json();
-                    setPublications(data);
-                }
-            } catch (error) {
-                console.error('Failed to fetch publications:', error);
-            }
-        }
-        fetchPublications();
-    }, []);
+    const { data: publications } = useStoreData(getPublications, [] as Publication[]);
+    const safePublications = Array.isArray(publications) ? publications : [];
 
     return (
         <div className={styles.pageContainer}>
@@ -77,14 +57,14 @@ export default function PublicationsPage() {
             </div>
 
             <div className={styles.cardsGrid}>
-                {publications.length === 0 ? (
+                {safePublications.length === 0 ? (
                     <div className={styles.emptyState}>
                         <span className={styles.emptyIcon}>📄</span>
                         <h2 className={styles.emptyTitle}>No publications yet</h2>
                         <p>Publications will appear here once the admin uploads them.</p>
                     </div>
                 ) : (
-                    publications.map((pub, idx) => (
+                    safePublications.map((pub, idx) => (
                         <motion.div
                             key={pub.id}
                             initial={{ opacity: 0, y: 30 }}

@@ -155,7 +155,7 @@ export default function GalleryManager() {
                 </Card>
             )}
 
-            {sections.map(section => (
+            {Array.isArray(sections) && sections.map(section => (
                 <Card key={section.id} className={styles.tableCard} style={{ marginBottom: '1.5rem' }}>
                     {/* Section header row */}
                     <div style={{

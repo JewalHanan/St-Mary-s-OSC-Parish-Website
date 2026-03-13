@@ -35,7 +35,8 @@ export default function GalleryPage() {
         return () => window.removeEventListener('keydown', handler);
     }, [lightbox, moveLightbox]);
 
-    const noImages = sections.every(s => s.images.length === 0) || sections.length === 0;
+    const safeSections = Array.isArray(sections) ? sections : [];
+    const noImages = safeSections.every(s => !s.images || s.images.length === 0) || safeSections.length === 0;
 
     return (
         <div className={styles.pageContainer}>
@@ -59,7 +60,7 @@ export default function GalleryPage() {
                 </div>
             ) : (
                 <div className={styles.sectionsWrapper}>
-                    {sections.filter(s => s.images.length > 0).map((section, idx) => (
+                    {safeSections.filter(s => s.images && s.images.length > 0).map((section, idx) => (
                         <motion.div
                             key={section.id}
                             className={styles.sectionBlock}
