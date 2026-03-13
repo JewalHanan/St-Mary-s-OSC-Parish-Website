@@ -57,12 +57,12 @@ export default function PublicationsManager() {
                 method: 'POST',
                 body: formData,
             });
-            const data = await res.json();
+            const data = await res.json().catch(() => ({}));
             if (!res.ok) throw new Error(data.error || 'Upload failed');
             return data.url;
-        } catch (error) {
+        } catch (error: any) {
             console.error('Upload Error:', error);
-            showMessage('Failed to upload file. Please try again.', 'error');
+            showMessage(`Upload error: ${error.message || 'Failed to upload'}`, 'error');
             return null;
         } finally {
             setUploading(false);
