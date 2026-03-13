@@ -7,17 +7,20 @@ import { getEventBanners, saveEventBanners, nextId, type EventBannerImage } from
 import styles from '@/styles/AdminDataTable.module.css';
 import { validateImageFile } from '@/lib/uploadValidation';
 
-/* ── Read original image without compression ───────────────────── */
-function readFileAsDataURL(file: File): Promise<string> {
-    return new Promise((resolve, reject) => {
-        const validationError = validateImageFile(file);
-        if (validationError) { reject(new Error(validationError)); return; }
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result as string);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-    });
-}
+const uploadToBlob = async (file: File, prefix: string): Promise<string | null> => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("prefix", prefix);
+    try {
+        const res = await fetch("/api/upload", { method: "POST", body: formData });
+        if (!res.ok) throw new Error("Upload failed");
+        const { url } = await res.json();
+        return url;
+    } catch (err) {
+        console.error("[upload] error:", err);
+        return null;
+    }
+};
 
 export default function EventBannersManager() {
     const [banners, setBanners] = useState<EventBannerImage[]>([]);
@@ -42,16 +45,21 @@ export default function EventBannersManager() {
         setUploading(true);
         const newBanners = [...banners];
         for (const file of Array.from(files)) {
-            try {
-                const dataUrl = await readFileAsDataURL(file);
+            const validationError = validateImageFile(file);
+            if (validationError) {
+                alert(`Could not process ${file.name}: ${validationError}`);
+                continue;
+            }
+            const url = await uploadToBlob(file, "event-banners");
+            if (url) {
                 newBanners.push({
                     id: nextId(newBanners),
-                    image: dataUrl,
-                    caption: file.name.replace(/\.[^/.]+$/, ''), // default caption = filename
+                    image: url,
+                    caption: file.name.replace(/\.[^/.]+$/, ''),
                     order: newBanners.length,
                 });
-            } catch {
-                alert(`Could not process ${file.name}. Please use an image file.`);
+            } else {
+                alert(`Failed to upload ${file.name}. Please try again.`);
             }
         }
         persist(newBanners);
@@ -109,8 +117,9 @@ export default function EventBannersManager() {
                         variant="primary"
                         onClick={() => fileRef.current?.click()}
                         style={{ opacity: uploading ? 0.6 : 1 }}
+                        disabled={uploading}
                     >
-                        {uploading ? '⏳ Processing…' : '📸 Upload Images'}
+                        {uploading ? '⏳ Uploading…' : '📸 Upload Images'}
                     </Button>
                     <input
                         ref={fileRef}

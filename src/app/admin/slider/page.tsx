@@ -8,6 +8,21 @@ import styles from '@/styles/AdminDataTable.module.css';
 
 import { validateImageFile } from '@/lib/uploadValidation';
 
+const uploadToBlob = async (file: File, prefix: string): Promise<string | null> => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("prefix", prefix);
+    try {
+        const res = await fetch("/api/upload", { method: "POST", body: formData });
+        if (!res.ok) throw new Error("Upload failed");
+        const { url } = await res.json();
+        return url;
+    } catch (err) {
+        console.error("[upload] error:", err);
+        return null;
+    }
+};
+
 export default function SliderManager() {
     const [images, setImages] = useState<SliderImage[]>([]);
     const [editingId, setEditingId] = useState<number | null>(null);
@@ -36,28 +51,26 @@ export default function SliderManager() {
         setForm({ image: img.image, title: img.title, caption: img.caption });
     };
 
-    /**
-     * Upload + auto-crop to 16:9 landscape.
-     * Center-crops to 16:9, outputs max 1280×720px.
-     */
-    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
         const validationError = validateImageFile(file);
         if (validationError) { alert(validationError); e.target.value = ''; return; }
         setUploading(true);
 
-        const reader = new FileReader();
-        reader.onload = () => {
-            setForm(prev => ({ ...prev, image: reader.result as string }));
-            setUploading(false);
-        };
-        reader.readAsDataURL(file);
+        const url = await uploadToBlob(file, "slider");
+        if (url) {
+            setForm(prev => ({ ...prev, image: url }));
+        } else {
+            alert('Image upload failed. Please try again.');
+        }
+        setUploading(false);
         e.target.value = '';
     };
 
     const save = () => {
         if (!form.title || !form.image) return alert('Title and an image are required.');
+        if (uploading) return;
         if (editingId === 0) {
             persist([...images, { id: nextId(images), ...form }]);
         } else {
@@ -144,7 +157,7 @@ export default function SliderManager() {
                                 }}
                             >
                                 {uploading ? (
-                                    <p style={{ margin: 0, color: 'var(--text-accent)' }}>⏳ Processing image…</p>
+                                    <p style={{ margin: 0, color: 'var(--text-accent)' }}>⏳ Uploading image…</p>
                                 ) : form.image ? (
                                     <img
                                         src={form.image}
@@ -191,7 +204,7 @@ export default function SliderManager() {
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '2rem' }}>
                             <Button variant="outline" onClick={() => setEditingId(null)}>Cancel</Button>
-                            <Button variant="primary" onClick={save}>Save Slide</Button>
+                            <Button variant="primary" onClick={save} disabled={uploading}>{uploading ? '⏳ Uploading…' : 'Save Slide'}</Button>
                         </div>
                     </Card>
                 </div>

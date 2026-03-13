@@ -23,14 +23,20 @@ const inp: React.CSSProperties = {
     width: '100%',
 };
 
-// ── Read original image without compression ──────────────────────
-function readFileAsDataURL(file: File): Promise<string> {
-    return new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result as string);
-        reader.readAsDataURL(file);
-    });
-}
+const uploadToBlob = async (file: File, prefix: string): Promise<string | null> => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("prefix", prefix);
+    try {
+        const res = await fetch("/api/upload", { method: "POST", body: formData });
+        if (!res.ok) throw new Error("Upload failed");
+        const { url } = await res.json();
+        return url;
+    } catch (err) {
+        console.error("[upload] error:", err);
+        return null;
+    }
+};
 
 export default function GalleryManager() {
     const [sections, setSections] = useState<GallerySection[]>([]);
@@ -88,16 +94,18 @@ export default function GalleryManager() {
 
         const processed = await Promise.all(
             files.filter(f => f.type.startsWith('image/')).map(async (file) => {
-                const url = await readFileAsDataURL(file);
-                return { id: 0, url, caption: '' };
+                const url = await uploadToBlob(file, "gallery");
+                return url ? { id: 0, url, caption: '' } : null;
             })
         );
+
+        const validImages = processed.filter(Boolean) as { id: number; url: string; caption: string }[];
 
         setSections(prev => {
             const updated = prev.map(s => {
                 if (s.id !== sid) return s;
                 let nextImgId = s.images.length > 0 ? Math.max(...s.images.map(i => i.id)) + 1 : 1;
-                const newImages: GalleryImage[] = processed.map(img => ({ ...img, id: nextImgId++ }));
+                const newImages: GalleryImage[] = validImages.map(img => ({ ...img, id: nextImgId++ }));
                 return { ...s, images: [...s.images, ...newImages] };
             });
             saveGallerySections(updated);
@@ -150,7 +158,7 @@ export default function GalleryManager() {
             {sections.length === 0 && (
                 <Card className={styles.tableCard} style={{ padding: '3rem', textAlign: 'center' }}>
                     <p style={{ color: 'var(--text-secondary)', margin: 0 }}>
-                        No gallery sections yet. Click "➕ Add Section" to get started.
+                        No gallery sections yet. Click &quot;➕ Add Section&quot; to get started.
                     </p>
                 </Card>
             )}
@@ -177,7 +185,7 @@ export default function GalleryManager() {
                             {uploading === section.id && (
                                 <span style={{ fontSize: '0.85rem', color: 'var(--text-accent)' }}>⏳ Uploading…</span>
                             )}
-                            <Button variant="outline" onClick={() => triggerUpload(section.id)} style={{ padding: '6px 12px', fontSize: '0.8rem' }}>
+                            <Button variant="outline" onClick={() => triggerUpload(section.id)} style={{ padding: '6px 12px', fontSize: '0.8rem' }} disabled={uploading === section.id}>
                                 📷 Upload Photos
                             </Button>
                             <Button variant="outline" onClick={() => openEditSection(section)} style={{ padding: '6px 12px', fontSize: '0.8rem' }}>
@@ -192,7 +200,7 @@ export default function GalleryManager() {
                     {/* Image thumbnail grid */}
                     {section.images.length === 0 ? (
                         <p style={{ padding: '1.5rem', color: 'var(--text-secondary)', textAlign: 'center', margin: 0 }}>
-                            No photos yet. Click "📷 Upload Photos" to add images.
+                            No photos yet. Click &quot;📷 Upload Photos&quot; to add images.
                         </p>
                     ) : (
                         <div style={{

@@ -6,6 +6,21 @@ import { Button } from '@/components/ui/Button';
 import { getSpecialDays, saveSpecialDays, nextId, type SpecialDay } from '@/lib/store';
 import styles from '@/styles/AdminDataTable.module.css';
 
+const uploadToBlob = async (file: File, prefix: string): Promise<string | null> => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("prefix", prefix);
+    try {
+        const res = await fetch("/api/upload", { method: "POST", body: formData });
+        if (!res.ok) throw new Error("Upload failed");
+        const { url } = await res.json();
+        return url;
+    } catch (err) {
+        console.error("[upload] error:", err);
+        return null;
+    }
+};
+
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const TYPE_LABELS: Record<string, string> = { feast: '🕊️ Feast', fast: '🌑 Fast', commemoration: '✝️ Commemoration', regular: '📌 Regular' };
 const TYPE_COLORS: Record<string, string> = { feast: '#F5A623', fast: '#7F8C8D', commemoration: '#9B59B6', regular: '#2980B9' };
@@ -26,6 +41,7 @@ export default function CalendarManager() {
     const [editingId, setEditingId] = useState<number | null>(null);
     const [form, setForm] = useState(emptyForm());
     const [search, setSearch] = useState('');
+    const [uploading, setUploading] = useState(false);
     const imgInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => { getSpecialDays().then(setDays); }, []);
@@ -61,13 +77,15 @@ export default function CalendarManager() {
 
     const displayDays = searchResults ?? daysInView;
 
-    // ── Image upload: original quality ─────────────────────────
-    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // ── Image upload via /api/upload ─────────────────────────
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
-        const reader = new FileReader();
-        reader.onload = () => setForm(prev => ({ ...prev, image: reader.result as string }));
-        reader.readAsDataURL(file);
+        setUploading(true);
+        const url = await uploadToBlob(file, "calendar");
+        if (url) setForm(prev => ({ ...prev, image: url }));
+        else alert('Image upload failed. Please try again.');
+        setUploading(false);
         e.target.value = '';
     };
 
@@ -94,6 +112,7 @@ export default function CalendarManager() {
 
     const handleSave = () => {
         if (!form.title || !form.date) return alert('Title and Date are required.');
+        if (uploading) return;
         let currentDays = [...days];
         if (form.is_countdown_target) {
             currentDays = currentDays.map(d => ({ ...d, is_countdown_target: false }));
@@ -218,7 +237,7 @@ export default function CalendarManager() {
                         </div>
                     </div>
                     <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
-                        <Button variant="primary" onClick={handleSave}>💾 Save</Button>
+                        <Button variant="primary" onClick={handleSave} disabled={uploading}>{uploading ? '⏳ Uploading…' : '💾 Save'}</Button>
                         <Button variant="outline" onClick={() => setEditingId(null)}>Cancel</Button>
                     </div>
                 </Card>

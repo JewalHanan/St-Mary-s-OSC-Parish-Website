@@ -1,6 +1,5 @@
 'use server';
 
-import { prisma } from '@/lib/prisma';
 import { prayerRequestSchema } from '@/lib/validations';
 import { sendEmail } from '@/lib/email';
 import { z } from 'zod';
@@ -10,20 +9,29 @@ export async function submitPrayerRequest(data: z.infer<typeof prayerRequestSche
         // 1. Validate data on the server
         const parsedData = prayerRequestSchema.parse(data);
 
-        // 2. Insert into the database
-        const request = await prisma.prayerRequest.create({
-            data: {
-                requester_name: parsedData.requester_name,
-                target_name: parsedData.target_name,
-                age: parsedData.age,
-                email: parsedData.email,
-                phone: parsedData.phone,
-                date: new Date(parsedData.date),
-                category: parsedData.category,
-                reason: parsedData.reason,
-                notes: parsedData.notes,
-            },
-        });
+        // 2. Save to Vercel Blob via the public prayer-requests endpoint
+        const saveRes = await fetch(
+            `${process.env.NEXTAUTH_URL || "http://localhost:3000"}/api/prayer-requests-public`,
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    requester_name: parsedData.requester_name,
+                    target_name: parsedData.target_name,
+                    age: parsedData.age,
+                    email: parsedData.email,
+                    phone: parsedData.phone,
+                    date: parsedData.date,
+                    category: parsedData.category,
+                    reason: parsedData.reason,
+                    notes: parsedData.notes,
+                }),
+            }
+        );
+
+        if (!saveRes.ok) throw new Error("Failed to save prayer request");
+
+        const result = await saveRes.json();
 
         // 3. Send confirmation email to user
         const emailHtml = `
@@ -52,7 +60,7 @@ export async function submitPrayerRequest(data: z.infer<typeof prayerRequestSche
             html: emailHtml,
         }).catch(e => console.error("Email sending failed:", e));
 
-        return { success: true, id: request.id };
+        return { success: true, id: result.id };
 
     } catch (error) {
         console.error('Submission Error:', error);

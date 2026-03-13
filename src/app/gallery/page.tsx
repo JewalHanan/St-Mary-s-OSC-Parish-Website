@@ -8,8 +8,14 @@ import { useStoreData } from '@/lib/useStoreData';
 import styles from '@/styles/Gallery.module.css';
 
 export default function GalleryPage() {
-    const { data: sections } = useStoreData(getGallerySections, [] as GallerySection[]);
+    const { data: sections, loading } = useStoreData(getGallerySections, [] as GallerySection[]);
     const [lightbox, setLightbox] = useState<{ images: GalleryImage[]; index: number } | null>(null);
+
+    if (loading) return (
+        <div style={{ minHeight: "60vh", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-secondary)" }}>
+            <p>Loading...</p>
+        </div>
+    );
 
     const openLightbox = (images: GalleryImage[], index: number) => setLightbox({ images, index });
     const closeLightbox = () => setLightbox(null);

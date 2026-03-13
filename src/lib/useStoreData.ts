@@ -8,7 +8,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 
-const DEFAULT_POLL_INTERVAL = 30_000; // 30 seconds
+const DEFAULT_POLL_INTERVAL = 300_000; // 5 minutes
 
 export function useStoreData<T>(
     fetcher: () => Promise<T>,

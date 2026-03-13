@@ -39,8 +39,14 @@ function openPdf(pub: Publication) {
 }
 
 export default function PublicationsPage() {
-    const { data: publications } = useStoreData(getPublications, [] as Publication[]);
+    const { data: publications, loading } = useStoreData(getPublications, [] as Publication[]);
     const safePublications = Array.isArray(publications) ? publications : [];
+
+    if (loading) return (
+        <div style={{ minHeight: "60vh", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-secondary)" }}>
+            <p>Loading...</p>
+        </div>
+    );
 
     return (
         <div className={styles.pageContainer}>

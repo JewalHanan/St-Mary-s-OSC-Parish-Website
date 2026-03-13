@@ -9,8 +9,14 @@ import { useStoreData } from '@/lib/useStoreData';
 import styles from '@/styles/Books.module.css';
 
 export default function BooksPage() {
-    const { data: sections } = useStoreData(getBookSections, [] as BookSection[]);
+    const { data: sections, loading } = useStoreData(getBookSections, [] as BookSection[]);
     const safeSections = Array.isArray(sections) ? sections : [];
+
+    if (loading) return (
+        <div style={{ minHeight: "60vh", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-secondary)" }}>
+            <p>Loading...</p>
+        </div>
+    );
 
     const handleOpen = (book: BookItem) => {
         const url: string = book.fileUrl || '';

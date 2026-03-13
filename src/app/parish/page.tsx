@@ -26,7 +26,13 @@ const cardVariants = {
 };
 
 export default function ParishPage() {
-    const { data: members } = useStoreData(getParishMembers, [] as ParishMember[]);
+    const { data: members, loading } = useStoreData(getParishMembers, [] as ParishMember[]);
+
+    if (loading) return (
+        <div style={{ minHeight: "60vh", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-secondary)" }}>
+            <p>Loading...</p>
+        </div>
+    );
 
     return (
         <div className={styles.pageContainer}>

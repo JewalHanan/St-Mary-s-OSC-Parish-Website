@@ -6,10 +6,26 @@ import { Button } from '@/components/ui/Button';
 import { getParishHistory, saveParishHistory, nextId, type ParishHistory, type HistoryImage } from '@/lib/store';
 import styles from '@/styles/AdminDashboard.module.css';
 
+const uploadToBlob = async (file: File, prefix: string): Promise<string | null> => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("prefix", prefix);
+    try {
+        const res = await fetch("/api/upload", { method: "POST", body: formData });
+        if (!res.ok) throw new Error("Upload failed");
+        const { url } = await res.json();
+        return url;
+    } catch (err) {
+        console.error("[upload] error:", err);
+        return null;
+    }
+};
+
 export default function AdminHistoryPage() {
     const [content, setContent] = useState('');
     const [images, setImages] = useState<HistoryImage[]>([]);
     const [isSaving, setIsSaving] = useState(false);
+    const [uploading, setUploading] = useState(false);
     const [message, setMessage] = useState({ text: '', type: '' });
     const [isLoading, setIsLoading] = useState(true);
     const imgInputRef = useRef<HTMLInputElement>(null);
@@ -26,6 +42,7 @@ export default function AdminHistoryPage() {
     }, []);
 
     const handleSave = async () => {
+        if (uploading) return;
         setIsSaving(true);
         setMessage({ text: '', type: '' });
         try {
@@ -39,17 +56,22 @@ export default function AdminHistoryPage() {
         }
     };
 
-    // Upload images at original quality
-    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Upload images via /api/upload
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(e.target.files ?? []);
-        files.forEach(file => {
-            const reader = new FileReader();
-            reader.onload = () => {
-                const url = reader.result as string;
+        if (!files.length) return;
+        setUploading(true);
+
+        for (const file of files) {
+            const url = await uploadToBlob(file, "history");
+            if (url) {
                 setImages(prev => [...prev, { id: nextId(prev), url, caption: '' }]);
-            };
-            reader.readAsDataURL(file);
-        });
+            } else {
+                alert(`Failed to upload ${file.name}. Please try again.`);
+            }
+        }
+
+        setUploading(false);
         e.target.value = '';
     };
 
@@ -100,13 +122,15 @@ export default function AdminHistoryPage() {
                     <button
                         type="button"
                         onClick={() => imgInputRef.current?.click()}
+                        disabled={uploading}
                         style={{
                             padding: '9px 18px', borderRadius: '8px', cursor: 'pointer',
                             background: 'var(--input-bg)', border: '1px solid var(--card-border)',
                             color: 'var(--text-primary)', fontWeight: 600, fontSize: '0.9rem',
+                            opacity: uploading ? 0.6 : 1,
                         }}
                     >
-                        ➕ Upload Image(s)
+                        {uploading ? '⏳ Uploading…' : '➕ Upload Image(s)'}
                     </button>
                     <input
                         ref={imgInputRef}
@@ -168,8 +192,8 @@ export default function AdminHistoryPage() {
                         {message.text}
                     </span>
                 )}
-                <Button variant="primary" onClick={handleSave} disabled={isSaving}>
-                    {isSaving ? 'Saving...' : '💾 Save All Changes'}
+                <Button variant="primary" onClick={handleSave} disabled={isSaving || uploading}>
+                    {uploading ? '⏳ Uploading…' : isSaving ? 'Saving...' : '💾 Save All Changes'}
                 </Button>
             </div>
 

@@ -7,10 +7,26 @@ import { getParishMembers, saveParishMembers, nextId, type ParishMember } from '
 import styles from '@/styles/AdminDataTable.module.css';
 import { validateImageFile } from '@/lib/uploadValidation';
 
+const uploadToBlob = async (file: File, prefix: string): Promise<string | null> => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("prefix", prefix);
+    try {
+        const res = await fetch("/api/upload", { method: "POST", body: formData });
+        if (!res.ok) throw new Error("Upload failed");
+        const { url } = await res.json();
+        return url;
+    } catch (err) {
+        console.error("[upload] error:", err);
+        return null;
+    }
+};
+
 export default function ParishCommitteeManager() {
     const [members, setMembers] = useState<ParishMember[]>([]);
     const [editingId, setEditingId] = useState<number | null>(null);
     const [form, setForm] = useState({ name: '', role: '', area: '', email: '', phone: '', image: '' });
+    const [uploading, setUploading] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => { getParishMembers().then(setMembers); }, []);
@@ -30,19 +46,25 @@ export default function ParishCommitteeManager() {
         setForm({ name: m.name, role: m.role, area: m.area, email: m.email, phone: m.phone, image: m.image || '' });
     };
 
-    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
         const validationError = validateImageFile(file);
         if (validationError) { alert(validationError); e.target.value = ''; return; }
 
-        const reader = new FileReader();
-        reader.onload = () => setForm(prev => ({ ...prev, image: reader.result as string }));
-        reader.readAsDataURL(file);
+        setUploading(true);
+        const url = await uploadToBlob(file, "parish");
+        if (url) {
+            setForm(prev => ({ ...prev, image: url }));
+        } else {
+            alert('Image upload failed. Please try again.');
+        }
+        setUploading(false);
     };
 
     const save = () => {
         if (!form.name || !form.role) return alert('Name and Role are required.');
+        if (uploading) return;
         if (editingId === 0) {
             persist([...members, { id: nextId(members), ...form }]);
         } else {
@@ -150,15 +172,17 @@ export default function ParishCommitteeManager() {
                                         background: 'var(--input-bg)'
                                     }}
                                 >
-                                    {form.image ? (
+                                    {uploading ? (
+                                        <span style={{ fontSize: '0.7rem', color: 'var(--text-accent)' }}>⏳</span>
+                                    ) : form.image ? (
                                         <img src={form.image} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                     ) : (
                                         <span style={{ fontSize: '1.5rem' }}>📷</span>
                                     )}
                                 </div>
                                 <div>
-                                    <Button variant="outline" onClick={() => fileInputRef.current?.click()} style={{ padding: '6px 12px', fontSize: '0.85rem' }}>
-                                        Upload Photo
+                                    <Button variant="outline" onClick={() => fileInputRef.current?.click()} style={{ padding: '6px 12px', fontSize: '0.85rem' }} disabled={uploading}>
+                                        {uploading ? '⏳ Uploading…' : 'Upload Photo'}
                                     </Button>
                                     {form.image && (
                                         <Button variant="secondary" onClick={() => setForm({ ...form, image: '' })} style={{ padding: '6px 12px', fontSize: '0.85rem', marginLeft: '8px' }}>
@@ -184,7 +208,7 @@ export default function ParishCommitteeManager() {
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1.5rem' }}>
                             <Button variant="outline" onClick={() => setEditingId(null)}>Cancel</Button>
-                            <Button variant="primary" onClick={save}>Save Member</Button>
+                            <Button variant="primary" onClick={save} disabled={uploading}>{uploading ? '⏳ Uploading…' : 'Save Member'}</Button>
                         </div>
                     </Card>
                 </div>

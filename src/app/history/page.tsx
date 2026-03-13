@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
+import DOMPurify from 'dompurify';
 import { getParishHistory, type ParishHistory } from '@/lib/store';
 import { useStoreData } from '@/lib/useStoreData';
 
@@ -44,7 +45,7 @@ export default function HistoryPage() {
                         <div
                             style={{ lineHeight: '1.8', color: 'var(--text-primary)', fontSize: '1.1rem' }}
                             className="rich-text-content"
-                            dangerouslySetInnerHTML={{ __html: history.content }}
+                            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(history.content) }}
                         />
                     )}
                 </Card>

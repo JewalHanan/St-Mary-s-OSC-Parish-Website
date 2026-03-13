@@ -7,6 +7,21 @@ import { getOrganisations, saveOrganisations, nextId, type Organisation, type Or
 import styles from '@/styles/AdminDataTable.module.css';
 import { validateImageFile } from '@/lib/uploadValidation';
 
+const uploadToBlob = async (file: File, prefix: string): Promise<string | null> => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("prefix", prefix);
+    try {
+        const res = await fetch("/api/upload", { method: "POST", body: formData });
+        if (!res.ok) throw new Error("Upload failed");
+        const { url } = await res.json();
+        return url;
+    } catch (err) {
+        console.error("[upload] error:", err);
+        return null;
+    }
+};
+
 export default function MinistriesManager() {
     const [orgs, setOrgs] = useState<Organisation[]>([]);
     const [expandedOrgId, setExpandedOrgId] = useState<number | null>(null);
@@ -15,6 +30,7 @@ export default function MinistriesManager() {
     const [newOrgName, setNewOrgName] = useState('');
     const [newOrgLogo, setNewOrgLogo] = useState('');
     const [showAddOrg, setShowAddOrg] = useState(false);
+    const [uploading, setUploading] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const orgLogoInputRef = useRef<HTMLInputElement>(null);
 
@@ -33,12 +49,17 @@ export default function MinistriesManager() {
         setShowAddOrg(false);
     };
 
-    const handleOrgLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleOrgLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
-        const reader = new FileReader();
-        reader.onload = () => setNewOrgLogo(reader.result as string);
-        reader.readAsDataURL(file);
+        setUploading(true);
+        const url = await uploadToBlob(file, "ministries");
+        if (url) {
+            setNewOrgLogo(url);
+        } else {
+            alert('Logo upload failed. Please try again.');
+        }
+        setUploading(false);
         e.target.value = '';
     };
 
@@ -58,20 +79,26 @@ export default function MinistriesManager() {
         setBearerForm({ name: bearer.name, position: bearer.position, contact: bearer.contact, image: bearer.image || '' });
     };
 
-    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
         const validationError = validateImageFile(file);
         if (validationError) { alert(validationError); e.target.value = ''; return; }
 
-        const reader = new FileReader();
-        reader.onload = () => setBearerForm(prev => ({ ...prev, image: reader.result as string }));
-        reader.readAsDataURL(file);
+        setUploading(true);
+        const url = await uploadToBlob(file, "ministries");
+        if (url) {
+            setBearerForm(prev => ({ ...prev, image: url }));
+        } else {
+            alert('Image upload failed. Please try again.');
+        }
+        setUploading(false);
     };
 
     const saveBearer = () => {
         if (!bearerForm.name || !bearerForm.position) return alert('Name and Position are required.');
         if (!editingBearer) return;
+        if (uploading) return;
 
         const { orgId, bearerId } = editingBearer;
 
@@ -116,11 +143,11 @@ export default function MinistriesManager() {
                     <h3 style={{ color: 'var(--text-accent)', marginBottom: '1rem' }}>New Ministry</h3>
                     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
                         <div onClick={() => orgLogoInputRef.current?.click()} style={{ width: 56, height: 56, borderRadius: '12px', border: '2px dashed var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', overflow: 'hidden', flexShrink: 0, background: 'var(--input-bg)' }}>
-                            {newOrgLogo ? <img src={newOrgLogo} alt="logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <span style={{ fontSize: '1.5rem' }}>🏛️</span>}
+                            {uploading ? <span style={{ fontSize: '0.8rem' }}>⏳</span> : newOrgLogo ? <img src={newOrgLogo} alt="logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <span style={{ fontSize: '1.5rem' }}>🏛️</span>}
                         </div>
                         <input ref={orgLogoInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleOrgLogoUpload} />
                         <input value={newOrgName} onChange={e => setNewOrgName(e.target.value)} placeholder="Ministry Name (e.g. OCYM)" style={{ ...inputStyle, flex: 1, minWidth: 200 }} />
-                        <Button variant="primary" onClick={addOrg}>Save</Button>
+                        <Button variant="primary" onClick={addOrg} disabled={uploading}>Save</Button>
                         <Button variant="outline" onClick={() => { setShowAddOrg(false); setNewOrgLogo(''); }}>Cancel</Button>
                     </div>
                     <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginTop: '0.5rem' }}>Click the logo square to upload a symbol/icon for this ministry.</p>
@@ -194,14 +221,18 @@ export default function MinistriesManager() {
                                     onClick={() => fileInputRef.current?.click()}
                                     style={{ width: '80px', height: '80px', borderRadius: '50%', border: '2px dashed var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', overflow: 'hidden', flexShrink: 0, background: 'var(--input-bg)' }}
                                 >
-                                    {bearerForm.image ? (
+                                    {uploading ? (
+                                        <span style={{ fontSize: '0.7rem', color: 'var(--text-accent)' }}>⏳</span>
+                                    ) : bearerForm.image ? (
                                         <img src={bearerForm.image} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                     ) : (
                                         <span style={{ fontSize: '1.5rem' }}>📷</span>
                                     )}
                                 </div>
                                 <div>
-                                    <Button variant="outline" onClick={() => fileInputRef.current?.click()} style={{ padding: '6px 12px', fontSize: '0.85rem' }}>Upload Photo</Button>
+                                    <Button variant="outline" onClick={() => fileInputRef.current?.click()} style={{ padding: '6px 12px', fontSize: '0.85rem' }} disabled={uploading}>
+                                        {uploading ? '⏳ Uploading…' : 'Upload Photo'}
+                                    </Button>
                                     {bearerForm.image && (
                                         <Button variant="secondary" onClick={() => setBearerForm({ ...bearerForm, image: '' })} style={{ padding: '6px 12px', fontSize: '0.85rem', marginLeft: '8px' }}>Remove</Button>
                                     )}
@@ -215,7 +246,7 @@ export default function MinistriesManager() {
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1.5rem' }}>
                             <Button variant="outline" onClick={() => setEditingBearer(null)}>Cancel</Button>
-                            <Button variant="primary" onClick={saveBearer}>Save Bearer</Button>
+                            <Button variant="primary" onClick={saveBearer} disabled={uploading}>{uploading ? '⏳ Uploading…' : 'Save Bearer'}</Button>
                         </div>
                     </Card>
                 </div>

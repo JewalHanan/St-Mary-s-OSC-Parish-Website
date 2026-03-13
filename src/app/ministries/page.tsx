@@ -7,7 +7,13 @@ import { useStoreData } from '@/lib/useStoreData';
 import styles from '@/styles/Organisations.module.css';
 
 export default function MinistriesPage() {
-    const { data: organisations } = useStoreData(getOrganisations, [] as Organisation[]);
+    const { data: organisations, loading } = useStoreData(getOrganisations, [] as Organisation[]);
+
+    if (loading) return (
+        <div style={{ minHeight: "60vh", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-secondary)" }}>
+            <p>Loading...</p>
+        </div>
+    );
 
     return (
         <div className={styles.pageContainer}>
