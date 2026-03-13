@@ -7,7 +7,12 @@ export async function POST(request: NextRequest) {
     // Auth check — only admin users can upload
     const session = await getServerSession(authOptions);
     if (!session) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        return NextResponse.json({ error: 'Unauthorized — please log in again' }, { status: 401 });
+    }
+
+    if (!process.env.BLOB_READ_WRITE_TOKEN) {
+        console.error('[api/upload] BLOB_READ_WRITE_TOKEN is not set');
+        return NextResponse.json({ error: 'Server misconfigured — BLOB_READ_WRITE_TOKEN is missing' }, { status: 500 });
     }
 
     try {
@@ -30,8 +35,9 @@ export async function POST(request: NextRequest) {
         });
 
         return NextResponse.json({ url: blob.url });
-    } catch (error) {
+    } catch (error: any) {
         console.error('[api/upload] POST error:', error);
-        return NextResponse.json({ error: 'Failed to upload file' }, { status: 500 });
+        const msg = error?.message || 'Failed to upload file';
+        return NextResponse.json({ error: msg }, { status: 500 });
     }
 }

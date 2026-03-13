@@ -29,11 +29,15 @@ const uploadToBlob = async (file: File, prefix: string): Promise<string | null> 
     formData.append("prefix", prefix);
     try {
         const res = await fetch("/api/upload", { method: "POST", body: formData });
-        if (!res.ok) throw new Error("Upload failed");
+        if (!res.ok) {
+            const data = await res.json().catch(() => ({}));
+            throw new Error(data.error || "Upload failed");
+        }
         const { url } = await res.json();
         return url;
-    } catch (err) {
+    } catch (err: any) {
         console.error("[upload] error:", err);
+        alert(`Upload error: ${err.message}`);
         return null;
     }
 };
