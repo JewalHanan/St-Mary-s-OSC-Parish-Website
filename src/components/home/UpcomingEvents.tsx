@@ -1,26 +1,23 @@
 'use client';
 
 import { motion, useInView } from 'framer-motion';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef, useMemo } from 'react';
 import { Card } from '@/components/ui/Card';
 import { getEvents, type ChurchEvent } from '@/lib/store';
+import { useStoreData } from '@/lib/useStoreData';
 import styles from '@/styles/UpcomingEvents.module.css';
 
 export default function UpcomingEvents() {
     const containerRef = useRef(null);
     const isInView = useInView(containerRef, { once: true, amount: 0.2 });
-    const [events, setEvents] = useState<ChurchEvent[]>([]);
+    const { data: allEvents } = useStoreData(getEvents, [] as ChurchEvent[]);
     const [selectedEvent, setSelectedEvent] = useState<ChurchEvent | null>(null);
 
-    useEffect(() => {
-        getEvents().then(all => {
-            // Sort by date ascending and take the first 6
-            const upcoming = [...all]
-                .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-                .slice(0, 6);
-            setEvents(upcoming);
-        });
-    }, []);
+    const events = useMemo(() => {
+        return [...allEvents]
+            .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+            .slice(0, 6);
+    }, [allEvents]);
 
     return (
         <section className={styles.section} ref={containerRef}>

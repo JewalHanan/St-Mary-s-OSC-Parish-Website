@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { getPublications, type Publication } from '@/lib/store';
+import { useStoreData } from '@/lib/useStoreData';
 import styles from '@/styles/Publications.module.css';
 
 function openPdf(pub: Publication) {
@@ -38,9 +38,7 @@ function openPdf(pub: Publication) {
 }
 
 export default function PublicationsPage() {
-    const [publications, setPublications] = useState<Publication[]>([]);
-
-    useEffect(() => { getPublications().then(setPublications); }, []);
+    const { data: publications } = useStoreData(getPublications, [] as Publication[]);
 
     return (
         <div className={styles.pageContainer}>

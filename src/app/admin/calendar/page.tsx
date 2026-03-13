@@ -61,26 +61,12 @@ export default function CalendarManager() {
 
     const displayDays = searchResults ?? daysInView;
 
-    // ── Image upload: 1:1 square crop ────────────────────────
+    // ── Image upload: original quality ─────────────────────────
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
         const reader = new FileReader();
-        reader.onload = (ev) => {
-            const img = new Image();
-            img.onload = () => {
-                const SIZE = 200;
-                const canvas = document.createElement('canvas');
-                canvas.width = SIZE; canvas.height = SIZE;
-                const ctx = canvas.getContext('2d')!;
-                const minDim = Math.min(img.width, img.height);
-                const sx = (img.width - minDim) / 2;
-                const sy = (img.height - minDim) / 2;
-                ctx.drawImage(img, sx, sy, minDim, minDim, 0, 0, SIZE, SIZE);
-                setForm(prev => ({ ...prev, image: canvas.toDataURL('image/jpeg', 0.8) }));
-            };
-            img.src = ev.target?.result as string;
-        };
+        reader.onload = () => setForm(prev => ({ ...prev, image: reader.result as string }));
         reader.readAsDataURL(file);
         e.target.value = '';
     };

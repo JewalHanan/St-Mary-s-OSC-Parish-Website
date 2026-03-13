@@ -25,27 +25,12 @@ export default function BooksManager() {
         await saveBookSections(updated);
     };
 
-    // ── Section Image Upload (Landscape) ──
+    // ── Section Image Upload (original quality) ──
     const handleSectionImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
         const reader = new FileReader();
-        reader.onload = (ev) => {
-            const img = new Image();
-            img.onload = () => {
-                const W = 640;
-                const H = 360;
-                const canvas = document.createElement('canvas');
-                canvas.width = W; canvas.height = H;
-                const ctx = canvas.getContext('2d')!;
-                const ratio = Math.max(W / img.width, H / img.height);
-                const x = (W - img.width * ratio) / 2;
-                const y = (H - img.height * ratio) / 2;
-                ctx.drawImage(img, x, y, img.width * ratio, img.height * ratio);
-                setSectionImage(canvas.toDataURL('image/jpeg', 0.8));
-            };
-            img.src = ev.target?.result as string;
-        };
+        reader.onload = () => setSectionImage(reader.result as string);
         reader.readAsDataURL(file);
         e.target.value = '';
     };
@@ -94,26 +79,12 @@ export default function BooksManager() {
         setBookForm({ title: book.title, language: book.language, fileUrl: book.fileUrl, fileName: '', image: book.image || '' });
     };
 
-    // 1:1 square crop for book thumbnail
+    // Book thumbnail upload (original quality)
     const handleBookImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
         const reader = new FileReader();
-        reader.onload = (ev) => {
-            const img = new Image();
-            img.onload = () => {
-                const SIZE = 200;
-                const canvas = document.createElement('canvas');
-                canvas.width = SIZE; canvas.height = SIZE;
-                const ctx = canvas.getContext('2d')!;
-                const minDim = Math.min(img.width, img.height);
-                const sx = (img.width - minDim) / 2;
-                const sy = (img.height - minDim) / 2;
-                ctx.drawImage(img, sx, sy, minDim, minDim, 0, 0, SIZE, SIZE);
-                setBookForm(prev => ({ ...prev, image: canvas.toDataURL('image/jpeg', 0.8) }));
-            };
-            img.src = ev.target?.result as string;
-        };
+        reader.onload = () => setBookForm(prev => ({ ...prev, image: reader.result as string }));
         reader.readAsDataURL(file);
         e.target.value = '';
     };

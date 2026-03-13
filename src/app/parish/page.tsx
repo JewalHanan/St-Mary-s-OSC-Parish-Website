@@ -4,8 +4,8 @@ import { motion } from 'framer-motion';
 import { Card } from '@/components/ui/Card';
 import styles from '@/styles/Parish.module.css';
 
-import { useState, useEffect } from 'react';
 import { getParishMembers, type ParishMember } from '@/lib/store';
+import { useStoreData } from '@/lib/useStoreData';
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -26,11 +26,7 @@ const cardVariants = {
 };
 
 export default function ParishPage() {
-    const [members, setMembers] = useState<ParishMember[]>([]);
-
-    useEffect(() => {
-        getParishMembers().then(setMembers);
-    }, []);
+    const { data: members } = useStoreData(getParishMembers, [] as ParishMember[]);
 
     return (
         <div className={styles.pageContainer}>

@@ -1,6 +1,31 @@
+'use client';
+
 import Link from 'next/link';
-import { getSiteSettings } from '@/lib/store';
+import { getSiteSettings, type SiteSettings } from '@/lib/store';
+import { useStoreData } from '@/lib/useStoreData';
 import styles from '@/styles/Footer.module.css';
+
+/* ── Default settings used while data is loading ── */
+const DEFAULT_SETTINGS: SiteSettings = {
+    tickerOverride: '',
+    contact: {
+        phone: '+91 7034756977',
+        email: 'info@stmosc.org',
+        addressLine1: 'Muthupilakkadu, Kollam',
+        addressLine2: 'Kerala — 691 578, India',
+        serviceTimings: [
+            { label: 'Sunday Holy Qurbono', time: '8:30 AM' },
+            { label: 'Wednesday Evening Prayer', time: '6:00 PM' },
+            { label: 'Saturday Vespers', time: '5:30 PM' }
+        ]
+    },
+    social: {
+        facebook: 'https://facebook.com/',
+        instagram: 'https://instagram.com/',
+        whatsapp: 'https://wa.me/917034756977',
+        youtube: 'https://youtube.com/'
+    }
+};
 
 /* ── Official SVG brand icons for social links ── */
 function FacebookIcon() {
@@ -43,8 +68,8 @@ function PhoneIcon() {
     );
 }
 
-export default async function Footer() {
-    const settings = await getSiteSettings();
+export default function Footer() {
+    const { data: settings } = useStoreData(getSiteSettings, DEFAULT_SETTINGS);
     const { contact, social } = settings;
 
     // Build tel: link from stored phone number

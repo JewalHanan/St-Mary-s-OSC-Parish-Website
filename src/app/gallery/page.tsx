@@ -4,13 +4,12 @@ import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card } from '@/components/ui/Card';
 import { getGallerySections, type GallerySection, type GalleryImage } from '@/lib/store';
+import { useStoreData } from '@/lib/useStoreData';
 import styles from '@/styles/Gallery.module.css';
 
 export default function GalleryPage() {
-    const [sections, setSections] = useState<GallerySection[]>([]);
+    const { data: sections } = useStoreData(getGallerySections, [] as GallerySection[]);
     const [lightbox, setLightbox] = useState<{ images: GalleryImage[]; index: number } | null>(null);
-
-    useEffect(() => { getGallerySections().then(setSections); }, []);
 
     const openLightbox = (images: GalleryImage[], index: number) => setLightbox({ images, index });
     const closeLightbox = () => setLightbox(null);

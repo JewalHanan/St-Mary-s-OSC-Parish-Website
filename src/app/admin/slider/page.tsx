@@ -48,34 +48,9 @@ export default function SliderManager() {
         setUploading(true);
 
         const reader = new FileReader();
-        reader.onload = (ev) => {
-            const img = new Image();
-            img.onload = () => {
-                const TARGET_W = Math.min(1280, img.width);
-                const TARGET_H = Math.round(TARGET_W * (9 / 16)); // 16:9 → h = w × 0.5625
-
-                // Center-crop source to 16:9
-                const srcAspect = img.width / img.height;
-                const targetAspect = 16 / 9;
-                let sx = 0, sy = 0, sw = img.width, sh = img.height;
-                if (srcAspect > targetAspect) {
-                    sw = Math.round(img.height * targetAspect);
-                    sx = Math.round((img.width - sw) / 2);
-                } else {
-                    sh = Math.round(img.width / targetAspect);
-                    sy = Math.round((img.height - sh) / 2);
-                }
-
-                const canvas = document.createElement('canvas');
-                canvas.width = TARGET_W;
-                canvas.height = TARGET_H;
-                const ctx = canvas.getContext('2d')!;
-                ctx.drawImage(img, sx, sy, sw, sh, 0, 0, TARGET_W, TARGET_H);
-                const compressed = canvas.toDataURL('image/jpeg', 0.78);
-                setForm(prev => ({ ...prev, image: compressed }));
-                setUploading(false);
-            };
-            img.src = ev.target?.result as string;
+        reader.onload = () => {
+            setForm(prev => ({ ...prev, image: reader.result as string }));
+            setUploading(false);
         };
         reader.readAsDataURL(file);
         e.target.value = '';
@@ -169,7 +144,7 @@ export default function SliderManager() {
                                 }}
                             >
                                 {uploading ? (
-                                    <p style={{ margin: 0, color: 'var(--text-accent)' }}>⏳ Compressing image…</p>
+                                    <p style={{ margin: 0, color: 'var(--text-accent)' }}>⏳ Processing image…</p>
                                 ) : form.image ? (
                                     <img
                                         src={form.image}
@@ -179,7 +154,7 @@ export default function SliderManager() {
                                 ) : (
                                     <>
                                         <p style={{ margin: '0 0 0.25rem', color: 'var(--text-secondary)' }}>🖼️ Click to upload from PC</p>
-                                        <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.8rem' }}>JPG, PNG, WebP — auto-compressed for fast loading</p>
+                                        <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.8rem' }}>JPG, PNG, WebP — stored at original quality</p>
                                     </>
                                 )}
                             </div>

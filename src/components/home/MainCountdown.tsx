@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { getSpecialDays, type SpecialDay } from '@/lib/store';
+import { useStoreData } from '@/lib/useStoreData';
 import { motion } from 'framer-motion';
 
 interface TimeLeft {
@@ -168,18 +169,15 @@ function CountdownTile({ event }: { event: SpecialDay }) {
 }
 
 export default function MainCountdown() {
-    const [targets, setTargets] = useState<SpecialDay[]>([]);
+    const { data: allDays } = useStoreData(getSpecialDays, [] as SpecialDay[]);
 
-    useEffect(() => {
-        getSpecialDays().then(days => {
-            const now = Date.now();
-            const upcoming = days
-                .filter(d => d.is_countdown_target && new Date(`${d.date}T00:00:00`).getTime() > now)
-                .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-                .slice(0, 2); // show next 1–2 countdown targets
-            setTargets(upcoming);
-        });
-    }, []);
+    const targets = useMemo(() => {
+        const now = Date.now();
+        return allDays
+            .filter(d => d.is_countdown_target && new Date(`${d.date}T00:00:00`).getTime() > now)
+            .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+            .slice(0, 2);
+    }, [allDays]);
 
     if (targets.length === 0) return null;
 

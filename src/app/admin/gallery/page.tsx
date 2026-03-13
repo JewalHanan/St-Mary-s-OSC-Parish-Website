@@ -23,24 +23,11 @@ const inp: React.CSSProperties = {
     width: '100%',
 };
 
-// ── Image resize helper ───────────────────────────────────────────
-function resizeImage(file: File, maxW: number, quality: number): Promise<string> {
+// ── Read original image without compression ──────────────────────
+function readFileAsDataURL(file: File): Promise<string> {
     return new Promise((resolve) => {
         const reader = new FileReader();
-        reader.onload = (e) => {
-            const img = new Image();
-            img.onload = () => {
-                const scale = Math.min(1, maxW / img.width);
-                const w = Math.round(img.width * scale);
-                const h = Math.round(img.height * scale);
-                const canvas = document.createElement('canvas');
-                canvas.width = w;
-                canvas.height = h;
-                canvas.getContext('2d')!.drawImage(img, 0, 0, w, h);
-                resolve(canvas.toDataURL('image/jpeg', quality));
-            };
-            img.src = e.target?.result as string;
-        };
+        reader.onload = () => resolve(reader.result as string);
         reader.readAsDataURL(file);
     });
 }
@@ -101,7 +88,7 @@ export default function GalleryManager() {
 
         const processed = await Promise.all(
             files.filter(f => f.type.startsWith('image/')).map(async (file) => {
-                const url = await resizeImage(file, 1200, 0.85);
+                const url = await readFileAsDataURL(file);
                 return { id: 0, url, caption: '' };
             })
         );

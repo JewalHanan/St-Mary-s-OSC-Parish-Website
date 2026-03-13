@@ -39,7 +39,7 @@ export async function GET(
         const data = await readBlob(collection, null);
         return NextResponse.json(data, {
             headers: {
-                'Cache-Control': 'public, s-maxage=10, stale-while-revalidate=30',
+                'Cache-Control': 'no-store, no-cache, must-revalidate',
             },
         });
     } catch (error) {

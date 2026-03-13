@@ -1,17 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Card } from '@/components/ui/Card';
 import { getOrganisations, type Organisation } from '@/lib/store';
+import { useStoreData } from '@/lib/useStoreData';
 import styles from '@/styles/Organisations.module.css';
 
 export default function MinistriesPage() {
-    const [organisations, setOrganisations] = useState<Organisation[]>([]);
-
-    useEffect(() => {
-        getOrganisations().then(setOrganisations);
-    }, []);
+    const { data: organisations } = useStoreData(getOrganisations, [] as Organisation[]);
 
     return (
         <div className={styles.pageContainer}>

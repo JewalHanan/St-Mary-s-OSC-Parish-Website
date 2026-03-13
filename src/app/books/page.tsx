@@ -1,14 +1,15 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { getBookSections, type BookSection } from '@/lib/store';
+import { useStoreData } from '@/lib/useStoreData';
 import styles from '@/styles/Books.module.css';
 
 export default function BooksPage() {
-    const [sections, setSections] = useState<BookSection[]>([]);
+    const { data: sections } = useStoreData(getBookSections, [] as BookSection[]);
     const [expandedSection, setExpandedSection] = useState<number | null>(null);
 
     const handleOpen = (book: any) => {
@@ -51,10 +52,6 @@ export default function BooksPage() {
             alert('Sorry, there was an issue opening this book. Please try again.');
         }
     };
-
-    useEffect(() => {
-        getBookSections().then(setSections);
-    }, []);
 
     return (
         <div className={styles.pageContainer}>

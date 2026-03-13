@@ -1,7 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
+import { getSiteSettings, type SiteSettings } from '@/lib/store';
+import { useStoreData } from '@/lib/useStoreData';
 import styles from '@/styles/Ticker.module.css';
 
 /** Compute the next Sunday from today (or today if it IS Sunday). */
@@ -23,25 +25,13 @@ function formatDate(d: Date): string {
 }
 
 export default function Ticker() {
-    const [tickerText, setTickerText] = useState('');
+    const { data: settings } = useStoreData(getSiteSettings, null as SiteSettings | null);
 
-    useEffect(() => {
-        // Build default text based on the next upcoming Sunday
-        // Use setting if provided; else dynamic auto-generated string
+    const tickerText = useMemo(() => {
+        if (settings?.tickerOverride) return settings.tickerOverride;
         const nextSun = getNextSunday();
-        const defaultText = `Next Holy Qurbono — Sunday ${formatDate(nextSun)} at 7:00 AM — St. Mary's Malankara Orthodox Syrian Church, Muthupilakkadu`;
-        setTickerText(defaultText);
-
-        // Try to fetch ticker override from site-settings
-        fetch('/api/data/site-settings', { cache: 'no-store' })
-            .then(r => r.ok ? r.json() : null)
-            .then(settings => {
-                if (settings?.tickerOverride) {
-                    setTickerText(settings.tickerOverride);
-                }
-            })
-            .catch(() => { /* use default */ });
-    }, []);
+        return `Next Holy Qurbono — Sunday ${formatDate(nextSun)} at 7:00 AM — St. Mary's Malankara Orthodox Syrian Church, Muthupilakkadu`;
+    }, [settings]);
 
     if (!tickerText) return null;
 

@@ -1,16 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { getSiteSettings, type SiteSettings } from '@/lib/store';
+import { useStoreData } from '@/lib/useStoreData';
 import styles from '@/styles/Contact.module.css';
 
 export default function ContactPage() {
-    const [settings, setSettings] = useState<SiteSettings | null>(null);
-
-    useEffect(() => {
-        getSiteSettings().then(setSettings);
-    }, []);
+    const { data: settings } = useStoreData(getSiteSettings, null as SiteSettings | null);
 
     if (!settings) return <div style={{ minHeight: '100vh', background: 'var(--bg-primary)' }} />;
 

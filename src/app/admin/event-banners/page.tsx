@@ -7,46 +7,13 @@ import { getEventBanners, saveEventBanners, nextId, type EventBannerImage } from
 import styles from '@/styles/AdminDataTable.module.css';
 import { validateImageFile } from '@/lib/uploadValidation';
 
-/* ── 4:3 Crop helper ─────────────────────────────────────────────
-   Renders the uploaded image on a canvas at exactly 4:3 and
-   returns a base64 JPEG (max 800px wide, ~70% quality) */
-// 2:3 portrait crop: center-crops uploaded image to 2:3 portrait
-function cropTo2x3(file: File): Promise<string> {
+/* ── Read original image without compression ───────────────────── */
+function readFileAsDataURL(file: File): Promise<string> {
     return new Promise((resolve, reject) => {
         const validationError = validateImageFile(file);
         if (validationError) { reject(new Error(validationError)); return; }
         const reader = new FileReader();
-        reader.onload = (ev) => {
-            const img = new Image();
-            img.onload = () => {
-                // 2:3 portrait → height = width * 1.5
-                const TARGET_W = Math.min(600, img.width);
-                const TARGET_H = Math.round(TARGET_W * 1.5); // 2:3
-
-                // Center-crop source to 2:3
-                const srcAspect = img.width / img.height;
-                const targetAspect = 2 / 3;
-                let sx = 0, sy = 0, sw = img.width, sh = img.height;
-                if (srcAspect > targetAspect) {
-                    // Wider than 2:3 → crop left/right
-                    sw = Math.round(img.height * targetAspect);
-                    sx = Math.round((img.width - sw) / 2);
-                } else {
-                    // Taller than 2:3 → crop top/bottom
-                    sh = Math.round(img.width / targetAspect);
-                    sy = Math.round((img.height - sh) / 2);
-                }
-
-                const canvas = document.createElement('canvas');
-                canvas.width = TARGET_W;
-                canvas.height = TARGET_H;
-                const ctx = canvas.getContext('2d')!;
-                ctx.drawImage(img, sx, sy, sw, sh, 0, 0, TARGET_W, TARGET_H);
-                resolve(canvas.toDataURL('image/jpeg', 0.75));
-            };
-            img.onerror = reject;
-            img.src = ev.target?.result as string;
-        };
+        reader.onload = () => resolve(reader.result as string);
         reader.onerror = reject;
         reader.readAsDataURL(file);
     });
@@ -76,7 +43,7 @@ export default function EventBannersManager() {
         const newBanners = [...banners];
         for (const file of Array.from(files)) {
             try {
-                const dataUrl = await cropTo2x3(file);
+                const dataUrl = await readFileAsDataURL(file);
                 newBanners.push({
                     id: nextId(newBanners),
                     image: dataUrl,
@@ -174,7 +141,7 @@ export default function EventBannersManager() {
             >
                 <p style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🖼️</p>
                 <p>Click or drag &amp; drop images here to upload</p>
-                <p style={{ fontSize: '0.85rem', marginTop: '0.25rem' }}>Auto-cropped to <strong>2:3 portrait</strong> — max 600×900px</p>
+                <p style={{ fontSize: '0.85rem', marginTop: '0.25rem' }}>Images are stored at <strong>original quality</strong></p>
             </div>
 
             {banners.length === 0 && (

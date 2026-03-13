@@ -39,34 +39,14 @@ export default function AdminHistoryPage() {
         }
     };
 
-    // Convert uploaded file into a 16:9 base64 JPEG thumbnail
+    // Upload images at original quality
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(e.target.files ?? []);
         files.forEach(file => {
             const reader = new FileReader();
-            reader.onload = (ev) => {
-                const img = new Image();
-                img.onload = () => {
-                    const W = 960, H = 540; // target 16:9
-                    const canvas = document.createElement('canvas');
-                    canvas.width = W; canvas.height = H;
-                    const ctx = canvas.getContext('2d')!;
-                    // center-crop to 16:9
-                    const srcAspect = img.width / img.height;
-                    const tgtAspect = W / H;
-                    let sx = 0, sy = 0, sw = img.width, sh = img.height;
-                    if (srcAspect > tgtAspect) {
-                        sw = img.height * tgtAspect;
-                        sx = (img.width - sw) / 2;
-                    } else {
-                        sh = img.width / tgtAspect;
-                        sy = (img.height - sh) / 2;
-                    }
-                    ctx.drawImage(img, sx, sy, sw, sh, 0, 0, W, H);
-                    const url = canvas.toDataURL('image/jpeg', 0.85);
-                    setImages(prev => [...prev, { id: nextId(prev), url, caption: '' }]);
-                };
-                img.src = ev.target?.result as string;
+            reader.onload = () => {
+                const url = reader.result as string;
+                setImages(prev => [...prev, { id: nextId(prev), url, caption: '' }]);
             };
             reader.readAsDataURL(file);
         });
@@ -93,7 +73,7 @@ export default function AdminHistoryPage() {
             <div className={styles.header}>
                 <h1 className={styles.title}>Parish History Editor</h1>
                 <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem' }}>
-                    Edit the history of the church displayed publicly. Use standard HTML tags like &lt;b&gt;, &lt;i&gt;, &lt;h2&gt;, &lt;p&gt;, and &lt;ul&gt;. Images below are displayed in 16:9 on the public page.
+                    Edit the history of the church displayed publicly. Use standard HTML tags like &lt;b&gt;, &lt;i&gt;, &lt;h2&gt;, &lt;p&gt;, and &lt;ul&gt;. Images below are displayed at their original aspect ratio on the public page.
                 </p>
             </div>
 
@@ -147,7 +127,7 @@ export default function AdminHistoryPage() {
                         {images.map(img => (
                             <div key={img.id} style={{ borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--card-border)', background: 'var(--input-bg)' }}>
                                 {/* 16:9 image preview */}
-                                <div style={{ width: '100%', aspectRatio: '16/9', overflow: 'hidden', position: 'relative' }}>
+                                <div style={{ width: '100%', overflow: 'hidden', position: 'relative' }}>
                                     <img
                                         src={img.url}
                                         alt={img.caption || 'History image'}
@@ -204,7 +184,7 @@ export default function AdminHistoryPage() {
                         <div style={{ marginTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
                             {images.map(img => (
                                 <div key={img.id} style={{ borderRadius: '10px', overflow: 'hidden' }}>
-                                    <div style={{ width: '100%', aspectRatio: '16/9', overflow: 'hidden' }}>
+                                    <div style={{ width: '100%', overflow: 'hidden' }}>
                                         <img src={img.url} alt={img.caption} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                     </div>
                                     {img.caption && <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '4px', textAlign: 'center' }}>{img.caption}</p>}

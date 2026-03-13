@@ -35,28 +35,9 @@ export default function ParishCommitteeManager() {
         if (!file) return;
         const validationError = validateImageFile(file);
         if (validationError) { alert(validationError); e.target.value = ''; return; }
-        if (file.size > 2 * 1024 * 1024) return alert('Image must be under 2MB.');
 
-
-        // Compress via canvas to keep localStorage usage reasonable
         const reader = new FileReader();
-        reader.onload = (ev) => {
-            const img = new Image();
-            img.onload = () => {
-                const canvas = document.createElement('canvas');
-                const MAX = 300; // max dimension
-                let w = img.width, h = img.height;
-                if (w > h) { h = (h / w) * MAX; w = MAX; }
-                else { w = (w / h) * MAX; h = MAX; }
-                canvas.width = w;
-                canvas.height = h;
-                const ctx = canvas.getContext('2d')!;
-                ctx.drawImage(img, 0, 0, w, h);
-                const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
-                setForm(prev => ({ ...prev, image: dataUrl }));
-            };
-            img.src = ev.target?.result as string;
-        };
+        reader.onload = () => setForm(prev => ({ ...prev, image: reader.result as string }));
         reader.readAsDataURL(file);
     };
 

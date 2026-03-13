@@ -37,21 +37,7 @@ export default function MinistriesManager() {
         const file = e.target.files?.[0];
         if (!file) return;
         const reader = new FileReader();
-        reader.onload = (ev) => {
-            const img = new Image();
-            img.onload = () => {
-                const SIZE = 200;
-                const canvas = document.createElement('canvas');
-                canvas.width = SIZE; canvas.height = SIZE;
-                const ctx = canvas.getContext('2d')!;
-                const minDim = Math.min(img.width, img.height);
-                const sx = (img.width - minDim) / 2;
-                const sy = (img.height - minDim) / 2;
-                ctx.drawImage(img, sx, sy, minDim, minDim, 0, 0, SIZE, SIZE);
-                setNewOrgLogo(canvas.toDataURL('image/png'));
-            };
-            img.src = ev.target?.result as string;
-        };
+        reader.onload = () => setNewOrgLogo(reader.result as string);
         reader.readAsDataURL(file);
         e.target.value = '';
     };
@@ -78,26 +64,8 @@ export default function MinistriesManager() {
         const validationError = validateImageFile(file);
         if (validationError) { alert(validationError); e.target.value = ''; return; }
 
-        if (file.size > 2 * 1024 * 1024) return alert('Image must be under 2MB.');
-
         const reader = new FileReader();
-        reader.onload = (ev) => {
-            const img = new Image();
-            img.onload = () => {
-                const canvas = document.createElement('canvas');
-                const MAX = 300;
-                let w = img.width, h = img.height;
-                if (w > h) { h = (h / w) * MAX; w = MAX; }
-                else { w = (w / h) * MAX; h = MAX; }
-                canvas.width = w;
-                canvas.height = h;
-                const ctx = canvas.getContext('2d')!;
-                ctx.drawImage(img, 0, 0, w, h);
-                const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
-                setBearerForm(prev => ({ ...prev, image: dataUrl }));
-            };
-            img.src = ev.target?.result as string;
-        };
+        reader.onload = () => setBearerForm(prev => ({ ...prev, image: reader.result as string }));
         reader.readAsDataURL(file);
     };
 

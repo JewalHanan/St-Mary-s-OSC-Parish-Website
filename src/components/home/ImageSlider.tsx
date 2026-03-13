@@ -2,20 +2,16 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { getSliderImages, type SliderImage } from '@/lib/store';
+import { useStoreData } from '@/lib/useStoreData';
 import styles from '@/styles/ImageSlider.module.css';
 
 export default function ImageSlider() {
-    const [slides, setSlides] = useState<SliderImage[]>([]);
+    const { data: slides } = useStoreData(getSliderImages, [] as SliderImage[]);
     const [current, setCurrent] = useState(0);
     const dragStartX = useRef(0);
     const dragDelta = useRef(0);
     const dragging = useRef(false);
     const autoTimer = useRef<ReturnType<typeof setInterval> | null>(null);
-
-    // Load from API
-    useEffect(() => {
-        getSliderImages().then(setSlides);
-    }, []);
 
     // Auto-play
     const startAuto = useCallback(() => {

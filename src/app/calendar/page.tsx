@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card } from '@/components/ui/Card';
 import { getSpecialDays, getEvents, type SpecialDay, type ChurchEvent } from '@/lib/store';
+import { useStoreData } from '@/lib/useStoreData';
 import styles from '@/styles/Calendar.module.css';
 
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -11,6 +12,7 @@ const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', '
 function CountdownTimer({ targetDay }: { targetDay: SpecialDay }) {
     const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, mins: 0 });
 
+    // CountdownTimer still needs its own interval for the timer display
     useEffect(() => {
         const calcTime = () => {
             const difference = new Date(`${targetDay.date}T00:00:00`).getTime() - new Date().getTime();
@@ -82,16 +84,9 @@ const TYPE_LABELS: Record<string, string> = {
 export default function CalendarPage() {
     const currentMonthIndex = new Date().getMonth();
     const [selectedMonth, setSelectedMonth] = useState(currentMonthIndex);
-    const [specialDays, setSpecialDays] = useState<SpecialDay[]>([]);
-    const [events, setEvents] = useState<ChurchEvent[]>([]);
+    const { data: specialDays } = useStoreData(getSpecialDays, [] as SpecialDay[]);
+    const { data: events } = useStoreData(getEvents, [] as ChurchEvent[]);
     const [selectedDayInfo, setSelectedDayInfo] = useState<{ day: SpecialDay } | null>(null);
-
-    useEffect(() => {
-        Promise.all([getSpecialDays(), getEvents()]).then(([days, evts]) => {
-            setSpecialDays(days);
-            setEvents(evts);
-        });
-    }, []);
 
     // Generate days for the selected month to render the grid
     const year = new Date().getFullYear();

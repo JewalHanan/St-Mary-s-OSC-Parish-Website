@@ -34,27 +34,12 @@ export default function EventsManager() {
         setForm({ title: evt.title, date: evt.date, time: evt.time, color: evt.color, type: evt.type, icon: evt.icon || '', description: evt.description || '', location: evt.location || '' });
     };
 
-    // Compress icon to a small 80×80 square thumbnail
+    // Upload icon at original quality
     const handleIconUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
         const reader = new FileReader();
-        reader.onload = (ev) => {
-            const img = new Image();
-            img.onload = () => {
-                const SIZE = 80;
-                const canvas = document.createElement('canvas');
-                canvas.width = SIZE; canvas.height = SIZE;
-                const ctx = canvas.getContext('2d')!;
-                // center-crop to square
-                const minDim = Math.min(img.width, img.height);
-                const sx = (img.width - minDim) / 2;
-                const sy = (img.height - minDim) / 2;
-                ctx.drawImage(img, sx, sy, minDim, minDim, 0, 0, SIZE, SIZE);
-                setForm(prev => ({ ...prev, icon: canvas.toDataURL('image/png') }));
-            };
-            img.src = ev.target?.result as string;
-        };
+        reader.onload = () => setForm(prev => ({ ...prev, icon: reader.result as string }));
         reader.readAsDataURL(file);
         e.target.value = '';
     };

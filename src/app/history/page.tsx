@@ -4,15 +4,11 @@ import { motion } from 'framer-motion';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
 import { getParishHistory, type ParishHistory } from '@/lib/store';
+import { useStoreData } from '@/lib/useStoreData';
 
 export default function HistoryPage() {
-    const [history, setHistory] = useState<ParishHistory | null>(null);
-
-    useEffect(() => {
-        getParishHistory().then(setHistory);
-    }, []);
+    const { data: history } = useStoreData(getParishHistory, null as ParishHistory | null);
 
     return (
         <div style={{ padding: '2rem 1rem 4rem', maxWidth: '1000px', margin: '0 auto', minHeight: '100vh' }}>
@@ -89,8 +85,8 @@ export default function HistoryPage() {
                                         boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
                                     }}
                                 >
-                                    {/* Strict 16:9 */}
-                                    <div style={{ width: '100%', aspectRatio: '16/9', overflow: 'hidden', position: 'relative' }}>
+                                    {/* Original aspect ratio */}
+                                    <div style={{ width: '100%', overflow: 'hidden', position: 'relative' }}>
                                         <img
                                             src={img.url}
                                             alt={img.caption || 'Parish History Photo'}
