@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
             Bucket: process.env.R2_BUCKET_NAME!,
             Key: key,
             Body: buffer,
-            ContentType: file.type,
+            ContentType: file.type || 'application/octet-stream',
         }));
 
         const url = `${process.env.R2_PUBLIC_URL}/${key}`;

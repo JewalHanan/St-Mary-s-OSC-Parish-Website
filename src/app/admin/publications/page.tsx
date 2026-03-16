@@ -64,7 +64,7 @@ export default function PublicationsManager() {
             return data.url;
         } catch (error: any) {
             console.error('Upload Error:', error);
-            showMessage(`Upload error: ${error.message || 'Failed to upload'}`, 'error');
+            showMessage(`Upload failed: ${error.message || 'Unknown error'}`, 'error');
             return null;
         } finally {
             setUploading(false);
@@ -77,7 +77,15 @@ export default function PublicationsManager() {
     const handlePdfUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
-        if (file.type !== 'application/pdf') return showMessage('Please select a PDF file.', 'error');
+        
+        const isPdf = file.type === 'application/pdf' ||
+                      file.type === 'application/octet-stream' ||
+                      file.name.toLowerCase().endsWith('.pdf');
+        if (!isPdf) return showMessage('Please select a PDF file.', 'error');
+
+        if (file.size > 50 * 1024 * 1024) {
+            return showMessage('File too large. Maximum size is 50 MB.', 'error');
+        }
         
         const url = await uploadFile(file, 'publications');
         if (url) {
