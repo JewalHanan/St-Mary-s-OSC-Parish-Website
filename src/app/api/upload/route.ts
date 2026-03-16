@@ -4,13 +4,17 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 
 function getR2Client() {
+    if (!process.env.R2_ACCOUNT_ID || !process.env.R2_ACCESS_KEY_ID || !process.env.R2_SECRET_ACCESS_KEY) {
+        throw new Error('Missing Cloudflare R2 Credentials in Environment Variables');
+    }
     return new S3Client({
-        region: 'auto',
+        region: 'us-east-1',
         endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
         credentials: {
-            accessKeyId: process.env.R2_ACCESS_KEY_ID!,
-            secretAccessKey: process.env.R2_SECRET_ACCESS_KEY!,
+            accessKeyId: process.env.R2_ACCESS_KEY_ID,
+            secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
         },
+        maxAttempts: 2,
     });
 }
 
