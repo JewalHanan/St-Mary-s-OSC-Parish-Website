@@ -46,10 +46,9 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         { href: '/admin/publications', label: 'Publications', icon: '📄' },
     ];
 
-    const userRole = (session?.user as any)?.role;
-    if (userRole === 'SUPER_ADMIN') {
-        navLinks.push({ href: '/admin/audit', label: 'Audit Logs', icon: '📋' });
-    }
+    // Removed Super Admin audit logs
+    
+
 
     return (
         <div className={styles.adminWrapper}>

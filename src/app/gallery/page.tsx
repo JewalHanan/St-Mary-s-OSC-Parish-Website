@@ -41,8 +41,8 @@ export default function GalleryPage() {
         return () => window.removeEventListener('keydown', handler);
     }, [lightbox, moveLightbox]);
 
-    const safeSections = Array.isArray(sections) ? sections : [];
-    const noImages = safeSections.every(s => !s.images || s.images.length === 0) || safeSections.length === 0;
+    const safeSections = (Array.isArray(sections) ? sections : []).filter(s => s && typeof s === 'object');
+    const noImages = safeSections.every(s => !s.images || !Array.isArray(s.images) || s.images.length === 0) || safeSections.length === 0;
 
     return (
         <div className={styles.pageContainer}>
@@ -65,8 +65,8 @@ export default function GalleryPage() {
                     <p>Gallery photos will appear here once the admin uploads them.</p>
                 </div>
             ) : (
-                <div className={styles.sectionsWrapper}>
-                    {safeSections.filter(s => s.images && s.images.length > 0).map((section, idx) => (
+                        <div className={styles.sectionsWrapper}>
+                    {safeSections.filter(s => Array.isArray(s.images) && s.images.length > 0).map((section, idx) => (
                         <motion.div
                             key={section.id}
                             className={styles.sectionBlock}
@@ -81,11 +81,11 @@ export default function GalleryPage() {
                             </div>
 
                             <div className={styles.imageGrid}>
-                                {section.images.map((img, imgIdx) => (
+                                {section.images.filter(img => img && typeof img === 'object').map((img, imgIdx) => (
                                     <motion.div
-                                        key={img.id}
+                                        key={img?.id || imgIdx}
                                         className={styles.gridItem}
-                                        onClick={() => openLightbox(section.images, imgIdx)}
+                                        onClick={() => openLightbox(section.images.filter(img => img && typeof img === 'object'), imgIdx)}
                                         initial={{ opacity: 0, scale: 0.95 }}
                                         animate={{ opacity: 1, scale: 1 }}
                                         transition={{ duration: 0.3, delay: imgIdx * 0.04 }}

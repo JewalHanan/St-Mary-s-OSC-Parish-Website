@@ -29,6 +29,10 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'No file provided' }, { status: 400 });
         }
 
+        if (!process.env.R2_ACCOUNT_ID || !process.env.R2_ACCESS_KEY_ID || !process.env.R2_SECRET_ACCESS_KEY || !process.env.R2_BUCKET_NAME || !process.env.R2_PUBLIC_URL) {
+            return NextResponse.json({ error: 'R2 Environment Variables are missing! Upload cannot proceed.' }, { status: 500 });
+        }
+
         const buffer = Buffer.from(await file.arrayBuffer());
         const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
         const key = `${prefix}/${Date.now()}-${safeName}`;
