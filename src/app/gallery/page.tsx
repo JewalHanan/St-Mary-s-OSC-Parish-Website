@@ -11,12 +11,6 @@ export default function GalleryPage() {
     const { data: sections, loading } = useStoreData(getGallerySections, [] as GallerySection[]);
     const [lightbox, setLightbox] = useState<{ images: GalleryImage[]; index: number } | null>(null);
 
-    if (loading) return (
-        <div style={{ minHeight: "60vh", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-secondary)" }}>
-            <p>Loading...</p>
-        </div>
-    );
-
     const openLightbox = (images: GalleryImage[], index: number) => setLightbox({ images, index });
     const closeLightbox = () => setLightbox(null);
 
@@ -43,6 +37,12 @@ export default function GalleryPage() {
 
     const safeSections = (Array.isArray(sections) ? sections : []).filter(s => s && typeof s === 'object');
     const noImages = safeSections.every(s => !s.images || !Array.isArray(s.images) || s.images.length === 0) || safeSections.length === 0;
+
+    if (loading) return (
+        <div style={{ minHeight: "60vh", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-secondary)" }}>
+            <p>Loading...</p>
+        </div>
+    );
 
     return (
         <div className={styles.pageContainer}>
