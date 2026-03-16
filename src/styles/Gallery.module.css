@@ -279,3 +279,52 @@
     .lightboxPrev { left: 0.4rem; }
     .lightboxNext { right: 0.4rem; }
 }
+
+/* ── Light Mode ────────────────────────────────────────────────── */
+
+:global([data-theme='light']) .pageContainer {
+    background: var(--color-light-bg, #f4f6f8);
+}
+
+:global([data-theme='light']) .heroSection {
+    background: linear-gradient(180deg, rgba(244,246,248,0.95) 0%, transparent 100%);
+}
+
+:global([data-theme='light']) .title {
+    background: linear-gradient(135deg, #1a2744 0%, #c8a85a 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+:global([data-theme='light']) .sectionTitle {
+    color: #1a2744;
+}
+
+:global([data-theme='light']) .sectionCount {
+    background: rgba(26,39,68,0.08);
+    border-color: rgba(26,39,68,0.15);
+    color: #1a2744;
+}
+
+:global([data-theme='light']) .divider {
+    background: linear-gradient(90deg, rgba(26,39,68,0.2) 0%, transparent 100%);
+}
+
+:global([data-theme='light']) .gridItem {
+    background: #ffffff;
+    border-color: rgba(0,0,0,0.08);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+:global([data-theme='light']) .gridItem:hover {
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+:global([data-theme='light']) .emptyState {
+    color: #555;
+}
+
+:global([data-theme='light']) .emptyTitle {
+    color: #1a2744;
+}

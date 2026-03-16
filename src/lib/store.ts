@@ -135,11 +135,12 @@ export interface GallerySection {
 }
 
 export interface Publication {
-    id: number;
+    id: number | string;
     name: string;
     description: string;
     fileUrl: string;
     fileName?: string;
+    coverImage?: string;
 }
 
 // ──── Default data (used as fallback when blob store is empty) ───
@@ -469,6 +470,11 @@ export async function savePublications(pubs: Publication[]): Promise<void> {
 
 // ──── ID Generation (unchanged) ─────────────────────────────────
 
-export function nextId(items: { id: number }[]): number {
-    return items.length > 0 ? Math.max(...items.map(i => i.id)) + 1 : 1;
+export function nextId(items: { id: number | string }[]): number {
+    const ids = items.map(item => {
+        if (typeof item.id === 'number') return item.id;
+        const parsed = parseInt(item.id, 10);
+        return isNaN(parsed) ? 0 : parsed;
+    });
+    return ids.length > 0 ? Math.max(...ids) + 1 : 1;
 }

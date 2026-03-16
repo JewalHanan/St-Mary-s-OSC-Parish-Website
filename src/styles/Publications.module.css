@@ -132,3 +132,67 @@
         padding: 0 1rem;
     }
 }
+
+/* ── Publication Covers ────────────────────────────────────────── */
+
+.coverImageContainer {
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+    position: relative;
+    border-bottom: 1px solid var(--card-border);
+}
+
+.coverImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+    display: block;
+}
+
+.pubCard:hover .coverImage {
+    transform: scale(1.05);
+}
+
+.cardContentWrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+/* ── Light Mode ────────────────────────────────────────────────── */
+
+:global([data-theme='light']) .pageContainer {
+    background: #f9f9ca; /* Note: site defines var(--color-light-bg) usually, using light solid */
+    background: var(--color-light-bg, #f4f6f8);
+}
+
+:global([data-theme='light']) .title {
+    background: linear-gradient(135deg, var(--text-primary) 0%, #1a2744 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+:global([data-theme='light']) .cardIconBar {
+    background: #ffffff;
+}
+
+:global([data-theme='light']) .cardName {
+    color: #1a2744;
+}
+
+:global([data-theme='light']) .pubCard {
+    background: #ffffff;
+    border-color: rgba(0,0,0,0.08);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+:global([data-theme='light']) .pubCard:hover {
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+
+:global([data-theme='light']) .emptyState {
+    color: var(--text-secondary);
+}

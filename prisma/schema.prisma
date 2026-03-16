@@ -7,7 +7,6 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = "file:./dev.db"
 }
 
 model User {
@@ -107,15 +106,15 @@ model BookSection {
 }
 
 model Book {
-  id          String      @id @default(uuid())
-  title       String
-  language    String
-  file_url    String
-  image_url   String?
-  section_id  String
-  section     BookSection @relation(fields: [section_id], references: [id], onDelete: Cascade)
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  id         String      @id @default(uuid())
+  title      String
+  language   String
+  file_url   String
+  image_url  String?
+  section_id String
+  section    BookSection @relation(fields: [section_id], references: [id], onDelete: Cascade)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
 
   @@map("books")
 }
@@ -126,6 +125,7 @@ model Publication {
   description String
   file_url    String
   file_name   String?
+  cover_image String? // Added optional cover image
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 

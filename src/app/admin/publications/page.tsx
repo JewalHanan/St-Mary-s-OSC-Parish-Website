@@ -25,7 +25,9 @@ export default function PublicationsManager() {
     const [isSaving, setIsSaving] = useState(false);
     const [message, setMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
 
+    const [uploadingImage, setUploadingImage] = useState(false);
     const pdfInputRef = useRef<HTMLInputElement>(null);
+    const imageInputRef = useRef<HTMLInputElement>(null);
 
     const showMessage = (text: string, type: 'success' | 'error') => {
         setMessage({ text, type });
@@ -87,6 +89,24 @@ export default function PublicationsManager() {
         e.target.value = '';
     };
 
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        if (!file.type.startsWith('image/')) return showMessage('Please select an image file.', 'error');
+        
+        setUploadingImage(true);
+        const url = await uploadFile(file, 'publications-covers');
+        setUploadingImage(false);
+        
+        if (url) {
+            setModal(prev => prev ? {
+                pub: { ...prev.pub, coverImage: url }
+            } : prev);
+            showMessage('Cover image uploaded.', 'success');
+        }
+        e.target.value = '';
+    };
+
     const save = async () => {
         if (!modal) return;
         const { name, description, fileUrl, fileName } = modal.pub;
@@ -101,7 +121,7 @@ export default function PublicationsManager() {
                 // Edit existing
                 updated = publications.map(p =>
                     p.id === modal.pub.id
-                        ? { ...p, name: name!.trim(), description: description!.trim(), fileUrl: fileUrl!, fileName: fileName || '' }
+                        ? { ...p, name: name!.trim(), description: description!.trim(), fileUrl: fileUrl!, fileName: fileName || '', coverImage: modal.pub.coverImage }
                         : p
                 );
             } else {
@@ -112,6 +132,7 @@ export default function PublicationsManager() {
                     description: description!.trim(),
                     fileUrl: fileUrl!,
                     fileName: fileName || '',
+                    coverImage: modal.pub.coverImage,
                 };
                 updated = [...publications, newPub];
             }
@@ -126,7 +147,7 @@ export default function PublicationsManager() {
         }
     };
 
-    const deletePub = async (id: number) => {
+    const deletePub = async (id: number | string) => {
         if (!confirm('Delete this publication?')) return;
         try {
             const updated = publications.filter(p => p.id !== id);
@@ -171,6 +192,7 @@ export default function PublicationsManager() {
                         <table className={styles.dataTable}>
                             <thead>
                                 <tr>
+                                    <th>Cover</th>
                                     <th>Name</th>
                                     <th>Description</th>
                                     <th>File</th>
@@ -180,6 +202,13 @@ export default function PublicationsManager() {
                             <tbody>
                                 {publications.map(pub => (
                                     <tr key={pub.id}>
+                                        <td>
+                                            {pub.coverImage ? (
+                                                <img src={pub.coverImage} alt={pub.name} style={{ width: 44, height: 44, borderRadius: '4px', objectFit: 'cover' }} />
+                                            ) : (
+                                                <span style={{ fontSize: '1.5rem' }}>📄</span>
+                                            )}
+                                        </td>
                                         <td style={{ fontWeight: 'bold' }}>{pub.name}</td>
                                         <td style={{ maxWidth: 260, color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
                                             {pub.description}
@@ -228,6 +257,25 @@ export default function PublicationsManager() {
                                 rows={3}
                                 style={{ ...inp, resize: 'vertical' }}
                             />
+
+                            {/* Cover Image upload area */}
+                            <div>
+                                <label style={{ color: 'var(--color-ivory)', fontWeight: 600, fontSize: '0.9rem', display: 'block', marginBottom: '0.5rem' }}>
+                                    Cover Image (Optional)
+                                </label>
+                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                                    {modal.pub.coverImage && (
+                                        <img src={modal.pub.coverImage} alt="Cover" style={{ width: 64, height: 64, borderRadius: '6px', objectFit: 'cover' }} />
+                                    )}
+                                    <Button variant="outline" onClick={() => !uploadingImage && imageInputRef.current?.click()} disabled={uploadingImage}>
+                                        {uploadingImage ? '⏳ Uploading...' : '📷 Upload Cover'}
+                                    </Button>
+                                    {modal.pub.coverImage && (
+                                        <Button variant="outline" onClick={() => setModal({ pub: { ...modal.pub, coverImage: undefined } })} style={{ color: '#E74C3C', borderColor: 'transparent' }}>Remove</Button>
+                                    )}
+                                </div>
+                                <input ref={imageInputRef} type="file" accept="image/*" onChange={handleImageUpload} style={{ display: 'none' }} />
+                            </div>
 
                             {/* PDF upload area */}
                             <div>

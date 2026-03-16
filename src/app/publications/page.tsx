@@ -78,19 +78,27 @@ export default function PublicationsPage() {
                             transition={{ duration: 0.45, delay: idx * 0.08 }}
                         >
                             <Card className={styles.pubCard} withGlow>
-                                <div className={styles.cardIconBar}>
-                                    <span className={styles.fileIcon}>📄</span>
-                                    <h2 className={styles.cardName}>{pub.name}</h2>
-                                </div>
-                                <div className={styles.cardBody}>
-                                    <p className={styles.cardDescription}>{pub.description}</p>
-                                    <Button
-                                        variant="primary"
-                                        className={styles.openBtn}
-                                        onClick={() => openPdf(pub)}
-                                    >
-                                        📖 Open PDF
-                                    </Button>
+                                {pub.coverImage && (
+                                    <div className={styles.coverImageContainer}>
+                                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                                        <img src={pub.coverImage} className={styles.coverImage} alt={pub.name} loading="lazy" />
+                                    </div>
+                                )}
+                                <div className={styles.cardContentWrapper}>
+                                    <div className={styles.cardIconBar}>
+                                        <span className={styles.fileIcon}>📄</span>
+                                        <h2 className={styles.cardName}>{pub.name}</h2>
+                                    </div>
+                                    <div className={styles.cardBody}>
+                                        <p className={styles.cardDescription}>{pub.description}</p>
+                                        <Button
+                                            variant="primary"
+                                            className={styles.openBtn}
+                                            onClick={() => openPdf(pub)}
+                                        >
+                                            📖 Read
+                                        </Button>
+                                    </div>
                                 </div>
                             </Card>
                         </motion.div>
