@@ -733,11 +733,11 @@ p, span, a, li, td, th, input, textarea, button { font-weight: 400; }
 .parish-btn-primary {
   background: radial-gradient(
     var(--btn-spread-x) var(--btn-spread-y) at var(--btn-pos-x) var(--btn-pos-y),
-    #8B6200 var(--btn-stop-1),
-    #a07800 var(--btn-stop-2),
-    #c49200 var(--btn-stop-3),
+    #dca000 var(--btn-stop-1),
+    #edae00 var(--btn-stop-2),
+    #faba00 var(--btn-stop-3),
     #FFC72C var(--btn-stop-4),
-    #ffe080 var(--btn-stop-5)
+    #fff2b8 var(--btn-stop-5)
   );
   color: #0A0F2C;
   --btn-border-color-1: hsla(45, 100%, 55%, 0.15);

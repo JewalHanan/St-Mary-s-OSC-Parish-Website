@@ -133,11 +133,11 @@
     color: var(--color-navy);
     background: radial-gradient(
         150% 180% at 11% 140%,
-        #8B6200 37%,
-        #a07800 61%,
-        #c49200 78%,
+        #dca000 37%,
+        #edae00 61%,
+        #faba00 78%,
         #FFC72C 89%,
-        #ffe080 100%
+        #fff2b8 100%
     );
     box-shadow:
         0 4px 16px rgba(255, 199, 44, 0.35),
