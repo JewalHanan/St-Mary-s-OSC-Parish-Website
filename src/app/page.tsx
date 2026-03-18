@@ -42,7 +42,7 @@ export default function Home() {
             Welcome to Our Parish
           </h2>
           <p style={{ fontFamily: 'var(--font-body-system)', fontSize: '1.5rem', marginBottom: '2.5rem', lineHeight: 1.6 }}>
-            St. Mary&apos;s Malankara Orthodox Church stands as a beacon of orthodox faith, continuing the rich heritage and traditions established by St. Thomas the Apostle.
+            St. Mary&apos;s Malankara Orthodox Syrian Church stands as a beacon of orthodox faith, continuing the rich heritage and traditions established by St. Thomas the Apostle.
           </p>
           <Link href="/history">
             <Button variant="primary">Learn More About Us</Button>

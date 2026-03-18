@@ -37,7 +37,7 @@ export default function Hero() {
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ duration: 0.9, delay: 0.2 }}
                 >
-                    St. Mary&apos;s <br /> Malankara Orthodox Church
+                    St. Mary&apos;s <br /> Malankara Orthodox Syrian Church
                 </motion.h1>
 
                 <motion.p

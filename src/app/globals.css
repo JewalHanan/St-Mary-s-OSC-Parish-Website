@@ -63,8 +63,8 @@
   --shadow-glow: 0 0 24px rgba(255, 215, 0, 0.18);
 
   /* ── Typography ─────────────────────────────────────── */
-  --font-heading-system: var(--font-heading), 'Roboto Slab', serif;
-  --font-body-system: var(--font-body), 'Roboto', sans-serif;
+  --font-heading-system: var(--font-poppins), 'Poppins', sans-serif;
+  --font-body-system: var(--font-poppins), 'Poppins', sans-serif;
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
   --text-base: 1rem;
@@ -612,3 +612,7 @@ textarea {
   transform: rotate(45deg);
   transform-origin: center;
 }
+
+* { font-family: var(--font-poppins), "Poppins", sans-serif; }
+h1, h2, h3, h4, h5, h6 { font-weight: 700; }
+p, span, a, li, td, th, input, textarea, button { font-weight: 400; }
