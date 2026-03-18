@@ -44,15 +44,42 @@
     flex-direction: column;
     gap: 0;
     overflow: hidden;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
     background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    border-radius: 12px;
+    border: 1px solid rgba(255, 199, 44, 0.2);
+    border-radius: 16px;
+    position: relative;
+}
+
+.pubCard::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+        135deg,
+        rgba(255, 199, 44, 0.4),
+        rgba(255, 255, 255, 0.05),
+        rgba(139, 26, 26, 0.3)
+    );
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .pubCard:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-hover);
+    transform: translateY(-6px);
+    box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.4),
+        0 0 30px rgba(255, 199, 44, 0.12);
+    border-color: rgba(255, 199, 44, 0.45);
+}
+
+.pubCard:hover::before {
+    opacity: 1;
 }
 
 .cardIconBar {
@@ -99,7 +126,11 @@
     justify-content: center;
     gap: 0.5rem;
     font-size: 0.9rem;
-    padding: 10px 18px;
+    padding: 11px 24px;
+    border-radius: 12px;
+    font-family: var(--font-poppins), 'Poppins', sans-serif;
+    font-weight: 700;
+    width: 100%;
 }
 
 /* ── Empty State ───────────────────────────────────────────────── */

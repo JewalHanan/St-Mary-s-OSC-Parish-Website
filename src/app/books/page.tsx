@@ -104,9 +104,9 @@ export default function BooksPage() {
                                             </div>
                                         </div>
                                         <Button
-                                            variant="outline"
+                                            variant="primary"
+                                            className={styles.openBookBtn}
                                             onClick={() => handleOpen(book)}
-                                            style={{ borderRadius: '12px', fontFamily: "'Poppins', sans-serif" }}
                                         >
                                             📖 Open Book
                                         </Button>

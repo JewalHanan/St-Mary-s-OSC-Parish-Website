@@ -37,8 +37,42 @@
     overflow: hidden;
     height: 100%;
     background: var(--card-bg) !important;
-    border: 1px solid var(--card-border);
+    border: 1px solid rgba(255, 199, 44, 0.2);
     border-radius: 16px;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.sectionCard::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+        135deg,
+        rgba(255, 199, 44, 0.35),
+        rgba(255, 255, 255, 0.04),
+        rgba(139, 26, 26, 0.25)
+    );
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
+.sectionCard:hover {
+    transform: translateY(-5px);
+    box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.4),
+        0 0 24px rgba(255, 199, 44, 0.1);
+    border-color: rgba(255, 199, 44, 0.4);
+}
+
+.sectionCard:hover::before {
+    opacity: 1;
 }
 
 .sectionImageContainer {
@@ -149,4 +183,14 @@
     .sectionsGrid {
         grid-template-columns: 1fr;
     }
+}
+
+.openBookBtn {
+    width: 100%;
+    border-radius: 12px;
+    font-family: var(--font-poppins), 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 10px 20px;
+    margin-top: 0.5rem;
 }
