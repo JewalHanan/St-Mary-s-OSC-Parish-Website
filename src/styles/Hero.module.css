@@ -47,9 +47,9 @@
 }
 
 .title {
-    font-family: var(--font-heading-system);
+    font-family: var(--font-poppins), 'Poppins', sans-serif;
     font-size: clamp(2rem, 5vw, 4rem);
-    font-weight: 700;
+    font-weight: 800;
     color: var(--text-accent);
     text-transform: uppercase;
     line-height: 1.15;

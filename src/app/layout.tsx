@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Roboto, Roboto_Slab } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import '@/styles/RichText.css';
 import { ThemeProvider } from "@/components/ThemeProvider";
@@ -8,17 +8,12 @@ import SmoothScroll from "@/components/SmoothScroll";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import GlobalScene from "@/components/Scene";
+import { LanguageProvider } from '@/lib/LanguageContext';
 
-const roboto = Roboto({
+const poppins = Poppins({
   subsets: ["latin"],
-  variable: "--font-body",
-  weight: ["300", "400", "500", "700"],
-});
-
-const robotoSlab = Roboto_Slab({
-  subsets: ["latin"],
-  variable: "--font-heading",
-  weight: ["400", "600", "700", "800"],
+  variable: "--font-poppins",
+  weight: ["300", "400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -33,18 +28,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${roboto.variable} ${robotoSlab.variable}`}>
+      <body className={poppins.variable}>
         <AuthProvider>
-          <ThemeProvider>
-            <GlobalScene />
-            <SmoothScroll>
-              <Navigation />
-              <main className="main-content">
-                {children}
-              </main>
-              <Footer />
-            </SmoothScroll>
-          </ThemeProvider>
+          <LanguageProvider>
+            <ThemeProvider>
+              <GlobalScene />
+              <SmoothScroll>
+                <Navigation />
+                <main className="main-content">
+                  {children}
+                </main>
+                <Footer />
+              </SmoothScroll>
+            </ThemeProvider>
+          </LanguageProvider>
         </AuthProvider>
       </body>
     </html>

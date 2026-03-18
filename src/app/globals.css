@@ -1,3 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Noto+Sans+Malayalam:wght@400;700&display=swap');
+
+@font-face {
+  font-family: 'FKL-Dhikk';
+  src: local('FKL-Dhikk');
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
   /* ── Core Colors ─────────────────────────────────────── */
   --color-navy: #0A0F2C;
@@ -63,8 +72,8 @@
   --shadow-glow: 0 0 24px rgba(255, 215, 0, 0.18);
 
   /* ── Typography ─────────────────────────────────────── */
-  --font-heading-system: var(--font-heading), 'Roboto Slab', serif;
-  --font-body-system: var(--font-body), 'Roboto', sans-serif;
+  --font-heading-system: var(--font-poppins), 'Poppins', sans-serif;
+  --font-body-system: var(--font-poppins), 'Poppins', sans-serif;
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
   --text-base: 1rem;
@@ -611,4 +620,90 @@ textarea {
   background: var(--color-ivory);
   transform: rotate(45deg);
   transform-origin: center;
+}
+
+* {
+  font-family: var(--font-poppins), 'Poppins', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-poppins), 'Poppins', sans-serif;
+  font-weight: 700;
+}
+
+p, span, a, li, td, th, input, textarea, button {
+  font-family: var(--font-poppins), 'Poppins', sans-serif;
+  font-weight: 400;
+}
+
+.malayalam {
+  font-family: 'FKL-Dhikk', 'Noto Sans Malayalam', serif;
+  font-weight: 700;
+}
+
+/* ── 3D Animated Text Effect (English headings) ─────────────────── */
+.text-3d {
+  font-weight: 800;
+  color: var(--accent-primary);
+  text-shadow:
+    1px 1px 0px #b8860b,
+    2px 2px 0px #a07800,
+    3px 3px 0px #886600,
+    4px 4px 0px #705400,
+    5px 5px 0px #584200,
+    6px 6px 8px rgba(0,0,0,0.4);
+  transform: perspective(400px) rotateX(8deg);
+  display: inline-block;
+  transition: transform 0.3s ease, text-shadow 0.3s ease;
+  animation: float3d 4s ease-in-out infinite;
+}
+
+.text-3d:hover {
+  transform: perspective(400px) rotateX(0deg) scale(1.04);
+  text-shadow:
+    1px 1px 0px #b8860b,
+    2px 2px 0px #a07800,
+    3px 3px 0px #886600,
+    4px 4px 0px #705400,
+    5px 5px 0px #584200,
+    6px 6px 0px #403000,
+    8px 8px 12px rgba(0,0,0,0.5);
+}
+
+@keyframes float3d {
+  0%, 100% {
+    transform: perspective(400px) rotateX(8deg) translateY(0px);
+  }
+  50% {
+    transform: perspective(400px) rotateX(4deg) translateY(-4px);
+  }
+}
+
+/* ── 3D Animated Text Effect (Malayalam) ───────────────────────── */
+.text-3d-malayalam {
+  font-family: 'FKL-Dhikk', 'Noto Sans Malayalam', serif;
+  font-weight: 700;
+  color: var(--accent-primary);
+  text-shadow:
+    1px 1px 0px #b8860b,
+    2px 2px 0px #a07800,
+    3px 3px 0px #886600,
+    4px 4px 4px rgba(0,0,0,0.3);
+  transform: perspective(400px) rotateX(6deg);
+  display: inline-block;
+  animation: float3d-ml 5s ease-in-out infinite;
+  letter-spacing: 0.02em;
+}
+
+.text-3d-malayalam:hover {
+  transform: perspective(400px) rotateX(0deg) scale(1.03);
+}
+
+@keyframes float3d-ml {
+  0%, 100% {
+    transform: perspective(400px) rotateX(6deg) translateY(0px);
+  }
+  50% {
+    transform: perspective(400px) rotateX(2deg) translateY(-3px);
+  }
 }

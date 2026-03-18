@@ -38,11 +38,11 @@ export default function Home() {
         textAlign: 'center'
       }}>
         <div style={{ maxWidth: '800px', width: '100%' }}>
-          <h2 style={{ fontFamily: 'var(--font-heading-system)', fontSize: 'clamp(2.5rem, 5vw, 4rem)', color: 'var(--text-accent)', marginBottom: '1.5rem' }}>
+          <h2 className="text-3d" style={{ fontFamily: 'var(--font-heading-system)', fontSize: 'clamp(2.5rem, 5vw, 4rem)', color: 'var(--text-accent)', marginBottom: '1.5rem' }}>
             Welcome to Our Parish
           </h2>
           <p style={{ fontFamily: 'var(--font-body-system)', fontSize: '1.5rem', marginBottom: '2.5rem', lineHeight: 1.6 }}>
-            St. Mary&apos;s Malankara Orthodox Church stands as a beacon of orthodox faith, continuing the rich heritage and traditions established by St. Thomas the Apostle.
+            St. Mary&apos;s Malankara Orthodox Syrian Church stands as a beacon of orthodox faith, continuing the rich heritage and traditions established by St. Thomas the Apostle.
           </p>
           <Link href="/history">
             <Button variant="primary">Learn More About Us</Button>

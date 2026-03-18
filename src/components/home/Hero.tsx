@@ -32,13 +32,28 @@ export default function Hero() {
                 </motion.div>
 
                 <motion.h1
-                    className={styles.title}
+                    className={`${styles.title} text-3d`}
                     initial={{ y: 30, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ duration: 0.9, delay: 0.2 }}
                 >
-                    St. Mary&apos;s <br /> Malankara Orthodox Church
+                    St. Mary&apos;s Malankara Orthodox Syrian Church
                 </motion.h1>
+
+                <motion.p
+                    className="text-3d-malayalam"
+                    style={{
+                        fontSize: 'clamp(0.95rem, 2.2vw, 1.3rem)',
+                        marginTop: '0.5rem',
+                        marginBottom: '0.25rem',
+                        textAlign: 'center',
+                    }}
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.9, delay: 0.35 }}
+                >
+                    സെന്റ് മേരീസ് മലങ്കര ഓർത്തഡോക്സ് സുറിയാനി പള്ളി
+                </motion.p>
 
                 <motion.p
                     className={styles.subtitle}
