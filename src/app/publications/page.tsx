@@ -77,7 +77,7 @@ export default function PublicationsPage() {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.45, delay: idx * 0.08 }}
                         >
-                            <Card className={styles.pubCard} withGlow>
+                            <Card className={styles.pubCard} withGlow glowSpread={40} glowBorderWidth={2}>
                                 {pub.coverImage && (
                                     <div className={styles.coverImageContainer}>
                                         {/* eslint-disable-next-line @next/next/no-img-element */}

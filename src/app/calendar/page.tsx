@@ -34,7 +34,7 @@ function CountdownTimer({ targetDay }: { targetDay: SpecialDay }) {
     });
 
     return (
-        <Card className={styles.countdownCard} withGlow>
+        <Card className={styles.countdownCard} withGlow glowSpread={40} glowBorderWidth={2}>
             <div className={styles.countdownImage}>
                 {targetDay.image ? (
                     <img src={targetDay.image} alt={targetDay.title} />

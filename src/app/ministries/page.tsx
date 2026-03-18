@@ -49,7 +49,7 @@ export default function MinistriesPage() {
 
                         <div className={styles.leadersGrid}>
                             {org.bearers.map((bearer) => (
-                                <Card key={bearer.id} className={styles.leaderCard}>
+                                <Card key={bearer.id} className={styles.leaderCard} glowVariant="maroon" glowSpread={35} glowBorderWidth={2}>
                                     {bearer.image ? (
                                         <img
                                             src={bearer.image}

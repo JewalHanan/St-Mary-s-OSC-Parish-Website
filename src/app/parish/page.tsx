@@ -54,7 +54,7 @@ export default function ParishPage() {
             >
                 {members.map((member) => (
                     <motion.div key={member.id} variants={cardVariants} className={styles.cardContainer}>
-                        <Card className={styles.memberCard}>
+                        <Card className={styles.memberCard} glowVariant="maroon" glowSpread={40} glowBorderWidth={2}>
                             <div className={styles.photoWrapper}>
                                 {member.image ? (
                                     <img

@@ -77,6 +77,10 @@
   /* ── Transitions ────────────────────────────────────── */
   --transition-smooth: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --transition-fast: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  --glow-gold: rgba(255, 199, 44, 0.35);
+  --glow-maroon: rgba(139, 26, 26, 0.35);
+  --glow-white: rgba(255, 255, 255, 0.2);
 }
 
 /* ── Dark Mode ──────────────────────────────────────────── */
@@ -974,6 +978,24 @@ p, span, a, li, td, th, input, textarea, button { font-weight: 400; }
   border-color: rgba(255, 199, 44, 0.9) !important;
   color: var(--accent-primary);
   box-shadow: 0 4px 16px rgba(255, 199, 44, 0.15);
+}
+
+/* ── GlowingEffect border mask fix ─────────────────────────────── */
+.glow-container {
+  position: relative;
+  overflow: visible !important;
+}
+
+/* Ensure glowing effect does not clip on cards with overflow:hidden */
+[class*="sectionCard"],
+[class*="pubCard"],
+[class*="memberCard"],
+[class*="leaderCard"],
+[class*="eventCard"],
+[class*="countdownCard"],
+[class*="formCard"] {
+  overflow: visible !important;
+  position: relative;
 }
 
 /* Disabled state for all variants */

@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { getSliderImages, type SliderImage } from '@/lib/store';
 import { useStoreData } from '@/lib/useStoreData';
 import styles from '@/styles/ImageSlider.module.css';
+import { GlowingEffect } from '@/components/ui/GlowingEffect';
 
 export default function ImageSlider() {
     const { data: slides } = useStoreData(getSliderImages, [] as SliderImage[]);
@@ -90,6 +91,15 @@ export default function ImageSlider() {
                             onClick={() => !isActive && goTo(idx)}
                             aria-hidden={!isActive}
                         >
+                            <GlowingEffect
+                              spread={60}
+                              glow={true}
+                              disabled={false}
+                              proximity={80}
+                              inactiveZone={0.01}
+                              borderWidth={2}
+                              variant="gold"
+                            />
                             <div className={styles.imageBox}>
                                 <img
                                     src={slide.image}

@@ -75,7 +75,7 @@ export default function BooksPage() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: idx * 0.1 }}
                     >
-                        <Card className={styles.sectionCard} withGlow>
+                        <Card className={styles.sectionCard} withGlow glowSpread={40} glowBorderWidth={2}>
                             <div className={styles.sectionImageContainer}>
                                 {section.image ? (
                                     <img src={section.image} alt={section.title} className={styles.sectionImage} />

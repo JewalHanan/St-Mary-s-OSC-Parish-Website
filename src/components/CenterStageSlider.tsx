@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { getEventBanners, type EventBannerImage } from '@/lib/store';
 import styles from '@/styles/CenterStageSlider.module.css';
+import { GlowingEffect } from '@/components/ui/GlowingEffect';
 
 interface CenterStageSliderProps {
     autoPlayMs?: number;
@@ -107,6 +108,15 @@ export default function CenterStageSlider({
                             onClick={() => !isActive && goTo(idx)}
                             aria-hidden={!isActive}
                         >
+                            <GlowingEffect
+                              spread={50}
+                              glow={true}
+                              disabled={false}
+                              proximity={80}
+                              inactiveZone={0.01}
+                              borderWidth={2}
+                              variant="gold"
+                            />
                             <div className={styles.imageBox}>
                                 <img
                                     src={slide.image}

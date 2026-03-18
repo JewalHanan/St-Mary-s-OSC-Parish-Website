@@ -36,7 +36,7 @@ export default function HistoryPage() {
                 transition={{ duration: 0.6, delay: 0.2 }}
             >
                 {/* Written content */}
-                <Card withGlow style={{ padding: 'clamp(2rem, 5vw, 4rem)', minHeight: '400px', marginBottom: '2rem' }}>
+                <Card withGlow glowSpread={40} glowBorderWidth={2} style={{ padding: 'clamp(2rem, 5vw, 4rem)', minHeight: '400px', marginBottom: '2rem' }}>
                     {!history ? (
                         <div style={{ textAlign: 'center', padding: '4rem 0', color: 'var(--text-secondary)' }}>
                             <p>Loading history...</p>
