@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
+import { LanguageProvider } from '@/lib/LanguageContext';
 import "./globals.css";
 import '@/styles/RichText.css';
 import { ThemeProvider } from "@/components/ThemeProvider";
@@ -8,7 +9,6 @@ import SmoothScroll from "@/components/SmoothScroll";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import GlobalScene from "@/components/Scene";
-import { LanguageProvider } from '@/lib/LanguageContext';
 
 const poppins = Poppins({
   subsets: ["latin"],

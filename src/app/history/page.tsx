@@ -26,7 +26,7 @@ export default function HistoryPage() {
                     Parish History
                 </h1>
                 <p style={{ color: 'var(--text-secondary)', fontSize: '1.2rem', maxWidth: '600px', margin: '0 auto' }}>
-                    The journey and heritage of St. Mary&apos;s Malankara Orthodox Syrian Church.
+                    The journey and heritage of St. Mary&apos;s Malankara Orthodox Church.
                 </p>
             </motion.div>
 

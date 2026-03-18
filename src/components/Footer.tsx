@@ -81,7 +81,7 @@ export default function Footer() {
                 {/* Church identity header */}
                 <div className={styles.header}>
                     <img src="/images/logo.png" alt="St. Mary's Church Logo" className={styles.logo} />
-                    <h2 className={`${styles.churchName} text-3d`}>St. Mary&apos;s Malankara Orthodox Syrian Church</h2>
+                    <h2 className={styles.churchName}>St. Mary&apos;s Malankara Orthodox Syrian Church</h2>
                     <p className={styles.diocese}>Under the Kollam Diocese, Malankara Orthodox Syrian Church</p>
                 </div>
 
