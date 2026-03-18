@@ -243,7 +243,8 @@ export default function CalendarPage() {
                             )}
                             <button
                                 onClick={() => setSelectedDayInfo(null)}
-                                style={{ marginTop: '2rem', width: '100%', padding: '12px', background: 'var(--accent-primary)', border: 'none', borderRadius: '8px', color: 'var(--color-navy)', cursor: 'pointer', fontWeight: 'bold', fontSize: '1rem' }}
+                                className="parish-btn parish-btn-primary"
+                                style={{ marginTop: '2rem', width: '100%', fontFamily: "'Poppins', sans-serif", borderRadius: '12px' }}
                             >
                                 Close
                             </button>

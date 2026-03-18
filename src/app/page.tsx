@@ -45,7 +45,9 @@ export default function Home() {
             St. Mary&apos;s Malankara Orthodox Syrian Church stands as a beacon of orthodox faith, continuing the rich heritage and traditions established by St. Thomas the Apostle.
           </p>
           <Link href="/history">
-            <Button variant="primary">Learn More About Us</Button>
+            <Button variant="primary" style={{ borderRadius: '12px', fontFamily: "'Poppins', sans-serif" }}>
+              Learn More About Us
+            </Button>
           </Link>
         </div>
       </section>

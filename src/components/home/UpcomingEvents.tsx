@@ -141,7 +141,8 @@ export default function UpcomingEvents() {
 
                         <button
                             onClick={() => setSelectedEvent(null)}
-                            style={{ display: 'block', width: '100%', marginTop: '2rem', padding: '12px', background: 'var(--accent-primary)', color: 'var(--color-navy)', border: 'none', borderRadius: '8px', fontWeight: 'bold', fontSize: '1rem', cursor: 'pointer' }}
+                            className="parish-btn parish-btn-primary"
+                            style={{ display: 'block', width: '100%', marginTop: '2rem', borderRadius: '12px', fontFamily: "'Poppins', sans-serif" }}
                         >
                             Close
                         </button>

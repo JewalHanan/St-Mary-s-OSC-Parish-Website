@@ -126,6 +126,7 @@ export default function GalleryPage() {
                             onClick={e => { e.stopPropagation(); moveLightbox(-1); }}
                             disabled={lightbox.index === 0}
                             aria-label="Previous image"
+                            style={{ fontFamily: "'Poppins', sans-serif" }}
                         >‹</button>
 
                         {/* Image */}
@@ -157,6 +158,7 @@ export default function GalleryPage() {
                             className={styles.lightboxClose}
                             onClick={closeLightbox}
                             aria-label="Close lightbox"
+                            style={{ fontFamily: "'Poppins', sans-serif" }}
                         >✕</button>
 
                         {/* Next */}
@@ -165,6 +167,7 @@ export default function GalleryPage() {
                             onClick={e => { e.stopPropagation(); moveLightbox(1); }}
                             disabled={lightbox.index === lightbox.images.length - 1}
                             aria-label="Next image"
+                            style={{ fontFamily: "'Poppins', sans-serif" }}
                         >›</button>
                     </motion.div>
                 )}

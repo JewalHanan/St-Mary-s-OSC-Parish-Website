@@ -693,26 +693,15 @@ p, span, a, li, td, th, input, textarea, button { font-weight: 400; }
   font-weight: 700;
   font-size: 0.95rem;
   letter-spacing: 0.4px;
+  border-radius: 12px;
+  min-width: 120px;
+  padding: 11px 28px;
   transition:
-    --btn-pos-x 0.5s,
-    --btn-pos-y 0.5s,
-    --btn-spread-x 0.5s,
-    --btn-spread-y 0.5s,
-    --btn-color-1 0.5s,
-    --btn-color-2 0.5s,
-    --btn-color-3 0.5s,
-    --btn-color-4 0.5s,
-    --btn-color-5 0.5s,
-    --btn-border-angle 0.5s,
-    --btn-border-color-1 0.5s,
-    --btn-border-color-2 0.5s,
-    --btn-stop-1 0.5s,
-    --btn-stop-2 0.5s,
-    --btn-stop-3 0.5s,
-    --btn-stop-4 0.5s,
-    --btn-stop-5 0.5s,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+    --btn-pos-x 0.5s, --btn-pos-y 0.5s, --btn-spread-x 0.5s, --btn-spread-y 0.5s,
+    --btn-color-1 0.5s, --btn-color-2 0.5s, --btn-color-3 0.5s, --btn-color-4 0.5s, --btn-color-5 0.5s,
+    --btn-border-angle 0.5s, --btn-border-color-1 0.5s, --btn-border-color-2 0.5s,
+    --btn-stop-1 0.5s, --btn-stop-2 0.5s, --btn-stop-3 0.5s, --btn-stop-4 0.5s, --btn-stop-5 0.5s,
+    transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .parish-btn::before {

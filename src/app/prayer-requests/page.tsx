@@ -143,7 +143,7 @@ export default function PrayerRequestPage() {
                         {errors.consent && <p className={styles.error}>{errors.consent.message}</p>}
                     </div>
 
-                    <Button type="submit" disabled={isSubmitting} fullWidth>
+                    <Button type="submit" disabled={isSubmitting} style={{ width: 'auto', minWidth: '200px', maxWidth: '280px', margin: '0 auto', display: 'block', borderRadius: '12px', fontFamily: "'Poppins', sans-serif" }}>
                         {isSubmitting ? 'Submitting...' : 'Submit Request'}
                     </Button>
 

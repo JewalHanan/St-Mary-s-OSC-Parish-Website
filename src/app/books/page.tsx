@@ -104,11 +104,11 @@ export default function BooksPage() {
                                             </div>
                                         </div>
                                         <Button
-                                            variant="secondary"
-                                            style={{ padding: '8px', fontSize: '0.85rem', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#FFC72C', color: '#1a2744', border: 'none', fontWeight: 600 }}
+                                            variant="outline"
                                             onClick={() => handleOpen(book)}
+                                            style={{ borderRadius: '12px', fontFamily: "'Poppins', sans-serif" }}
                                         >
-                                            Read Book
+                                            📖 Open Book
                                         </Button>
                                     </div>
                                 ))}

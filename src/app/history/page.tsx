@@ -114,7 +114,9 @@ export default function HistoryPage() {
 
                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
                     <Link href="/">
-                        <Button variant="outline">Back to Home</Button>
+                        <Button variant="outline" style={{ borderRadius: '12px', fontFamily: "'Poppins', sans-serif" }}>
+                          Back to Home
+                        </Button>
                     </Link>
                 </div>
             </motion.div>

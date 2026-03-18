@@ -82,19 +82,23 @@
 }
 
 .readMoreBtn {
-    background: transparent;
-    border: 1px solid var(--accent-primary);
-    color: var(--text-primary);
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: var(--transition-fast);
-    align-self: flex-start;
-    font-family: var(--font-body-system);
-    font-weight: 600;
+  background: transparent;
+  border: 1.5px solid var(--accent-primary);
+  color: var(--text-primary);
+  padding: 9px 22px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  align-self: flex-start;
+  font-family: var(--font-poppins), 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  min-width: 120px;
 }
 
 .readMoreBtn:hover {
-    background: var(--accent-primary);
-    color: var(--color-navy);
+  background: var(--accent-primary);
+  color: var(--color-navy);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(255, 199, 44, 0.3);
 }

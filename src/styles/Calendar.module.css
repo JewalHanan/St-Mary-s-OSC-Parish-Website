@@ -184,30 +184,29 @@
 }
 
 .monthBtn {
-    background: transparent;
-    border: none;
-    color: var(--text-secondary);
-    font-family: var(--font-body-system);
-    font-size: 0.9rem;
-    font-weight: 600;
-    padding: 0.4rem 0.85rem;
-    cursor: pointer;
-    border-radius: var(--radius-full, 20px);
-    transition: var(--transition-fast);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    min-height: 44px;
-    white-space: nowrap;
-    flex-shrink: 0;
+  background: transparent;
+  border: 1.5px solid transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-poppins), 'Poppins', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: var(--transition-fast);
 }
 
 .monthBtn:hover {
-    color: var(--text-primary);
+  color: var(--text-primary);
+  border-color: rgba(255, 199, 44, 0.4);
+  background: rgba(255, 199, 44, 0.08);
 }
 
 .activeMonth {
-    background: var(--accent-primary);
-    color: var(--text-primary);
+  background: var(--accent-primary);
+  color: var(--color-navy);
+  font-weight: 700;
+  border-color: var(--accent-primary);
 }
 
 .weekdays {

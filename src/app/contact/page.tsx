@@ -37,12 +37,8 @@ export default function ContactPage() {
                         href="https://maps.app.goo.gl/qi8XaMVmmYGMwbtG7"
                         target="_blank"
                         rel="noopener noreferrer"
-                        style={{
-                            display: 'inline-block', marginTop: '0.75rem',
-                            padding: '8px 18px', borderRadius: '8px',
-                            background: 'var(--accent-primary)', color: 'var(--color-navy)',
-                            fontWeight: '600', fontSize: '0.9rem', textDecoration: 'none',
-                        }}
+                        className="parish-btn parish-btn-primary"
+                        style={{ display: 'inline-flex', marginTop: '0.75rem', textDecoration: 'none', borderRadius: '12px', fontFamily: "'Poppins', sans-serif" }}
                     >
                         🗺️ Open in Google Maps
                     </a>
