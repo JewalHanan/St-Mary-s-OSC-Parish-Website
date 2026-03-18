@@ -616,3 +616,215 @@ textarea {
 * { font-family: var(--font-poppins), "Poppins", sans-serif; }
 h1, h2, h3, h4, h5, h6 { font-weight: 700; }
 p, span, a, li, td, th, input, textarea, button { font-weight: 400; }
+
+/* ── Parish Gradient Button System ─────────────────────────────── */
+
+@property --btn-pos-x {
+  syntax: '<percentage>';
+  initial-value: 11%;
+  inherits: false;
+}
+@property --btn-pos-y {
+  syntax: '<percentage>';
+  initial-value: 140%;
+  inherits: false;
+}
+@property --btn-spread-x {
+  syntax: '<percentage>';
+  initial-value: 150%;
+  inherits: false;
+}
+@property --btn-spread-y {
+  syntax: '<percentage>';
+  initial-value: 180%;
+  inherits: false;
+}
+@property --btn-color-1 {
+  syntax: '<color>';
+  initial-value: #0A0F2C;
+  inherits: false;
+}
+@property --btn-color-2 {
+  syntax: '<color>';
+  initial-value: #1a0a0a;
+  inherits: false;
+}
+@property --btn-color-3 {
+  syntax: '<color>';
+  initial-value: #5c1010;
+  inherits: false;
+}
+@property --btn-color-4 {
+  syntax: '<color>';
+  initial-value: #8B1A1A;
+  inherits: false;
+}
+@property --btn-color-5 {
+  syntax: '<color>';
+  initial-value: #a52020;
+  inherits: false;
+}
+@property --btn-border-angle {
+  syntax: '<angle>';
+  initial-value: 20deg;
+  inherits: true;
+}
+@property --btn-border-color-1 {
+  syntax: '<color>';
+  initial-value: hsla(45, 100%, 55%, 0.2);
+  inherits: true;
+}
+@property --btn-border-color-2 {
+  syntax: '<color>';
+  initial-value: hsla(45, 100%, 55%, 0.7);
+  inherits: true;
+}
+@property --btn-stop-1 { syntax: '<percentage>'; initial-value: 37%; inherits: false; }
+@property --btn-stop-2 { syntax: '<percentage>'; initial-value: 61%; inherits: false; }
+@property --btn-stop-3 { syntax: '<percentage>'; initial-value: 78%; inherits: false; }
+@property --btn-stop-4 { syntax: '<percentage>'; initial-value: 89%; inherits: false; }
+@property --btn-stop-5 { syntax: '<percentage>'; initial-value: 100%; inherits: false; }
+
+.parish-btn {
+  position: relative;
+  appearance: none;
+  cursor: pointer;
+  font-family: var(--font-poppins), 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.4px;
+  transition:
+    --btn-pos-x 0.5s,
+    --btn-pos-y 0.5s,
+    --btn-spread-x 0.5s,
+    --btn-spread-y 0.5s,
+    --btn-color-1 0.5s,
+    --btn-color-2 0.5s,
+    --btn-color-3 0.5s,
+    --btn-color-4 0.5s,
+    --btn-color-5 0.5s,
+    --btn-border-angle 0.5s,
+    --btn-border-color-1 0.5s,
+    --btn-border-color-2 0.5s,
+    --btn-stop-1 0.5s,
+    --btn-stop-2 0.5s,
+    --btn-stop-3 0.5s,
+    --btn-stop-4 0.5s,
+    --btn-stop-5 0.5s,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.parish-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    var(--btn-border-angle),
+    var(--btn-border-color-1),
+    var(--btn-border-color-2)
+  );
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.parish-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 199, 44, 0.25);
+}
+
+.parish-btn:active {
+  transform: translateY(0px);
+}
+
+/* PRIMARY — Gold gradient (main CTAs) */
+.parish-btn-primary {
+  background: radial-gradient(
+    var(--btn-spread-x) var(--btn-spread-y) at var(--btn-pos-x) var(--btn-pos-y),
+    #8B6200 var(--btn-stop-1),
+    #a07800 var(--btn-stop-2),
+    #c49200 var(--btn-stop-3),
+    #FFC72C var(--btn-stop-4),
+    #ffe080 var(--btn-stop-5)
+  );
+  color: #0A0F2C;
+  --btn-border-color-1: hsla(45, 100%, 55%, 0.15);
+  --btn-border-color-2: hsla(45, 100%, 65%, 0.8);
+}
+
+.parish-btn-primary:hover {
+  --btn-pos-x: 0%;
+  --btn-pos-y: 91%;
+  --btn-spread-x: 120%;
+  --btn-spread-y: 103%;
+  --btn-stop-1: 0%;
+  --btn-stop-2: 9%;
+  --btn-stop-3: 22%;
+  --btn-stop-4: 71%;
+  --btn-stop-5: 86%;
+  --btn-border-angle: 190deg;
+  --btn-border-color-1: hsla(45, 100%, 75%, 0.1);
+  --btn-border-color-2: hsla(45, 100%, 75%, 0.7);
+  box-shadow: 0 6px 24px rgba(255, 199, 44, 0.4);
+}
+
+/* SECONDARY — Maroon/crimson gradient (delete, danger) */
+.parish-btn-secondary {
+  background: radial-gradient(
+    var(--btn-spread-x) var(--btn-spread-y) at var(--btn-pos-x) var(--btn-pos-y),
+    var(--btn-color-1) var(--btn-stop-1),
+    var(--btn-color-2) var(--btn-stop-2),
+    var(--btn-color-3) var(--btn-stop-3),
+    var(--btn-color-4) var(--btn-stop-4),
+    var(--btn-color-5) var(--btn-stop-5)
+  );
+  color: #F8F5EE;
+  --btn-border-color-1: hsla(0, 70%, 60%, 0.2);
+  --btn-border-color-2: hsla(0, 70%, 60%, 0.7);
+}
+
+.parish-btn-secondary:hover {
+  --btn-pos-x: 0%;
+  --btn-pos-y: 91%;
+  --btn-spread-x: 120%;
+  --btn-spread-y: 103%;
+  --btn-color-1: #a52020;
+  --btn-color-2: #8B1A1A;
+  --btn-color-3: #5c1010;
+  --btn-color-4: #1a0a0a;
+  --btn-color-5: #000;
+  --btn-stop-1: 0%;
+  --btn-stop-2: 9%;
+  --btn-stop-3: 22%;
+  --btn-stop-4: 71%;
+  --btn-stop-5: 86%;
+  --btn-border-angle: 190deg;
+  box-shadow: 0 6px 24px rgba(139, 26, 26, 0.4);
+}
+
+/* OUTLINE — Transparent with gold border (secondary CTAs) */
+.parish-btn-outline {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1.5px solid rgba(255, 199, 44, 0.5) !important;
+  --btn-border-color-1: hsla(45, 100%, 55%, 0.1);
+  --btn-border-color-2: hsla(45, 100%, 55%, 0.5);
+}
+
+.parish-btn-outline:hover {
+  background: rgba(255, 199, 44, 0.08);
+  border-color: rgba(255, 199, 44, 0.9) !important;
+  color: var(--accent-primary);
+  box-shadow: 0 4px 16px rgba(255, 199, 44, 0.15);
+}
+
+/* Disabled state for all variants */
+.parish-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
