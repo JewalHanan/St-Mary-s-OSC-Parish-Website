@@ -193,7 +193,7 @@ export default function ParishCommitteeManager() {
                                             Remove
                                         </Button>
                                     )}
-                                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginTop: '4px' }}>Max 2MB, JPEG/PNG</p>
+                                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginTop: '4px' }}>Max 10MB, Image</p>
                                 </div>
                                 <input
                                     ref={fileInputRef}

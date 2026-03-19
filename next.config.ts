@@ -13,6 +13,12 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  serverExternalPackages: ['bcrypt'],
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '10mb',
+    },
+  },
 };
 
 export default nextConfig;

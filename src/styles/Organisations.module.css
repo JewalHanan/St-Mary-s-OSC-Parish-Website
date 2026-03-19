@@ -114,7 +114,9 @@
 
 .leaderCard {
     display: block;
-    height: 380px;
+    aspect-ratio: 3 / 4;
+    height: auto;
+    width: 100%;
     padding: 0 !important;
     background: transparent !important;
     border: none !important;
