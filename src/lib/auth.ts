@@ -28,10 +28,8 @@ export const authOptions: NextAuthOptions = {
 
                 // Demo mode: check against hardcoded admin
                 if (credentials.email === DEMO_ADMIN.email) {
-                    const isCorrectPassword = await bcrypt.compare(
-                        credentials.password,
-                        DEMO_ADMIN.password_hash
-                    );
+                    // Check against plaintext for the hardcoded demo account
+                    const isCorrectPassword = credentials.password === 'admin123';
 
                     if (isCorrectPassword) {
                         return {
