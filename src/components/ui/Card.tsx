@@ -28,7 +28,7 @@ export function Card({
             className={`${styles.card} ${withGlow ? styles.glow : ''} ${className}`}
             style={{ ...style, position: 'relative' }}
         >
-            {!disableGlowEffect && (
+            {withGlow && !disableGlowEffect && (
                 <GlowingEffect
                     spread={glowSpread}
                     glow={true}
@@ -39,7 +39,9 @@ export function Card({
                     variant={glowVariant}
                 />
             )}
-            {children}
+            <div style={{ position: 'relative', zIndex: 10, width: '100%', height: '100%' }}>
+                {children}
+            </div>
         </div>
     );
 }

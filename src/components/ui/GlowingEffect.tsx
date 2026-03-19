@@ -165,12 +165,18 @@ const GlowingEffect = memo(
             "--glowingeffect-border-width": `${borderWidth}px`,
             "--repeating-conic-gradient-times": "5",
             "--gradient": getGradient(),
+            pointerEvents: "none",
+            position: "absolute",
+            inset: 0,
+            borderRadius: "inherit",
+            opacity: 1,
+            transition: "opacity 0.3s",
+            filter: blur > 0 ? "blur(var(--blur))" : "none",
           } as React.CSSProperties
         }
-        className={`pointer-events-none absolute inset-0 rounded-[inherit] opacity-100 transition-opacity ${blur > 0 ? "blur-[var(--blur)]" : ""} ${className ?? ""}`}
+        className={className}
       >
         <div
-          className="rounded-[inherit]"
           style={{
             position: "absolute",
             inset: `calc(-1 * var(--glowingeffect-border-width, 1px))`,
