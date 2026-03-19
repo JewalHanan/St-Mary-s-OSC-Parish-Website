@@ -39,7 +39,7 @@ export function Card({
                     variant={glowVariant}
                 />
             )}
-            <div style={{ position: 'relative', zIndex: 10, width: '100%', height: '100%' }}>
+            <div style={{ position: 'relative', zIndex: 10, width: '100%', height: '100%', overflow: 'hidden', borderRadius: 'inherit' }}>
                 {children}
             </div>
         </div>
