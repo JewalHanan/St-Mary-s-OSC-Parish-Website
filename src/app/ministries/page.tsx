@@ -49,24 +49,48 @@ export default function MinistriesPage() {
 
                         <div className={styles.leadersGrid}>
                             {org.bearers.map((bearer) => (
-                                <Card key={bearer.id} className={styles.leaderCard} glowVariant="maroon" glowSpread={35} glowBorderWidth={2}>
-                                    {bearer.image ? (
-                                        <img
-                                            src={bearer.image}
-                                            alt={bearer.name}
-                                            style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: '3px solid var(--accent-primary)', margin: '0 auto 1rem', display: 'block' }}
-                                        />
-                                    ) : (
-                                        <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'var(--input-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', margin: '0 auto 1rem', border: '3px solid var(--card-border)' }}>
-                                            👤
+                                <div key={bearer.id} className={styles.cardContainer}>
+                                    <Card className={styles.leaderCard} glowVariant="maroon" glowSpread={35} glowBorderWidth={2}>
+                                        <div className={styles.flipCardInner}>
+                                            {/* FRONT FACE */}
+                                            <div className={styles.flipCardFront}>
+                                                <div className={styles.frontPhotoWrapper}>
+                                                    {bearer.image ? (
+                                                        <img
+                                                            src={bearer.image}
+                                                            alt={bearer.name}
+                                                            className={styles.frontPhoto}
+                                                        />
+                                                    ) : (
+                                                        <div className={styles.photoPlaceholder}>
+                                                            {bearer.name.charAt(0)}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <div className={styles.frontStrip}>
+                                                    <h3 className={styles.nameFront}>{bearer.name}</h3>
+                                                    <p className={styles.roleFront}>{bearer.position}</p>
+                                                </div>
+                                            </div>
+
+                                            {/* BACK FACE */}
+                                            <div className={styles.flipCardBack}>
+                                                <h3 className={styles.nameBack}>{bearer.name}</h3>
+                                                <p className={styles.roleBack}>{bearer.position}</p>
+                                                
+                                                <div className={styles.divider} />
+                                                
+                                                <div className={styles.details}>
+                                                    {bearer.contact && (
+                                                        <p>
+                                                            <span className={styles.detailsIcon}>📞</span> {bearer.contact}
+                                                        </p>
+                                                    )}
+                                                </div>
+                                            </div>
                                         </div>
-                                    )}
-                                    <h3>{bearer.name}</h3>
-                                    <div className={styles.roleBadge}>{bearer.position}</div>
-                                    {bearer.contact && (
-                                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginTop: '0.5rem' }}>{bearer.contact}</p>
-                                    )}
-                                </Card>
+                                    </Card>
+                                </div>
                             ))}
                             {org.bearers.length === 0 && (
                                 <p style={{ color: 'var(--text-secondary)', gridColumn: '1 / -1', textAlign: 'center', padding: '1rem' }}>

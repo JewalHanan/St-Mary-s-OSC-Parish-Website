@@ -55,28 +55,53 @@ export default function ParishPage() {
                 {members.map((member) => (
                     <motion.div key={member.id} variants={cardVariants} className={styles.cardContainer}>
                         <Card className={styles.memberCard} glowVariant="maroon" glowSpread={40} glowBorderWidth={2}>
-                            <div className={styles.photoWrapper}>
-                                {member.image ? (
-                                    <img
-                                        src={member.image}
-                                        alt={member.name}
-                                        className={styles.photoPlaceholder}
-                                        style={{ objectFit: 'cover', width: '100%', height: '100%', borderRadius: '50%' }}
-                                    />
-                                ) : (
-                                    <div className={styles.photoPlaceholder}>
-                                        {member.name.charAt(0)}
+                            <div className={styles.flipCardInner}>
+                                {/* FRONT FACE */}
+                                <div className={styles.flipCardFront}>
+                                    <div className={styles.frontPhotoWrapper}>
+                                        {member.image ? (
+                                            <img
+                                                src={member.image}
+                                                alt={member.name}
+                                                className={styles.frontPhoto}
+                                            />
+                                        ) : (
+                                            <div className={styles.photoPlaceholder}>
+                                                {member.name.charAt(0)}
+                                            </div>
+                                        )}
                                     </div>
-                                )}
-                            </div>
+                                    <div className={styles.frontStrip}>
+                                        <h3 className={styles.nameFront}>{member.name}</h3>
+                                        <p className={styles.roleFront}>{member.role}</p>
+                                    </div>
+                                </div>
 
-                            <h3 className={styles.name}>{member.name}</h3>
-                            <div className={styles.roleBadge}>{member.role}</div>
-
-                            <div className={styles.details}>
-                                {member.area && <p>📍 {member.area}</p>}
-                                {member.phone && <a href={`tel:${member.phone}`}>📞 {member.phone}</a>}
-                                {member.email && <a href={`mailto:${member.email}`}>✉️ {member.email}</a>}
+                                {/* BACK FACE */}
+                                <div className={styles.flipCardBack}>
+                                    <h3 className={styles.nameBack}>{member.name}</h3>
+                                    <p className={styles.roleBack}>{member.role}</p>
+                                    
+                                    <div className={styles.divider} />
+                                    
+                                    <div className={styles.details}>
+                                        {member.phone && (
+                                            <a href={`tel:${member.phone}`}>
+                                                <span className={styles.detailsIcon}>📞</span> {member.phone}
+                                            </a>
+                                        )}
+                                        {member.email && (
+                                            <a href={`mailto:${member.email}`}>
+                                                <span className={styles.detailsIcon}>✉️</span> {member.email}
+                                            </a>
+                                        )}
+                                        {member.area && (
+                                            <p>
+                                                <span className={styles.detailsIcon}>📍</span> {member.area}
+                                            </p>
+                                        )}
+                                    </div>
+                                </div>
                             </div>
                         </Card>
                     </motion.div>
