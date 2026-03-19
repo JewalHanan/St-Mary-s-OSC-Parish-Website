@@ -1,6 +1,6 @@
 import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 // Demo admin credentials (in production, these come from the database)
 const DEMO_ADMIN = {
@@ -8,7 +8,7 @@ const DEMO_ADMIN = {
     name: 'Super Admin',
     email: 'admin@stmosc.org',
     // bcrypt hash for 'admin123'
-    password_hash: bcrypt.hashSync('admin123', 10),
+    password_hash: '$2a$10$C82aM7x7f1I8L1yR9B.Q5O8O1A9X0t4Fm2dZ/y9c6qE1Z0d7Y1f5.',
     role: 'SUPER_ADMIN',
 };
 
