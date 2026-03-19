@@ -3,7 +3,7 @@
 .pageContainer {
     min-height: 100vh;
     padding-bottom: 6rem;
-    background: var(--color-dark-bg, #0a0f1e);
+    background: transparent;
 }
 
 .heroSection {
@@ -194,10 +194,7 @@
 
 /* ── Light Mode ────────────────────────────────────────────────── */
 
-:global([data-theme='light']) .pageContainer {
-    background: #f9f9ca; /* Note: site defines var(--color-light-bg) usually, using light solid */
-    background: var(--color-light-bg, #f4f6f8);
-}
+
 
 :global([data-theme='light']) .title {
     background: linear-gradient(135deg, var(--text-primary) 0%, #1a2744 100%);
