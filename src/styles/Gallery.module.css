@@ -2,13 +2,14 @@
 
 .pageContainer {
     min-height: 100vh;
+    padding-top: 120px;
     padding-bottom: 6rem;
     background: transparent;
 }
 
 .heroSection {
     text-align: center;
-    padding: 5rem 1.5rem 3rem;
+    padding: 1rem 1.5rem 3rem;
     background: linear-gradient(180deg, var(--hero-bg-top, rgba(10,15,30,0.9)) 0%, transparent 100%);
 }
 
@@ -307,7 +308,7 @@
 
 
 :global([data-theme='light']) .heroSection {
-    background: linear-gradient(180deg, var(--bg-primary, #F8F5EE) 0%, transparent 100%);
+    background: none;
 }
 
 :global([data-theme='light']) .title {
