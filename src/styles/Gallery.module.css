@@ -289,8 +289,33 @@
 
 @media (max-width: 600px) {
     .imageGrid {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        gap: 8px;
+        column-count: 2;
+        column-gap: 8px;
+    }
+
+    .gridItem {
+        margin-bottom: 8px;
+        border-radius: 6px;
+    }
+
+    .sectionHeaderMobile {
+        cursor: pointer;
+        padding: 0.5rem 0;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .chevron {
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+    }
+
+    .imageGridMobilePadding {
+        padding-top: 0.5rem;
     }
 
     .lightboxNav {

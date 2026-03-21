@@ -35,6 +35,25 @@ export default function GalleryPage() {
         return () => window.removeEventListener('keydown', handler);
     }, [lightbox, moveLightbox]);
 
+    const [isMobile, setIsMobile] = useState(false);
+    const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth <= 640);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
+    const toggleSection = (id: string | number) => {
+        if (!isMobile) return;
+        const key = String(id);
+        setExpandedSections(prev => ({
+            ...prev,
+            [key]: prev[key] === undefined ? false : !prev[key]
+        }));
+    };
+
     const safeSections = (Array.isArray(sections) ? sections : []).filter(s => s && typeof s === 'object');
     const noImages = safeSections.every(s => !s.images || !Array.isArray(s.images) || s.images.length === 0) || safeSections.length === 0;
 
@@ -65,48 +84,77 @@ export default function GalleryPage() {
                     <p>Gallery photos will appear here once the admin uploads them.</p>
                 </div>
             ) : (
-                        <div className={styles.sectionsWrapper}>
-                    {safeSections.filter(s => Array.isArray(s.images) && s.images.length > 0).map((section, idx) => (
-                        <motion.div
-                            key={section.id}
-                            className={styles.sectionBlock}
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5, delay: idx * 0.1 }}
-                        >
-                            <div className={styles.sectionHeader}>
-                                <h2 className={styles.sectionTitle}>{section.name}</h2>
-                                <span className={styles.sectionCount}>{section.images.length} photo{section.images.length !== 1 ? 's' : ''}</span>
-                                <div className={styles.divider} />
-                            </div>
+                <div className={styles.sectionsWrapper}>
+                    {safeSections.filter(s => Array.isArray(s.images) && s.images.length > 0).map((section, idx) => {
+                        const isExpanded = !isMobile || (expandedSections[section.id] ?? idx === 0);
 
-                            <div className={styles.imageGrid}>
-                                {section.images.filter(img => img && typeof img === 'object').map((img, imgIdx) => (
-                                    <motion.div
-                                        key={img?.id || imgIdx}
-                                        className={styles.gridItem}
-                                        onClick={() => openLightbox(section.images.filter(img => img && typeof img === 'object'), imgIdx)}
-                                        initial={{ opacity: 0, scale: 0.95 }}
-                                        animate={{ opacity: 1, scale: 1 }}
-                                        transition={{ duration: 0.3, delay: imgIdx * 0.04 }}
-                                    >
-                                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                                        <img
-                                            src={img.url}
-                                            alt={img.caption || `Photo ${imgIdx + 1}`}
-                                            className={styles.gridImage}
-                                            loading="lazy"
-                                        />
-                                        <div className={styles.gridOverlay}>
-                                            {img.caption && (
-                                                <span className={styles.gridCaption}>{img.caption}</span>
-                                            )}
-                                        </div>
-                                    </motion.div>
-                                ))}
-                            </div>
-                        </motion.div>
-                    ))}
+                        return (
+                            <motion.div
+                                key={section.id}
+                                className={styles.sectionBlock}
+                                initial={{ opacity: 0, y: 30 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                            >
+                                <div 
+                                    className={`${styles.sectionHeader} ${isMobile ? styles.sectionHeaderMobile : ''}`}
+                                    onClick={() => toggleSection(section.id)}
+                                >
+                                    <h2 className={styles.sectionTitle}>{section.name}</h2>
+                                    <span className={styles.sectionCount}>{section.images.length} photo{section.images.length !== 1 ? 's' : ''}</span>
+                                    <div className={styles.divider} />
+                                    {isMobile && (
+                                        <motion.div 
+                                            animate={{ rotate: isExpanded ? 180 : 0 }} 
+                                            className={styles.chevron}
+                                            transition={{ duration: 0.3 }}
+                                        >
+                                            ▼
+                                        </motion.div>
+                                    )}
+                                </div>
+
+                                <AnimatePresence initial={false}>
+                                    {isExpanded && (
+                                        <motion.div
+                                            key="content"
+                                            initial={isMobile ? { height: 0, opacity: 0 } : false}
+                                            animate={isMobile ? { height: 'auto', opacity: 1 } : { opacity: 1 }}
+                                            exit={isMobile ? { height: 0, opacity: 0 } : undefined}
+                                            transition={{ duration: 0.3, ease: 'easeInOut' }}
+                                            style={{ overflow: 'hidden' }}
+                                        >
+                                            <div className={`${styles.imageGrid} ${isMobile ? styles.imageGridMobilePadding : ''}`}>
+                                                {section.images.filter(img => img && typeof img === 'object').map((img, imgIdx) => (
+                                                    <motion.div
+                                                        key={img?.id || imgIdx}
+                                                        className={styles.gridItem}
+                                                        onClick={() => openLightbox(section.images.filter(img => img && typeof img === 'object'), imgIdx)}
+                                                        initial={{ opacity: 0, scale: 0.95 }}
+                                                        animate={{ opacity: 1, scale: 1 }}
+                                                        transition={{ duration: 0.3, delay: imgIdx * 0.04 }}
+                                                    >
+                                                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                                                        <img
+                                                            src={img.url}
+                                                            alt={img.caption || `Photo ${imgIdx + 1}`}
+                                                            className={styles.gridImage}
+                                                            loading="lazy"
+                                                        />
+                                                        <div className={styles.gridOverlay}>
+                                                            {img.caption && (
+                                                                <span className={styles.gridCaption}>{img.caption}</span>
+                                                            )}
+                                                        </div>
+                                                    </motion.div>
+                                                ))}
+                                            </div>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+                            </motion.div>
+                        );
+                    })}
                 </div>
             )}
 
