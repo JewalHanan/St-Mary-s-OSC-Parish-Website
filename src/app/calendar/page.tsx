@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card } from '@/components/ui/Card';
+import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import { getSpecialDays, getEvents, type SpecialDay, type ChurchEvent } from '@/lib/store';
 import { useStoreData } from '@/lib/useStoreData';
 import styles from '@/styles/Calendar.module.css';
@@ -100,20 +101,19 @@ export default function CalendarPage() {
 
     return (
         <div className={styles.pageContainer}>
-            <div className={styles.header}>
-                <motion.h1
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                >
-                    Liturgical Calendar
-                </motion.h1>
-            </div>
+            <ScrollReveal>
+                <div className={styles.header}>
+                    <h1>Liturgical Calendar</h1>
+                </div>
+            </ScrollReveal>
 
             <div className={styles.countdowns}>
-                {specialDays.filter(d => d.is_countdown_target).map(target => (
-                    <div key={target.id} style={{ display: 'flex', flexDirection: 'column', width: '100%', maxWidth: '900px', margin: '0 auto' }}>
-                        <CountdownTimer targetDay={target} />
-                    </div>
+                {specialDays.filter(d => d.is_countdown_target).map((target, idx) => (
+                    <ScrollReveal key={target.id} delay={idx * 0.1}>
+                        <div style={{ display: 'flex', flexDirection: 'column', width: '100%', maxWidth: '900px', margin: '0 auto' }}>
+                            <CountdownTimer targetDay={target} />
+                        </div>
+                    </ScrollReveal>
                 ))}
             </div>
 

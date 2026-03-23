@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
+import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import { getBookSections, type BookSection, type BookItem } from '@/lib/store';
 import { useStoreData } from '@/lib/useStoreData';
 import styles from '@/styles/Books.module.css';
@@ -55,26 +56,23 @@ export default function BooksPage() {
 
     return (
         <div className={styles.pageContainer}>
-            <div className={styles.heroSection}>
-                <motion.h1
-                    className={styles.title}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8 }}
-                >
-                    Service Books Library
-                </motion.h1>
-                <p className={styles.subtitle}>Digital library of Malankara Orthodox liturgical books.</p>
-            </div>
+            <ScrollReveal>
+                <div className={styles.heroSection}>
+                    <motion.h1
+                        className={styles.title}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
+                    >
+                        Service Books Library
+                    </motion.h1>
+                    <p className={styles.subtitle}>Digital library of Malankara Orthodox liturgical books.</p>
+                </div>
+            </ScrollReveal>
 
             <div className={styles.sectionsGrid}>
                 {safeSections.map((section, idx) => (
-                    <motion.div
-                        key={section.id}
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: idx * 0.1 }}
-                    >
+                    <ScrollReveal key={section.id} delay={0.05 * idx}>
                         <Card className={styles.sectionCard} withGlow glowSpread={40} glowBorderWidth={2}>
                             <div className={styles.sectionImageContainer}>
                                 {section.image ? (
@@ -117,7 +115,7 @@ export default function BooksPage() {
                                 )}
                             </div>
                         </Card>
-                    </motion.div>
+                    </ScrollReveal>
                 ))}
             </div>
         </div>

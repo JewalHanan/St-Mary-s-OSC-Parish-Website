@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
+import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import { getPublications, type Publication } from '@/lib/store';
 import { useStoreData } from '@/lib/useStoreData';
 import styles from '@/styles/Publications.module.css';
@@ -50,17 +51,19 @@ export default function PublicationsPage() {
 
     return (
         <div className={styles.pageContainer}>
-            <div className={styles.heroSection}>
-                <motion.h1
-                    className={styles.title}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8 }}
-                >
-                    Publications
-                </motion.h1>
-                <p className={styles.subtitle}>Parish newsletters, circulars & supplement papers.</p>
-            </div>
+            <ScrollReveal>
+                <div className={styles.heroSection}>
+                    <motion.h1
+                        className={styles.title}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
+                    >
+                        Publications
+                    </motion.h1>
+                    <p className={styles.subtitle}>Parish newsletters, circulars & supplement papers.</p>
+                </div>
+            </ScrollReveal>
 
             <div className={styles.cardsGrid}>
                 {safePublications.length === 0 ? (
@@ -71,12 +74,7 @@ export default function PublicationsPage() {
                     </div>
                 ) : (
                     safePublications.map((pub, idx) => (
-                        <motion.div
-                            key={pub.id}
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.45, delay: idx * 0.08 }}
-                        >
+                        <ScrollReveal key={pub.id} delay={0.05 * idx}>
                             <Card className={styles.pubCard} withGlow glowSpread={40} glowBorderWidth={2}>
                                 {pub.coverImage && (
                                     <div className={styles.coverImageContainer}>
@@ -101,7 +99,7 @@ export default function PublicationsPage() {
                                     </div>
                                 </div>
                             </Card>
-                        </motion.div>
+                        </ScrollReveal>
                     ))
                 )}
             </div>
